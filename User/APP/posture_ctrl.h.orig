@@ -11,9 +11,6 @@
 #define YES 1
 #define NO 0
 
-extern float _climbing_offset_angle;
-extern bool climbing_offset_flag;
-
 extern const float TROT_step_length2;
 extern const float TROT_up_amp2;
 
@@ -58,7 +55,7 @@ enum States {
     TEST4=4,
     TEST5=5,
     TEST6=6,
-    TEST7=7,
+	  TEST7=7,
     TEST8=8,
     TEST9=9,
     TEST10=10,
