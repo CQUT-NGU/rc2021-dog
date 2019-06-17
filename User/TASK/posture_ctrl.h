@@ -11,6 +11,9 @@
 #define YES 1
 #define NO 0
 
+extern float _climbing_offset_angle;
+extern bool climbing_offset_flag;
+
 extern const float TROT_step_length2;
 extern const float TROT_up_amp2;
 
@@ -21,6 +24,7 @@ extern const float TROT_down_amp;
 extern const float TROT_flight_percent;
 extern const float TROT_freq;
 extern bool _leg_active[4];
+extern bool rc_ctrl_flag;
 
 extern float x, y, theta1, theta2;
 
@@ -55,19 +59,26 @@ enum States {
     TEST4=4,
     TEST5=5,
     TEST6=6,
-	  TEST7=7,
+    TEST7=7,
     TEST8=8,
     TEST9=9,
     TEST10=10,
     TEST11=11,
     TEST12=12,
     CLIMBING = 13,
-    WALK_AHEAD=14,
+
+
+    WALK=14,
     WALK_BACK=15,
     ROTAT_LEFT=16,
     ROTAT_RIGHT=17,
-    WALK_LEFT=18,
-    WALK_RIGHT=19,
+
+
+    BOUND=18,	// 跳跑
+    GALLOP=19, // 袭步
+
+
+
     STOP = 20,
     REALSE=21,
     JUMP=22,
@@ -79,10 +90,13 @@ extern enum States state;
 
 
 typedef struct  {		// 腿部PID增益结构体
-    float kp_spd;		//速度环
-    float kd_spd;
+
     float kp_pos;		//位置环
     float kd_pos;
+
+    float kp_spd;		//速度环
+    float kd_spd;
+
 } LegGain;
 extern LegGain test_gait_gains;
 
@@ -95,7 +109,7 @@ typedef struct  {		// 腿部参数结构体
     float freq ; // 一步的频率 (Hz)
 } GaitParams;
 extern GaitParams gait_params;
-
+extern GaitParams state_gait_params[];
 
 typedef struct {
 
@@ -108,6 +122,8 @@ typedef struct {
 } DetachedParam;
 extern DetachedParam detached_params;
 extern DetachedParam state_detached_params[];
+
+extern DetachedParam  RcDetachedParam;
 
 void gait(	GaitParams params,LegGain gait_gains,
             float leg0_offset, float leg1_offset,float leg2_offset, float leg3_offset,

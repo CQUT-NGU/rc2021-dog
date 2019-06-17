@@ -6,7 +6,7 @@ int LinearCorrection=Deny;
 bool BalanceCorrection=Deny;
 
 bool _Sensor[10];
-float step_len_initial = 16;
+float step_len_initial = 14;
 float step_high_initial = 16;
 
 float step_len_dev=0.0;
@@ -44,6 +44,9 @@ void Navi_task(void *pvParameters)
 0 --- 180 --- 360
 
 */
+
+
+float normal_params_l,normal_params_r;
 void navigation_execute(void)
 {
 
@@ -53,17 +56,21 @@ void navigation_execute(void)
     if(LinearCorrection==normal_correction)		//直线矫正
     {
 
-        step_len_dev=pid_calc(&pid_imu[2],imuinfo.ActVal[0],yaw_set);  //计算陀螺仪yaw轴角度，输出给两腿腿部差速 保持角度
+        step_len_dev=pid_calc(&pid_imu[2],imuinfo.ActVal[0]/1.0,yaw_set/1.0);  //计算陀螺仪yaw轴角度，输出给两腿腿部差速 保持角度
 
-				float _dev_limit = 16.0;
+        float _dev_limit = 14.0;
         if(step_len_dev>_dev_limit)	step_len_dev=_dev_limit;
         else if(step_len_dev<-_dev_limit)	step_len_dev=-_dev_limit;
 
-        state_detached_params[TROT].detached_params_0.step_length=step_len_initial-step_len_dev;
-        state_detached_params[TROT].detached_params_2.step_length=step_len_initial-step_len_dev;
+        normal_params_l=step_len_initial-step_len_dev;
+        normal_params_r=step_len_initial+step_len_dev;
+        if(normal_params_l<0) normal_params_l=0;
+        if(normal_params_r<0) normal_params_r=0;
 
-        state_detached_params[TROT].detached_params_1.step_length=step_len_initial+step_len_dev;
-        state_detached_params[TROT].detached_params_3.step_length=step_len_initial+step_len_dev;
+        state_detached_params[TROT].detached_params_0.step_length=normal_params_l;
+        state_detached_params[TROT].detached_params_2.step_length=normal_params_l;
+        state_detached_params[TROT].detached_params_1.step_length=normal_params_r;
+        state_detached_params[TROT].detached_params_3.step_length=normal_params_r;
 
 //				flight_percent_dev=pid_calc(&pid_imu[2],imuinfo.ActVal[0]/100,yaw_set/100);
 
@@ -81,33 +88,52 @@ void navigation_execute(void)
     else if(LinearCorrection==test1_correction)
     {
         //test1步态 纠偏
-        step_len_dev=pid_calc(&pid_test1,imuinfo.ActVal[0]/1.8,yaw_set/1.8);  //计算陀螺仪yaw轴角度，输出给两腿腿部差速 保持角度
-				
-				float _dev_limit = 6.0;
+        step_len_dev=pid_calc(&pid_test1,imuinfo.ActVal[0]/1.0,yaw_set/1.0);  //计算陀螺仪yaw轴角度，输出给两腿腿部差速 保持角度
+
+        float _dev_limit = 6.0;
         if(step_len_dev>_dev_limit)	step_len_dev=_dev_limit;
         else if(step_len_dev<-_dev_limit)	step_len_dev=-_dev_limit;
 
-        state_detached_params[TEST1].detached_params_0.step_length=step_len_initial-step_len_dev;
-        state_detached_params[TEST1].detached_params_2.step_length=step_len_initial-step_len_dev;
+        state_detached_params[TEST1].detached_params_0.step_length=10-step_len_dev;
+        state_detached_params[TEST1].detached_params_2.step_length=10-step_len_dev;
 
-        state_detached_params[TEST1].detached_params_1.step_length=step_len_initial+step_len_dev;
-        state_detached_params[TEST1].detached_params_3.step_length=step_len_initial+step_len_dev;
+        state_detached_params[TEST1].detached_params_1.step_length=10+step_len_dev;
+        state_detached_params[TEST1].detached_params_3.step_length=10+step_len_dev;
 
     }
 
     else	if(LinearCorrection==climbing_correction)
     {
+//        step_len_dev=pid_calc(&pid_climbing,imuinfo.ActVal[0]/1.2,yaw_set/1.2);  //计算陀螺仪yaw轴角度，输出给两腿腿部差速 保持角度
+
+//        float _dev_limit = 10.0;
+//        if(step_len_dev>_dev_limit)	step_len_dev=_dev_limit;
+//        else if(step_len_dev<-_dev_limit)	step_len_dev=-_dev_limit;
+
+//        normal_params_l=10-step_len_dev;
+//        normal_params_r=10+step_len_dev;
+//        if(normal_params_l<0) normal_params_l=0;
+//        if(normal_params_r<0) normal_params_r=0;
+
+//        state_detached_params[CLIMBING].detached_params_0.step_length=normal_params_l;
+//        state_detached_params[CLIMBING].detached_params_2.step_length=normal_params_l;
+//        state_detached_params[CLIMBING].detached_params_1.step_length=normal_params_r;
+//        state_detached_params[CLIMBING].detached_params_3.step_length=normal_params_r;
 
         flight_percent_dev=pid_calc(&pid_climbing,imuinfo.ActVal[0]/100,yaw_set/100);
 
-        if(flight_percent_dev>0.15)	flight_percent_dev=0.15;
-        else if(flight_percent_dev<-0.15)	flight_percent_dev=-0.15;
+        if(flight_percent_dev>0.25)	flight_percent_dev=0.25;
+        else if(flight_percent_dev<-0.25)	flight_percent_dev=-0.25;
 
-        state_detached_params[CLIMBING].detached_params_0.flight_percent=0.4-flight_percent_dev;
-        state_detached_params[CLIMBING].detached_params_2.flight_percent=0.4-flight_percent_dev;
+//			        if(flight_percent_dev>0.25)	flight_percent_dev=0.25;
+//        else if(flight_percent_dev<-0.25)	flight_percent_dev=-0.25;
 
-        state_detached_params[CLIMBING].detached_params_1.flight_percent=0.4+flight_percent_dev;
-        state_detached_params[CLIMBING].detached_params_3.flight_percent=0.4+flight_percent_dev;
+
+        state_detached_params[CLIMBING].detached_params_0.flight_percent=0.25-flight_percent_dev;  // +
+        state_detached_params[CLIMBING].detached_params_2.flight_percent=0.25-flight_percent_dev;  //
+
+        state_detached_params[CLIMBING].detached_params_1.flight_percent=0.25+flight_percent_dev;  //
+        state_detached_params[CLIMBING].detached_params_3.flight_percent=0.25+flight_percent_dev;  //
 
     }
 

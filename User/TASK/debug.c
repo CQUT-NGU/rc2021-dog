@@ -29,26 +29,27 @@ void Debug_task(void *pvParameters)
 * NAME: void InterpretCommand(void)
 * FUNCTION : 命令解析
 */
+float temp_angle_;
 void InterpretCommand(void)
 {
     switch(usart2_buf[0])
     {
     /*************************************************步态参数选择区*************************************************/
     case 0x01:
-        state = WALK_AHEAD;
-        printf("\r\n**********state = WALK_AHEAD**********\r\n");
+        state = WALK;
+        printf("\r\n**********state = WALK**********\r\n");
         break;
     case 0x02:
         state = WALK_BACK;
         printf("\r\n**********state = WALK_BACK**********\r\n");
         break;
     case 0x03:
-        state = WALK_LEFT;
-        printf("\r\n**********state = WALK_LEFT**********\r\n");
+        state = BOUND;
+        printf("\r\n**********state = BOUND**********\r\n");
         break;
     case 0x04:
-        state = WALK_RIGHT;
-        printf("\r\n**********state = WALK_RIGHT**********\r\n");
+        state = GALLOP;
+        printf("\r\n**********state = GALLOP**********\r\n");
         break;
     case 0x05:
         state = ROTAT_LEFT;
@@ -66,10 +67,7 @@ void InterpretCommand(void)
         break;
     case 0x09:
         break;
-//    case 0x0a:
-//        state = BOUND;
-//        printf("\r\n**********state = BOUND**********\r\n");
-//        break;
+
     case 0x0b:
         //  state = TEST;
         printf("\r\n**********state = TEST**********\r\n");
@@ -79,7 +77,7 @@ void InterpretCommand(void)
         printf("\r\n**********state = STOP**********\r\n");
         break;
     case 0x0d:
-        StartJump(times/1000.0f);
+        StartJump(HAL_GetTick());
         printf("JUMP");
         break;
     case 0x0e:
@@ -150,18 +148,17 @@ void InterpretCommand(void)
         state_detached_params[state].detached_params_1.freq-=0.1;
         state_detached_params[state].detached_params_3.freq-=0.1;
         break;
-		
-		    case 0x26:
-        state_detached_params[state].detached_params_0.freq+=0.1;
-        state_detached_params[state].detached_params_2.freq+=0.1;
-        state_detached_params[state].detached_params_1.freq+=0.1;
-        state_detached_params[state].detached_params_3.freq+=0.1;
+    case 0x26:
+        state_detached_params[state].detached_params_0.down_amp+=1;
+        state_detached_params[state].detached_params_2.down_amp+=1;
+        state_detached_params[state].detached_params_1.down_amp+=1;
+        state_detached_params[state].detached_params_3.down_amp+=1;
         break;
     case 0x27:
-        state_detached_params[state].detached_params_0.freq-=0.1;
-        state_detached_params[state].detached_params_2.freq-=0.1;
-        state_detached_params[state].detached_params_1.freq-=0.1;
-        state_detached_params[state].detached_params_3.freq-=0.1;
+        state_detached_params[state].detached_params_0.down_amp-=1;
+        state_detached_params[state].detached_params_2.down_amp-=1;
+        state_detached_params[state].detached_params_1.down_amp-=1;
+        state_detached_params[state].detached_params_3.down_amp-=1;
         break;
 
     /******************************************************END******************************************************/
@@ -186,6 +183,29 @@ void InterpretCommand(void)
     case 0x25:
         TIM4->CCR3-=20;
         break;
+
+    case 0x30:
+        test_speed+=1000;
+        break;
+    case 0x31:
+        test_speed-=1000;
+        break;
+
+
+
+    case 0x32:
+        temp_angle_+=100;
+        CAN_RoboModule_DRV_Position_Mode(0,1,1000,temp_angle_*4*15.15);		//杆子升起来  2100
+        printf("temp_angle_ %f\r\n",temp_angle_);
+        break;
+
+    case 0x33:
+        temp_angle_-=100;
+        CAN_RoboModule_DRV_Position_Mode(0,1,1000,temp_angle_*4*15.15);		//杆子升起来  2100
+        printf("temp_angle_ %f\r\n",temp_angle_);
+        break;
+
+
 
 
 //        case 'E':

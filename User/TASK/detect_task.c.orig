@@ -28,92 +28,120 @@ static error_t errorList[errorListLength + 1];
 uint32_t DetectTaskStack;
 #endif
 
-//掉线判断任务
+
+bool High_Temp_Warning = 0;
 void Detect_task(void *pvParameters)
 {
-    static uint32_t systemTime;
-    systemTime = xTaskGetTickCount();
-    //初始化
-    DetectInit(systemTime);
-    //空闲一段时间
-    vTaskDelay(DETECT_TASK_INIT_TIME);
 
-    for(;;)
-    {
-        static uint8_t error_num_display = 0;
-        systemTime = xTaskGetTickCount();
+	for(;;)
+	{
+		
+		for(int i=0 ; i<8 ; i++)
+		{
+			if(moto_chassis[i].hall>=100)
+				High_Temp_Warning = 1;
+			}
+	
+				osDelay(1000);
+			
+			if(High_Temp_Warning == 1){
+				IndLED_On(IndColorRed);
+        vTaskDelay(50);
+        IndLED_Off();
+        vTaskDelay(50);
+			}
+			
+			
+		}
+	
+	}
 
-        error_num_display = errorListLength;
-        errorList[errorListLength].isLost = 0;
-        errorList[errorListLength].errorExist = 0;
+////掉线判断任务
+//void Detect_task(void *pvParameters)
+//{
+//    static uint32_t systemTime;
+//    systemTime = xTaskGetTickCount();
+//    //初始化
+//    DetectInit(systemTime);
+//    //空闲一段时间
+//    vTaskDelay(DETECT_TASK_INIT_TIME);
 
-        for (int i = 0; i < errorListLength; i++)
-        {
-            //未使能，跳过
-            if (errorList[i].enable == 0)
-            {
-                continue;
-            }
+//    for(;;)
+//    {
+//        static uint8_t error_num_display = 0;
+//        systemTime = xTaskGetTickCount();
 
-            //判断掉线
-            if (systemTime - errorList[i].newTime > errorList[i].setOfflineTime)
-            {
-                if (errorList[i].errorExist == 0)
-                {
-                    //记录错误以及掉线时间
-                    errorList[i].isLost = 1;
-                    errorList[i].errorExist = 1;
-                    errorList[i].Losttime = systemTime;
-                }
-                //判断错误优先级， 保存优先级最高的错误码
-                if (errorList[i].Priority > errorList[error_num_display].Priority)
-                {
-                    error_num_display = i;
-                }
-                //记录列表的存在错误，
-                errorList[errorListLength].isLost = 1;
-                errorList[errorListLength].errorExist = 1;
-                //如果提供解决函数，运行解决函数
-                if (errorList[i].solveLostFun != NULL)
-                {
-                    errorList[i].solveLostFun();
-                }
-            }
-            else if (systemTime - errorList[i].worktime < errorList[i].setOnlineTime)
-            {
-                //刚刚上线，可能存在数据不稳定，只记录不丢失，
-                errorList[i].isLost = 0;
-                errorList[i].errorExist = 1;
-            }
-            else
-            {
-                errorList[i].isLost = 0;
-                //判断是否存在数据错误
-                if (errorList[i].dataIsError)
-                {
-                    errorList[i].errorExist = 1;
-                }
-                else
-                {
-                    errorList[i].errorExist = 0;
-                }
-                //计算频率
-                if (errorList[i].newTime > errorList[i].lastTime)
-                {
-                    errorList[i].frequency = configTICK_RATE_HZ / (fp32)(errorList[i].newTime - errorList[i].lastTime);
-                }
-            }
-        }
+//        error_num_display = errorListLength;
+//        errorList[errorListLength].isLost = 0;
+//        errorList[errorListLength].errorExist = 0;
 
-        DetectDisplay(error_num_display + 1);
-        vTaskDelay(DETECT_CONTROL_TIME);
-#if INCLUDE_uxTaskGetStackHighWaterMark
-        DetectTaskStack = uxTaskGetStackHighWaterMark(NULL);
-#endif
-				
-				vTaskDelay(10);
-    }
-}
+//        for (int i = 0; i < errorListLength; i++)
+//        {
+//            //未使能，跳过
+//            if (errorList[i].enable == 0)
+//            {
+//                continue;
+//            }
+
+//            //判断掉线
+//            if (systemTime - errorList[i].newTime > errorList[i].setOfflineTime)
+//            {
+//                if (errorList[i].errorExist == 0)
+//                {
+//                    //记录错误以及掉线时间
+//                    errorList[i].isLost = 1;
+//                    errorList[i].errorExist = 1;
+//                    errorList[i].Losttime = systemTime;
+//                }
+//                //判断错误优先级， 保存优先级最高的错误码
+//                if (errorList[i].Priority > errorList[error_num_display].Priority)
+//                {
+//                    error_num_display = i;
+//                }
+//                //记录列表的存在错误，
+//                errorList[errorListLength].isLost = 1;
+//                errorList[errorListLength].errorExist = 1;
+//                //如果提供解决函数，运行解决函数
+//                if (errorList[i].solveLostFun != NULL)
+//                {
+//                    errorList[i].solveLostFun();
+//                }
+//            }
+//            else if (systemTime - errorList[i].worktime < errorList[i].setOnlineTime)
+//            {
+//                //刚刚上线，可能存在数据不稳定，只记录不丢失，
+//                errorList[i].isLost = 0;
+//                errorList[i].errorExist = 1;
+//            }
+//            else
+//            {
+//                errorList[i].isLost = 0;
+//                //判断是否存在数据错误
+//                if (errorList[i].dataIsError)
+//                {
+//                    errorList[i].errorExist = 1;
+//                }
+//                else
+//                {
+//                    errorList[i].errorExist = 0;
+//                }
+//                //计算频率
+//                if (errorList[i].newTime > errorList[i].lastTime)
+//                {
+//                    errorList[i].frequency = configTICK_RATE_HZ / (fp32)(errorList[i].newTime - errorList[i].lastTime);
+//                }
+//            }
+//        }
+
+//        DetectDisplay(error_num_display + 1);
+//        vTaskDelay(DETECT_CONTROL_TIME);
+//#if INCLUDE_uxTaskGetStackHighWaterMark
+//        DetectTaskStack = uxTaskGetStackHighWaterMark(NULL);
+//#endif
+
+//        vTaskDelay(10);
+//    }
+//}
 
 //返回对应的设备是否存在错误
 bool_t toe_is_error(uint8_t err)

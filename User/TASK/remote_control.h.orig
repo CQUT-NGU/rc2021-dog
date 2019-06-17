@@ -2,6 +2,9 @@
 #define REMOTE_CONTROL_H
 #include "robocon.h"
 
+/* ----------------------- RC PPM DEFINE ----------------------------- */
+#define RC_SWITCH_ON 
+
 /* ----------------------- RC Switch Definition----------------------------- */
 
 /* ----------------------- PC Key Definition-------------------------------- */
