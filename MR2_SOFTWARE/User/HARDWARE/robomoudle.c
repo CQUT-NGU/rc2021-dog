@@ -13,34 +13,34 @@ void robomoudle_init(void)
     //vTaskDelay(1000);
     IndLED_On(IndColorBlue);
 
-    CAN_RoboModule_DRV_Reset(0,1);
+//    CAN_RoboModule_DRV_Reset(0,1);
     vTaskDelay(100);
 	
-    IndLED_Off();
+//    IndLED_Off();
 	
-    CAN_RoboModule_DRV_Config(0,1,100,0);
-    vTaskDelay(100);
-	
-    IndLED_On(IndColorBlue);
+//    CAN_RoboModule_DRV_Config(0,1,100,0);
+//    vTaskDelay(100);
+//	
+//    IndLED_On(IndColorBlue);
 	
 //    CAN_RoboModule_DRV_Mode_Choice(1,1,OpenLoop_Mode);
 //    vTaskDelay(500);
 //    CAN_RoboModule_DRV_OpenLoop_Mode(1,1,0);
 //    vTaskDelay(500);
 
-    CAN_RoboModule_DRV_Mode_Choice(0,1,Position_Mode);
-    vTaskDelay(100);
-		
-		 IndLED_Off();
-		 
-    CAN_RoboModule_DRV_Position_Mode( 0, 1, 500, 0);
-    vTaskDelay(100);
-		
-		IndLED_On(IndColorBlue);
-		
-		vTaskDelay(200);
-		
-		IndLED_Off();
+//    CAN_RoboModule_DRV_Mode_Choice(0,1,Position_Mode);
+//    vTaskDelay(100);
+//		
+//		 IndLED_Off();
+//		 
+//    CAN_RoboModule_DRV_Position_Mode( 0, 1, 500, 0);
+//    vTaskDelay(100);
+//		
+//		IndLED_On(IndColorBlue);
+//		
+//		vTaskDelay(200);
+//		
+//		IndLED_Off();
 		
 		
 

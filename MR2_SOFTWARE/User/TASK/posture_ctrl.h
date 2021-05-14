@@ -53,37 +53,37 @@ extern Coordinate_Trans_Data coor_calc;
 enum States {
 
     TROT = 0,
-    TEST1=1,
-    TEST2=2,
-    TEST3=3,
-    TEST4=4,
-    TEST5=5,
-    TEST6=6,
-    TEST7=7,
-    TEST8=8,
-    TEST9=9,
-    TEST10=10,
-    TEST11=11,
-    TEST12=12,
+    TEST1 = 1,
+    TEST2 = 2,
+    TEST3 = 3,
+    TEST4 = 4,
+    TEST5 = 5,
+    TEST6 = 6,
+    TEST7 = 7,
+    TEST8 = 8,
+    TEST9 = 9,
+    TEST10 = 10,
+    TEST11 = 11,
+    TEST12 = 12,
     CLIMBING = 13,
 
 
-    WALK=14,
-    WALK_BACK=15,
-    ROTAT_LEFT=16,
-    ROTAT_RIGHT=17,
+    WALK = 14,
+    WALK_BACK = 15,
+    ROTAT_LEFT = 16,
+    ROTAT_RIGHT = 17,
 
 
-    BOUND=18,	// 跳跑
-    GALLOP=19, // 袭步
+    BOUND = 18,	// 跳跑
+    GALLOP = 19, // 袭步
 
 
 
     STOP = 20,
-    REALSE=21,
-    JUMP=22,
-    START=23,
-    END=24
+    REALSE = 21,
+    JUMP = 22,
+    START = 23,
+    END = 24
 
 };
 extern enum States state;
@@ -100,13 +100,13 @@ typedef struct  {		// 腿部PID增益结构体
 } LegGain;
 extern LegGain test_gait_gains;
 
-typedef struct  {		// 腿部参数结构体
-    float stance_height ; // 狗身到地面的距离 (cm)
-    float step_length ; // 一步的距离 (cm)
-    float up_amp ; // 上部振幅y (cm)
-    float down_amp ; // 下部振幅 (cm)
-    float flight_percent ; // 摆动相百分比 (cm)
-    float freq ; // 一步的频率 (Hz)
+typedef struct  {		        // 腿部参数结构体
+    float stance_height ;   // 狗身到地面的距离 (cm)
+    float step_length ;     // 一步的距离 (cm)
+    float up_amp ;          // 上部振幅y (cm)
+    float down_amp ;        // 下部振幅 (cm)
+    float flight_percent ;  // 摆动相百分比 (cm)
+    float freq ;            // 一步的频率 (Hz)
 } GaitParams;
 extern GaitParams gait_params;
 extern GaitParams state_gait_params[];
@@ -133,13 +133,13 @@ void gait_detached(	DetachedParam d_params,
                     float leg0_direction, float leg1_direction,float leg2_direction, float leg3_direction);
 void CoupledMoveLeg(float t, GaitParams params,float gait_offset, float leg_direction, int LegId);
 void CycloidTrajectory (float t, GaitParams params, float gait_offset) ;
-void SinTrajectory (float t, GaitParams params, float gait_offset) ;
+void SinTrajectry (float t, GaitParams params, float gait_offset) ;
 void CartesianToTheta(float leg_direction) ;
-void SetCoupledPosition(int LegId);
-void CommandAllLegs(LegGain gains);
-bool IsValidLegGain( LegGain gains);
-bool IsValidGaitParams( GaitParams params);
-void ChangeTheGainsOfPD(LegGain gains);
-void RenewYaw (void);
-void CommandAllLegs_v(void);
+void SetCoupledPosition( int LegId );
+void CommandAllLegs( LegGain gains );
+bool IsValidLegGain( LegGain gains );
+bool IsValidGaitParams( GaitParams params );
+void ChangeTheGainsOfPD( LegGain gains );
+void RenewYaw ( void );
+void CommandAllLegs_v( void );
 #endif

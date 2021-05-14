@@ -45,6 +45,7 @@
 #include "debug.h"
 #include "navigation.h"
 #include "Remote_Control.h"
+#include "remote_control_task.h"
 #include "logicalflow_task.h"
 #include "detect_task.h"
 
@@ -62,6 +63,7 @@
 /* BSP ------------------------------------------------------------------*/
 #include "bsp_uart.h"
 #include "bsp_can.h"
+#include "bsp_rc.h"
 #include "pid.h"
 #include "vcan.h"
 #include "robomoudle.h"

@@ -52,31 +52,22 @@ void my_can_filter_init_recv_all(CAN_HandleTypeDef* _hcan)
     static CanTxMsgTypeDef		Tx2Message;
     static CanRxMsgTypeDef 		Rx2Message;
 
-    CAN_FilterConfigStructure.FilterNumber = 0;
-    CAN_FilterConfigStructure.FilterMode = CAN_FILTERMODE_IDMASK;
-    CAN_FilterConfigStructure.FilterScale = CAN_FILTERSCALE_32BIT;
-    CAN_FilterConfigStructure.FilterIdHigh = 0x0000;
-    CAN_FilterConfigStructure.FilterIdLow = 0x0000;
-    CAN_FilterConfigStructure.FilterMaskIdHigh = 0x0000;
-    CAN_FilterConfigStructure.FilterMaskIdLow = 0x0000;
-    CAN_FilterConfigStructure.FilterFIFOAssignment = CAN_FilterFIFO0;
-    CAN_FilterConfigStructure.BankNumber = 14;//can1(0-13)和can2(14-27)分别得到一半的filter
-    CAN_FilterConfigStructure.FilterActivation = ENABLE;
 
-    if(HAL_CAN_ConfigFilter(_hcan, &CAN_FilterConfigStructure) != HAL_OK)
-    {
-        //err_deadloop(); //show error!
-    }
-
-    //filter config for can2
-    //can1(0-13)和can2(14-27)分别得到一半的filter
-    CAN_FilterConfigStructure.FilterNumber = 14;
-    if(HAL_CAN_ConfigFilter(_hcan, &CAN_FilterConfigStructure) != HAL_OK)
-    {
-        //err_deadloop();
-    }
-
-    if(_hcan == &hcan1) {
+			  CAN_FilterConfigStructure.FilterNumber = 0;
+				CAN_FilterConfigStructure.FilterMode = CAN_FILTERMODE_IDMASK;
+				CAN_FilterConfigStructure.FilterScale = CAN_FILTERSCALE_32BIT;
+				CAN_FilterConfigStructure.FilterIdHigh = 0x0000;
+				CAN_FilterConfigStructure.FilterIdLow = 0x0000;
+				CAN_FilterConfigStructure.FilterMaskIdHigh = 0x0000;
+				CAN_FilterConfigStructure.FilterMaskIdLow = 0x0000;
+				CAN_FilterConfigStructure.FilterFIFOAssignment = CAN_FilterFIFO0;
+				CAN_FilterConfigStructure.BankNumber = 14;//can1(0-13)和can2(14-27)分别得到一半的filter
+				CAN_FilterConfigStructure.FilterActivation = ENABLE;
+			  if(HAL_CAN_ConfigFilter(_hcan, &CAN_FilterConfigStructure) != HAL_OK)
+				{
+						//err_deadloop(); //show error!
+				}
+		if(_hcan == &hcan1) {
         _hcan->pTxMsg = &Tx1Message;
         _hcan->pRxMsg = &Rx1Message;
     }
@@ -84,6 +75,22 @@ void my_can_filter_init_recv_all(CAN_HandleTypeDef* _hcan)
     if(_hcan == &hcan2) {
         _hcan->pTxMsg = &Tx2Message;
         _hcan->pRxMsg = &Rx2Message;
+			    //filter config for can2
+				//can1(0-13)和can2(14-27)分别得到一半的filter
+				CAN_FilterConfigStructure.FilterNumber = 14;
+				CAN_FilterConfigStructure.FilterMode = CAN_FILTERMODE_IDMASK;
+				CAN_FilterConfigStructure.FilterScale = CAN_FILTERSCALE_32BIT;
+				CAN_FilterConfigStructure.FilterIdHigh = 0x0000;
+				CAN_FilterConfigStructure.FilterIdLow = 0x0000;
+				CAN_FilterConfigStructure.FilterMaskIdHigh = 0x0000;
+				CAN_FilterConfigStructure.FilterMaskIdLow = 0x0000;
+				CAN_FilterConfigStructure.FilterFIFOAssignment = CAN_FilterFIFO0;
+//				CAN_FilterConfigStructure.BankNumber = 28;//can1(0-13)和can2(14-27)分别得到一半的filter
+				CAN_FilterConfigStructure.FilterActivation = ENABLE;
+				if(HAL_CAN_ConfigFilter(_hcan, &CAN_FilterConfigStructure) != HAL_OK)
+				{
+						//err_deadloop();
+				}
     }
 
 }
@@ -138,7 +145,7 @@ float ZGyroModuleAngle;
 void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* _hcan)
 {
     //ignore can1 or can2.
-    switch(_hcan->pRxMsg->StdId) {
+    switch( _hcan -> pRxMsg -> StdId ) {
     case CAN_3508Moto1_ID:
     case CAN_3508Moto2_ID:
     case CAN_3508Moto3_ID:
@@ -149,10 +156,10 @@ void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* _hcan)
     case CAN_3508Moto8_ID:
     {
         static u8 i;
-        i = _hcan->pRxMsg->StdId - CAN_3508Moto1_ID;
+        i = _hcan -> pRxMsg -> StdId - CAN_3508Moto1_ID;
 
-        moto_chassis[i].msg_cnt++ <= 50	?	get_moto_offset(&moto_chassis[i], _hcan) : get_moto_measure(&moto_chassis[i], _hcan);
-        get_moto_measure(&moto_info, _hcan);
+        moto_chassis[ i ].msg_cnt++ <= 50	?	get_moto_offset(&moto_chassis[i], _hcan) : get_moto_measure(&moto_chassis[i], _hcan);
+        get_moto_measure( &moto_info, _hcan);
         //get_moto_measure(&moto_chassis[i], _hcan);
     }
     break;
@@ -180,7 +187,7 @@ void get_moto_measure(moto_measure_t *ptr, CAN_HandleTypeDef* hcan)
 //	u32  sum=0;
 //	u8	 i = FILTER_BUF_LEN;
 
-    /*BUG!!! dont use this para code*/
+    /*BUG!!! don‘t use this para code*/
 //	ptr->angle_buf[ptr->buf_idx] = (uint16_t)(hcan->pRxMsg->Data[0]<<8 | hcan->pRxMsg->Data[1]) ;
 //	ptr->buf_idx = ptr->buf_idx++ > FILTER_BUF_LEN ? 0 : ptr->buf_idx;
 //	while(i){

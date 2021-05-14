@@ -10,11 +10,11 @@
 #include "Remote_Control.h"
 extern TaskHandle_t LogicalFlowTask_Handler;
 
-float step_len_throttle;
-float step_len_throttle_yaw;
-float rc_params_l,rc_params_r;
+float step_len_throttle;        //步长杆。
+float step_len_throttle_yaw;    //步长杆航向角。
+float rc_params_l,rc_params_r;  //遥控左腿参数，遥控右腿参数。
 
-float step_len_rotate_angle;
+float step_len_rotate_angle;    //步长杆旋转角。
 
 bool StartFlag = 0;
 
@@ -31,7 +31,7 @@ void rc_params_clean(void)
 
 }
 
-void Rc_task(void *pvParameters)
+void Rc_task( void *pvParameters )
 {
 
 //    while(!imu_rec_flag)		//等待ACTION初始化
@@ -46,25 +46,25 @@ void Rc_task(void *pvParameters)
 
 //    ActionDoneBuzzer();
 
-    for(;;)
+    while( 1 )
     {
         //----------------------启动按键---板载按键-------------------//
-        if(keyStart==0&&StartFlag == 0)  //599上 1599下
+        if( keyStart == 0 && StartFlag == 0 )  //599上 1599下
         {
-            while(keyStart==0)
-                vTaskDelay(20);
-            StartPosToMiddlePos();
-            StartFlag=1;
+            while( keyStart == 0 )
+                vTaskDelay( 20 );
+            StartPosToMiddlePos( );
+            StartFlag = 1;
             IndicateLED_Off;
-            IndLED_On(IndColorGreen);
+            IndLED_On( IndColorGreen );
         }
-        else if(keyStart==0&&StartFlag == 1)
+        else if( keyStart == 0 && StartFlag == 1 )
         {
             while(keyStart==0)
-                vTaskDelay(20);
+                vTaskDelay( 20 );
             CAN_RoboModule_DRV_Position_Mode(0,1,2000,0);
-            MiddlePosToEndPos();
-            StartFlag=0;
+            MiddlePosToEndPos( );
+            StartFlag = 0;
         }
 
 //----------------------遥控区域-------------------------------------------------//
@@ -81,7 +81,7 @@ void Rc_task(void *pvParameters)
             while(ppm_rx[5]>1500)
                 vTaskDelay(200);
             state = REALSE;
-            StartJump(HAL_GetTick());
+            StartJump( HAL_GetTick( ) );
 						vTaskDelay(2000);
             printf("JUMP\r\n");
         }
@@ -92,15 +92,15 @@ void Rc_task(void *pvParameters)
             //------------------------油门--------------------------//
             if(ppm_rx[3]>590&&ppm_rx[3]<660) { //599上 1599下  油门
 
-                if(ppm_rx[4]>600&&ppm_rx[4]<900) {  //左打
-                    step_len_rotate_angle=((float)(-(ppm_rx[4]-1100+200)))/100*4;
+                if( ppm_rx[ 4 ] > 600&&ppm_rx[4]<900) {  //左打
+                    step_len_rotate_angle = ((float)(-(ppm_rx[4]-1100+200)))/100 * 4;
                     state=ROTAT_LEFT;
                     state_gait_params[ROTAT_LEFT].step_length=step_len_rotate_angle;
                     vTaskDelay(50);
                 }
 
                 else if(ppm_rx[4]>1300&&ppm_rx[4]<1600) {//右打
-                    step_len_rotate_angle=(float)(ppm_rx[4]-1100-200)/100*4;
+                    step_len_rotate_angle=(float)(ppm_rx[4]-1100-200)/100 * 4;
                     state=ROTAT_RIGHT;
                     state_gait_params[ROTAT_RIGHT].step_length=step_len_rotate_angle;
                     vTaskDelay(50);
@@ -122,11 +122,11 @@ void Rc_task(void *pvParameters)
                 state = TROT;
                 vTaskDelay(5);
             }
-            else if(ppm_rx[3]>=900&&ppm_rx[3]<1600) {
-                vTaskDelay(5);
+            else if( ppm_rx[ 3 ] >= 900 && ppm_rx[ 3 ] < 1600 ) {
+                vTaskDelay( 5 );
 
-                step_len_throttle=((float)ppm_rx[3]-900)/100*3; //0-21
-                step_len_throttle_yaw=((float)ppm_rx[1]-1099)/100*3;
+                step_len_throttle = ( ( float ) ppm_rx[ 3 ] - 900 ) / 100 * 3; //0-21
+                step_len_throttle_yaw = ( ( float ) ppm_rx[ 1 ] - 1099 ) / 100 * 3;
 
                 rc_params_l=step_len_throttle+step_len_throttle_yaw;
                 rc_params_r=step_len_throttle-step_len_throttle_yaw;

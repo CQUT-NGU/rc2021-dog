@@ -26,22 +26,22 @@ void shanwai_send_wave_form(void)
 {
     uint8_t i;
 
-    send_data(0x03);
-    send_data(0xfc);
-    for(i = 0; i<6; i++)
+    send_data( 0x03 );
+    send_data( 0xfc );
+    for(i = 0; i < 6; i ++)
     {
-        send_data((wave_form_data[i]&0xff)); //现发送低位在发送高位
-        send_data((wave_form_data[i]>>8));
+        send_data( ( wave_form_data[ i ] & 0xff ) ); //现发送低位在发送高位
+        send_data( ( wave_form_data[ i ] >> 8 ) );
 
     }
-    send_data(0xfc);
-    send_data(0x03);
+    send_data( 0xfc );
+    send_data( 0x03 );
 }
 
 void VcanGC_task(void *pvParameters)
 {
 
-    for(;;)
+    while( 1 )
     {
 
         wave_form_data[0] =test_speed;

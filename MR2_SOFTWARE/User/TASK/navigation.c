@@ -1,30 +1,30 @@
 #include "navigation.h"
 
 
-int LinearCorrection=Deny;
+int LinearCorrection = Deny;
 
-bool BalanceCorrection=Deny;
+bool BalanceCorrection = Deny;
 
 bool _Sensor[10];
 float step_len_initial = 14;
 float step_high_initial = 16;
 
-float step_len_dev=0.0;
-float step_high_dev=0.0;
-float flight_percent_dev=0.0;
+float step_len_dev = 0.0;
+float step_high_dev = 0.0;
+float flight_percent_dev = 0.0;
 
-float yaw_now=0.0;
-float yaw_set=0.0;
+float yaw_now = 0.0;
+float yaw_set = 0.0;
 
-float roll_set=0.0;
-float pitch_set=0.0;
+float roll_set = 0.0;
+float pitch_set = 0.0;
 
-float roll_offset=0.0;
-float pitch_offset=0.0;
+float roll_offset = 0.0;
+float pitch_offset = 0.0;
 
 float _dev_angel;
 
-int stage=0 ;
+int stage = 0;
 
 int _count_navi;
 
@@ -46,17 +46,17 @@ void Navi_task(void *pvParameters)
 */
 
 
-float normal_params_l,normal_params_r;
+float normal_params_l,normal_params_r;//左腿参数，右腿参数。
 void navigation_execute(void)
 {
 
 //    _Pitch_rev=_Pitch_initial-imuinfo.ActVal[1];
 //    _Roll_rev=_Roll_initial-imuinfo.ActVal[2];
 
-    if(LinearCorrection==normal_correction)		//直线矫正
+    if(LinearCorrection == normal_correction)		//直线矫正
     {
 
-        step_len_dev=pid_calc(&pid_imu[2],imuinfo.ActVal[0]/1.0,yaw_set/1.0);  //计算陀螺仪yaw轴角度，输出给两腿腿部差速 保持角度
+        step_len_dev = pid_calc(&pid_imu[2],imuinfo.ActVal[0]/1.0,yaw_set/1.0);  //计算陀螺仪yaw轴角度，输出给两腿腿部差速 保持角度
 
         float _dev_limit = 14.0;
         if(step_len_dev>_dev_limit)	step_len_dev=_dev_limit;
@@ -88,7 +88,7 @@ void navigation_execute(void)
     else if(LinearCorrection==test1_correction)
     {
         //test1步态 纠偏
-        step_len_dev=pid_calc(&pid_test1,imuinfo.ActVal[0]/1.0,yaw_set/1.0);  //计算陀螺仪yaw轴角度，输出给两腿腿部差速 保持角度
+        step_len_dev = pid_calc(&pid_test1,imuinfo.ActVal[0]/1.0,yaw_set/1.0);  //计算陀螺仪yaw轴角度，输出给两腿腿部差速 保持角度
 
         float _dev_limit = 6.0;
         if(step_len_dev>_dev_limit)	step_len_dev=_dev_limit;

@@ -2,13 +2,13 @@
 #include "posture_ctrl.h"
 
 
-float x, y, theta1, theta2;
+float x, y, theta1, theta2;//足端坐标下x，y，角度1，角度2
 
 enum States state = REALSE;
 
 extern TaskHandle_t MotorControlTask_Handler;
 
-float _angle_initial,_rotate_angle;
+float _angle_initial, _rotate_angle;
 
 bool TurnLeftFlag1,TurnLeftFlag2,TurnRightFlag1,TurnRightFlag2,ClimbingFlag1,ClimbingFlag2;
 
@@ -133,7 +133,7 @@ DetachedParam state_detached_params[] = {
     },
     {   // TEST1
         {25.0, 10.00, 3, 2.00, 0.25, 3.8},
-        {25.0, 10.00, 3, 2.00, 0.25,3.8},
+        {25.0, 10.00, 3, 2.00, 0.25, 3.8},
 
         {25.0, 10.00, 3, 2.00, 0.25, 3.8},
         {25.0, 10.00, 3, 2.00, 0.25, 3.8}
@@ -301,7 +301,7 @@ void PostureControl_task(void *pvParameters)
 //			step_len_initial = state_detached_params[TROT].detached_params_0.step_length;
 //		step_high_initial = state_detached_params[CLIMBING].detached_params_0.stance_height;
 //
-    for(;;)
+    while( 1 )
     {
 //        _Pitch_rev=_Pitch_initial-imuinfo.ActVal[1];
 //        _Roll_rev=_Roll_initial-imuinfo.ActVal[2];
@@ -434,7 +434,7 @@ void PostureControl_task(void *pvParameters)
             break;
 
         }
-        vTaskDelay(10);
+        vTaskDelay(3);
     }
 }
 
@@ -500,24 +500,10 @@ void gait(	GaitParams params,LegGain gains,
 }
 
 /**
-* NAME: void CoupledMoveLeg(float t, GaitParams params,float gait_offset, float leg_direction, int LegId)
-* FUNCTION : 驱动并联腿 传递参数
-*/
-void CoupledMoveLeg(float t, GaitParams params,float gait_offset, float leg_direction, int LegId)
-{
-    SinTrajectory(t, params, gait_offset);		//足端摆线轨迹生成器
-    CartesianToTheta(leg_direction);		//笛卡尔坐标转换到伽马坐标
-
-
-    SetCoupledPosition(LegId);		//发送数据给电机驱动函数
-//  printf("\r\nt=%f x=%f  y=%f  theta1=%f  theta2=%f  legid=%d he%f",t,x,y,theta1,theta2,LegId,theta1+theta2);
-}
-
-/**
 * NAME: SinTrajectory (float t,GaitParams params, float gaitOffset)
 * FUNCTION : 正弦轨迹生成器
 */
-void SinTrajectory (float t,GaitParams params, float gaitOffset) {
+void SinTrajectory( float t, GaitParams params, float gaitOffset ) {
     static float p = 0;
     static float prev_t = 0;
 
@@ -544,6 +530,22 @@ void SinTrajectory (float t,GaitParams params, float gaitOffset) {
 
 }
 
+/**
+* NAME: void CoupledMoveLeg(float t, GaitParams params,float gait_offset, float leg_direction, int LegId)
+* FUNCTION : 驱动并联腿 传递参数
+*/
+void CoupledMoveLeg( float t, GaitParams params, float gait_offset, float leg_direction, int LegId )
+{
+	
+    CartesianToTheta( leg_direction );		//笛卡尔坐标转换到伽马坐标
+	
+	  SinTrajectory( t, params, gait_offset );		//足端摆线轨迹生成器
+
+    SetCoupledPosition( LegId );		//发送数据给电机驱动函数
+//  printf("\r\nt=%f x=%f  y=%f  theta1=%f  theta2=%f  legid=%d he%f",t,x,y,theta1,theta2,LegId,theta1+theta2);
+}
+
+
 
 /**
 * NAME: void CartesianToThetaGamma(float leg_direction)
@@ -551,11 +553,11 @@ void SinTrajectory (float t,GaitParams params, float gaitOffset) {
 */
 void CartesianToTheta(float leg_direction)
 {
-    float L=0;
+    float L=0;//当前足端在坐标系中的长度。
     float N=0;
     double M=0;
-    float A1=0;
-    float A2=0;
+    float A1=0;//腿上一个电机的角度。
+    float A2=0;//腿上另一个电机的角度。
 
     L=sqrt(		pow(x,2)	+		pow(y,2)	);
 
@@ -581,8 +583,8 @@ void CartesianToTheta(float leg_direction)
     //	printf("\r\n x=%f  y=%f  theta1=%f  theta2=%f   he=%f   L=%f  M=%lf  N=%f   SIXI=%f",x,y,theta1,theta2,theta1+theta2,L,M,N,(	(pow(L,2)+pow(L1,2)-pow(L2,2))/(2*L1*L)	));
 }
 
-bool climbing_offset_flag=NO;
-float _climbing_offset_angle=15;
+bool climbing_offset_flag = NO;
+float _climbing_offset_angle = 15;
 /**
 * NAME: void SetCoupledPosition( int LegId)
 * FUNCTION : 发送电机控制角度

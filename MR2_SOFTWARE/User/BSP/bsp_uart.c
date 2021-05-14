@@ -22,11 +22,11 @@ uint8_t   imu_buf[IMU_BUFLEN];
 
 bool imu_rec_flag;
 
-uint8_t   openmv_buf[OPENMV_BUFLEN];
+uint8_t   openmv_buf[ OPENMV_BUFLEN ];
 
-uint8_t   usart3_buf[USART3_BUFLEN];
+uint8_t   usart3_buf[ USART3_BUFLEN ];
 
-uint8_t   usart2_buf[USART2_BUFLEN];
+uint8_t   usart2_buf[ USART2_BUFLEN ];
 
 imudata imuinfo;
 
@@ -43,7 +43,7 @@ openmvdata openmv2info;
 
 ps2data ps2info;
 
-float _Pitch_initial,_Roll_initial,_Pitch_rev,_Roll_rev;
+float _Pitch_initial, _Roll_initial, _Pitch_rev, _Roll_rev;
 
 /**
   * @brief      enable global uart it and do not use DMA transfer done it
@@ -92,7 +92,7 @@ static int uart_receive_dma_no_it(UART_HandleTypeDef* huart, uint8_t* pData, uin
   *             to 7 to select the DMA Stream.
   * @retval     The number of remaining data units in the current DMAy Streamx transfer.
   */
-uint16_t dma_current_data_counter(DMA_Stream_TypeDef *dma_stream)
+uint16_t dma_current_data_counter( DMA_Stream_TypeDef *dma_stream )
 {
     /* Return the number of remaining data units for DMAy Streamx */
     return ((uint16_t)(dma_stream->NDTR));
@@ -251,12 +251,12 @@ static void uart_rx_idle_callback(UART_HandleTypeDef* huart)
   * @param[in]  huart: uart IRQHandler id
   * @retval
   */
-void uart_receive_handler(UART_HandleTypeDef *huart)
+void uart_receive_handler( UART_HandleTypeDef *huart )
 {
-    if (__HAL_UART_GET_FLAG(huart, UART_FLAG_IDLE) &&
-            __HAL_UART_GET_IT_SOURCE(huart, UART_IT_IDLE))
+    if (__HAL_UART_GET_FLAG( huart, UART_FLAG_IDLE) &&
+            __HAL_UART_GET_IT_SOURCE( huart, UART_IT_IDLE))
     {
-        uart_rx_idle_callback(huart);
+        uart_rx_idle_callback( huart );
     }
 
 }

@@ -60,23 +60,24 @@ static void MX_NVIC_Init(void);
 
 int main(void)
 {
-    HAL_Init();						//Hal库初始化
-    SystemClock_Config();	//系统时钟初始化
-    MX_GPIO_Init();				//GPIO初始化
+    HAL_Init( );						//Hal库初始化
+    SystemClock_Config( );	//系统时钟初始化
+    MX_GPIO_Init( );				//GPIO初始化
 
 
-    MX_DMA_Init();				//DMA初始化
-    MX_CAN1_Init();				//CAN1接口初始化
+    MX_DMA_Init( );				//DMA初始化
+    MX_CAN1_Init( );				//CAN1接口初始化
 
-    MX_CAN2_Init();				//CAN1接口初始化
-    MX_SPI5_Init();				//spi5初始化
+    MX_CAN2_Init( );				//CAN1接口初始化
+    MX_SPI5_Init( );				//spi5初始化
 
-    MX_USART2_UART_Init();
-    uart_receive_init(&USART2_HUART);//USART2DMA空闲中断
-    MX_USART3_UART_Init();
-    uart_receive_init(&USART3_HUART);//USART3DMA空闲中断   ps2数据 现在拿来做为 openmv2的接收
-    MX_USART6_UART_Init();
-    uart_receive_init(&IMU_HUART);//usart6DMA接收陀螺仪数据
+	  MX_USART1_UART_Init( );
+    MX_USART2_UART_Init( );
+    uart_receive_init( &USART2_HUART );//USART2DMA空闲中断
+    MX_USART3_UART_Init( );
+    uart_receive_init( &USART3_HUART );//USART3DMA空闲中断   ps2数据 现在拿来做为 openmv2的接收
+    MX_USART6_UART_Init( );
+    uart_receive_init( &IMU_HUART );//usart6DMA接收陀螺仪数据
     MX_UART7_Init();			//uart7DMA接收
     uart_receive_init(&OPENMV_HUART);//USART7DMA空闲中断  openmv
     MX_UART8_Init();		//usart8DMA发送数据给山外上位机
@@ -85,17 +86,19 @@ int main(void)
     //定时器时钟90M分频系数9000-1,定时器3的频率90M/9000=10K自动重装载10-1,定时器周期1ms
     //TIM3_Init(10-1,9000-1);//定时器3初始化 步态震荡时钟
 
-    my_can_filter_init_recv_all(&hcan1);//开启CAN滤波器
-    HAL_CAN_Receive_IT(&hcan1, CAN_FIFO0);//开启CAN1
-    HAL_CAN_Receive_IT(&hcan2, CAN_FIFO0);//开启CAN2
+    remote_control_init( );
+    my_can_filter_init_recv_all( &hcan1 );//开启CAN滤波器
+		my_can_filter_init_recv_all( &hcan2 );
+    HAL_CAN_Receive_IT( &hcan1, CAN_FIFO0);//开启CAN1
+    HAL_CAN_Receive_IT( &hcan2, CAN_FIFO0);//开启CAN2
 
-    pid_param_init();		//所有使用到的PID参数初始化
-    buzzer_init(500-1, 90-1);//蜂鸣器初始化
-    led_configuration();	//流水灯 红绿灯初始化
-    //f=Tck/(psc+1)*(arr+1) 定时器时钟为90M  50Hz=180MHz/(90*20000)
-    Servo_Init(20000-1,90-1);//舵机PWM通道初始化
+    pid_param_init( );		//所有使用到的PID参数初始化
+    buzzer_init( 500 - 1, 90 - 1 );//蜂鸣器初始化
+    led_configuration( );	//流水灯 红绿灯初始化
+    //f=Tck/(psc+1)*(arr+1) 定时器时钟为90M  50Hz=180MHz/( 90 * 20000 )
+    Servo_Init( 20000 - 1, 90 - 1 );//舵机PWM通道初始化
 
-    TIM2_CH3_Cap_Init(0XFFFFFFFF,90-1); //PWM捕获 以1MHZ的频率计数
+    TIM2_CH3_Cap_Init( 0XFFFFFFFF , 90 -  1 ); //PWM捕获 以1MHZ的频率计数
 
     Servo1_OPEN;//舵机1复位
 
@@ -127,19 +130,19 @@ void start_task(void *pvParameters)
 
     taskENTER_CRITICAL();           //进入临界区
     //创建MotorControl_task
-//    xTaskCreate((TaskFunction_t )MotorControl_task,
-//                (const char*    )"MotorControl_task",
-//                (uint16_t       )MotorControl_STK_SIZE,
-//                (void*          )NULL,
-//                (UBaseType_t    )MotorControl_TASK_PRIO,
-//                (TaskHandle_t*  )&MotorControlTask_Handler);
-//    //创建PostureControl_task
-//    xTaskCreate((TaskFunction_t )PostureControl_task,
-//                (const char*    )"PostureControl_task",
-//                (uint16_t       )PostureControl_STK_SIZE,
-//                (void*          )NULL,
-//                (UBaseType_t    )PostureControl_TASK_PRIO,
-//                (TaskHandle_t*  )&PostureControlTask_Handler);
+    xTaskCreate((TaskFunction_t )MotorControl_task,
+                (const char*    )"MotorControl_task",
+                (uint16_t       )MotorControl_STK_SIZE,
+                (void*          )NULL,
+                (UBaseType_t    )MotorControl_TASK_PRIO,
+                (TaskHandle_t*  )&MotorControlTask_Handler);
+    //创建PostureControl_task
+    xTaskCreate((TaskFunction_t )PostureControl_task,
+                (const char*    )"PostureControl_task",
+                (uint16_t       )PostureControl_STK_SIZE,
+                (void*          )NULL,
+                (UBaseType_t    )PostureControl_TASK_PRIO,
+                (TaskHandle_t*  )&PostureControlTask_Handler);
     //创建NAVIGATION任务
 //    xTaskCreate((TaskFunction_t )Navi_task,
 //                (const char*    )"Navi_task",
@@ -176,19 +179,19 @@ void start_task(void *pvParameters)
 //                (UBaseType_t    )VcanGC_TASK_PRIO,
 //                (TaskHandle_t*  )&VcanGCTask_Handler);
     //创建Test任务
-    xTaskCreate((TaskFunction_t )Test_task,
-                (const char*    )"Test_task",
-                (uint16_t       )Test_STK_SIZE,
-                (void*          )NULL,
-                (UBaseType_t    )Test_TASK_PRIO,
-                (TaskHandle_t*  )&TestTask_Handler);
-//    //创建LogicalFlow任务 逻辑流控制
-//    xTaskCreate((TaskFunction_t )LogicalFlow_task,
-//                (const char*    )"LogicalFlow_task",
-//                (uint16_t       )LogicalFlow_STK_SIZE,
-//                (void*           )NULL,
-//                (UBaseType_t    )LogicalFlow_TASK_PRIO,
-//                (TaskHandle_t*  )&LogicalFlowTask_Handler);
+//    xTaskCreate(  ( TaskFunction_t )Test_task,
+//									( const char*    )"Test_task",
+//									( uint16_t       )Test_STK_SIZE,
+//									( void*          )NULL,
+//									( UBaseType_t    )Test_TASK_PRIO,
+//									( TaskHandle_t*  )&TestTask_Handler );
+    //创建LogicalFlow任务 逻辑流控制
+    xTaskCreate((TaskFunction_t )LogicalFlow_task,
+                (const char*    )"LogicalFlow_task",
+                (uint16_t       )LogicalFlow_STK_SIZE,
+                (void*           )NULL,
+                (UBaseType_t    )LogicalFlow_TASK_PRIO,
+                (TaskHandle_t*  )&LogicalFlowTask_Handler);
 
     vTaskDelete(StartTask_Handler); //删除开始任务
     taskEXIT_CRITICAL();            //退出临界区
@@ -215,15 +218,15 @@ void Test_task(void *pvParameters)
 
 //        CAN_RoboModule_DRV_Position_Mode(0,1,4000,2000*4*15.15);  //2100
 //			
-//			    Servo1_OPEN;//舵机1复位
+//			  Servo1_OPEN;//舵机1复位
 
 //        osDelay(3000);
 
 //        CAN_RoboModule_DRV_Position_Mode(0,1,1000,0);
 //			
-//			    Servo1_CLOSE;//舵机1复位
+//			  Servo1_CLOSE;//舵机1复位
 
-//			osDelay(3000);
+//			  osDelay(3000);
 
 //        IndLED_Off();
 
@@ -396,7 +399,7 @@ void ResetStart(void)
 				IndicateLED_Off;
         IndLED_On(IndColorRed);
 				IndLED_On(IndColorBlue);
-        state= STOP;
+        state = STOP;
         vTaskDelay(300);
         vTaskDelete(LogicalFlowTask_Handler);
         vTaskDelay(200);
