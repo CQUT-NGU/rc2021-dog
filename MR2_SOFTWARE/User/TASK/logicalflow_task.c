@@ -8,325 +8,302 @@
 
 #include "logicalflow_task.h"
 
-//		RED_GROUNG		BLUE_GROUNG
+//        RED_GROUNG        BLUE_GROUNG
 
-bool GROUND_SELECT = RED_GROUNG;  //ºìÀ¶³¡Ñ¡Ôñ
+bool GROUND_SELECT = RED_GROUNG;  //çº¢è“åœºé€‰æ‹©
 
 bool restartflag = 0;
 
-/*********´«¸ĞÆ÷¶Ë¿ÚËµÃ÷********************
+/*********ä¼ æ„Ÿå™¨ç«¯å£è¯´æ˜********************
 *
-*¶æ»úËµÃ÷£º1ºÅ£¨Éı¸Ë¶æ»ú£©H:PD12		2ºÅ£¨ÁîÅÆ¶æ»ú£©G:PD13		3ºÅ£¨½âËø¶æ»ú£©F:PD14
+*èˆµæœºè¯´æ˜ï¼š1å·ï¼ˆå‡æ†èˆµæœºï¼‰H:PD12        2å·ï¼ˆä»¤ç‰Œèˆµæœºï¼‰G:PD13        3å·ï¼ˆè§£é”èˆµæœºï¼‰F:PD14
 *
-*ÏŞÎ»¿ª¹Ø		ÖØÆô1 X:PI6		ÖØÆô2 A:PI0		ÖØÆôCLIMB C:PH11  ÖØÆôSTA W:PI5		Æô¶¯B:PH12
-*¹âµç¿ª¹Ø£¨»ÓÊÖ¿ªÊ¼ÉÏÆÂ£©¹âµç1 S:PA0 ¹âµç2 T:PA1
+*é™ä½å¼€å…³        é‡å¯1 X:PI6        é‡å¯2 A:PI0        é‡å¯CLIMB C:PH11  é‡å¯STA W:PI5        å¯åŠ¨B:PH12
+*å…‰ç”µå¼€å…³ï¼ˆæŒ¥æ‰‹å¼€å§‹ä¸Šå¡ï¼‰å…‰ç”µ1 S:PA0 å…‰ç”µ2 T:PA1
 *
-*Ö¸Ê¾LED Z PI2
+*æŒ‡ç¤ºLED Z PI2
 **/
 
 /**
-*		¿ØÖÆÕû¸ö±ÈÈüµÄÂß¼­¹ı³Ì
+*        æ§åˆ¶æ•´ä¸ªæ¯”èµ›çš„é€»è¾‘è¿‡ç¨‹
 */
 void LogicalFlow_task(void *pvParameters)
 {
-    while( 1 ) {
+    while (1)
+    {
+        //        CAN_RoboModule_DRV_Position_Mode(0,1,2000,2150*4*15.15);  //å¼€æœºè‡ªæ£€
+        //        osDelay(2000);
+        //        CAN_RoboModule_DRV_Position_Mode(0,1,2000,0);
 
-//        CAN_RoboModule_DRV_Position_Mode(0,1,2000,2150*4*15.15);  //¿ª»ú×Ô¼ì
-//        osDelay(2000);
-//        CAN_RoboModule_DRV_Position_Mode(0,1,2000,0);
-
-        while( 1 )
+        while (1)
         {
             vTaskDelay(100);
-//            if(keyRestart1==0) {//ÖØÆô1 U:PA2
-                while(keyRestart1==0)
-                    vTaskDelay(20);
+            //            if(keyRestart1==0) {//é‡å¯1 U:PA2
+            while (keyRestart1 == 0)
+                vTaskDelay(20);
 
-                IndicateLED_Off;
-                IndLED_On(IndColorBlue);
-                IndLED_On(IndColorRed);
-                goto restart1;
-//            }
-//            else if(keyRestart2==0) { //ÖØÆô2 V:PA3
-//                while(keyRestart2==0)
-//                    vTaskDelay(20);
+            IndicateLED_Off;
+            IndLED_On(IndColorBlue);
+            IndLED_On(IndColorRed);
+            goto restart1;
+            //            }
+            //            else if(keyRestart2==0) { //é‡å¯2 V:PA3
+            //                while(keyRestart2==0)
+            //                    vTaskDelay(20);
 
-//                IndicateLED_Off;
-//                IndLED_On( IndColorBlue );
-//                IndLED_On( IndColorGreen );
-//                goto restart2;
-//            }
-//            else if(keyRestartclimb==0) //ÖØÆôclimb
-//            {
-//                while(keyRestartclimb==0)
-//                    vTaskDelay(20);
+            //                IndicateLED_Off;
+            //                IndLED_On( IndColorBlue );
+            //                IndLED_On( IndColorGreen );
+            //                goto restart2;
+            //            }
+            //            else if(keyRestartclimb==0) //é‡å¯climb
+            //            {
+            //                while(keyRestartclimb==0)
+            //                    vTaskDelay(20);
 
-//                IndicateLED_Off;
-//                IndLED_On(IndColorRed);
-//                IndLED_On(IndColorGreen);
-//                state = STOP;
-//                goto restartclimb;
-//            }
+            //                IndicateLED_Off;
+            //                IndLED_On(IndColorRed);
+            //                IndLED_On(IndColorGreen);
+            //                state = STOP;
+            //                goto restartclimb;
+            //            }
 
-            if( StartFlag == 1 && restartflag == 0 ) {
-                osDelay( 100 );
+            if (StartFlag == 1 && restartflag == 0)
+            {
+                osDelay(100);
                 break;
             }
         }
 
-
-//        while((keyInf2!=0)) //µÈ´ıÁîÅÆ¹âµç¿ª¹Ø´¥·¢
-//            vTaskDelay(500);
+        //        while((keyInf2!=0)) //ç­‰å¾…ä»¤ç‰Œå…‰ç”µå¼€å…³è§¦å‘
+        //            vTaskDelay(500);
 
         IndLED_Off();
 
         IndLED_On(IndColorRed);
-//        vTaskDelay(1500);  				//µÈ´ı mr1×ß
-//        Servo1_CLOSE;
+        //        vTaskDelay(1500);                  //ç­‰å¾… mr1èµ°
+        //        Servo1_CLOSE;
 
+        //        pid_spd_out_limit=  2000;
 
-//        pid_spd_out_limit=  2000;
+        //        state = STOP;
+        //        vTaskDelay(800);
+        //        IndLED_Off();
 
-//        state = STOP;
-//        vTaskDelay(800);
-//        IndLED_Off();
+        //        pid_spd_out_limit=  6000;
 
-//        pid_spd_out_limit=  6000;
+        //        yaw_set=0;  //------èˆªå‘è§’è®¾å®šä¸º0
+        //        LinearCorrection=normal_correction;        //æ‰“å¼€ç›´çº¿çŸ«æ­£
 
-//        yaw_set=0;  //------º½Ïò½ÇÉè¶¨Îª0
-//        LinearCorrection=normal_correction;		//´ò¿ªÖ±Ïß½ÃÕı
+        //        state = TROT;        //å°è·‘æ­¥æ€
 
-//        state = TROT;		//Ğ¡ÅÜ²½Ì¬
+        //        vTaskDelay(2000);                  //ç­‰å¾… ä¸æ£€æµ‹åˆ°çº¢è‰²å¯åŠ¨åŒºåŸŸ
 
-//        vTaskDelay(2000);  				//µÈ´ı ²»¼ì²âµ½ºìÉ«Æô¶¯ÇøÓò
+        //        OpenMvInspect(openmv_Red);  //æ£€æµ‹åˆ°çº¢è‰²  å¼€å§‹è½¬å¼¯
 
-//        OpenMvInspect(openmv_Red);  //¼ì²âµ½ºìÉ«  ¿ªÊ¼×ªÍä
+        //        IndLED_On(IndColorRed);  //çº¢ç¯æŒ‡ç¤º
 
+        //        if(GROUND_SELECT==RED_GROUNG) {//çº¢è“åœºåˆ¤æ–­ çº¢åœº
+        //            yaw_set=10;
+        //            _rotate_angle=yaw_set;
+        //            while(imuinfo.ActVal[0]<=(_rotate_angle-4))
+        //                osDelay(50);
+        //        }
+        //        else if(GROUND_SELECT==BLUE_GROUNG) {
+        //            yaw_set=-10;
+        //            _rotate_angle=yaw_set;
+        //            while(imuinfo.ActVal[0]>=(_rotate_angle+4))
+        //                osDelay(50);
+        //        }
 
+        //        IndLED_Off(); //æŒ‡ç¤ºç¯ç­
+        //        OpenMvInspect(openmv_Yellow);  // -------- ç­‰å¾…æ£€æµ‹åˆ°è½¬å¼¯ é»„è‰² --æ²™ä¸˜
 
-//        IndLED_On(IndColorRed);  //ºìµÆÖ¸Ê¾
-
-
-//        if(GROUND_SELECT==RED_GROUNG) {//ºìÀ¶³¡ÅĞ¶Ï ºì³¡
-//            yaw_set=10;
-//            _rotate_angle=yaw_set;
-//            while(imuinfo.ActVal[0]<=(_rotate_angle-4))
-//                osDelay(50);
-//        }
-//        else if(GROUND_SELECT==BLUE_GROUNG) {
-//            yaw_set=-10;
-//            _rotate_angle=yaw_set;
-//            while(imuinfo.ActVal[0]>=(_rotate_angle+4))
-//                osDelay(50);
-//        }
-
-//        IndLED_Off(); //Ö¸Ê¾µÆÃğ
-//        OpenMvInspect(openmv_Yellow);  // -------- µÈ´ı¼ì²âµ½×ªÍä »ÆÉ« --É³Çğ
-
-				
-				restart1:
+    restart1:
         /////restart only
-        pid_spd_out_limit=  6000;
-       // yaw_set=0;  //------º½Ïò½ÇÉè¶¨Îª0
-//        LinearCorrection=normal_correction;		//´ò¿ªÖ±Ïß½ÃÕı
-        state = TROT;		//Ğ¡ÅÜ²½Ì¬
-        /////------end
-				
-				vTaskDelay(1000);
-				
-				
-				
-//        if(GROUND_SELECT==RED_GROUNG) {//ºìÀ¶³¡ÅĞ¶Ï ºì³¡
-//            yaw_set=10;
-//            _rotate_angle=yaw_set;
-//            state = ROTAT_LEFT;
-//            while(imuinfo.ActVal[0]<=_rotate_angle)
-//                osDelay(20);
-//        }
-//        else if(GROUND_SELECT==BLUE_GROUNG) {
-//            yaw_set=-10;
-//            _rotate_angle=yaw_set;
-//            state = ROTAT_RIGHT;
-//            while(imuinfo.ActVal[0]>=_rotate_angle)
-//                osDelay(20);
-//        }
+        pid_spd_out_limit = 6000;
+        // yaw_set=0;  //------èˆªå‘è§’è®¾å®šä¸º0
+        //        LinearCorrection=normal_correction;        //æ‰“å¼€ç›´çº¿çŸ«æ­£
+        state = TROT;  //å°è·‘æ­¥æ€
+                       /////------end
 
+        vTaskDelay(1000);
 
-        //////////////Ô½É³Çğ//////////////
+        //        if(GROUND_SELECT==RED_GROUNG) {//çº¢è“åœºåˆ¤æ–­ çº¢åœº
+        //            yaw_set=10;
+        //            _rotate_angle=yaw_set;
+        //            state = ROTAT_LEFT;
+        //            while(imuinfo.ActVal[0]<=_rotate_angle)
+        //                osDelay(20);
+        //        }
+        //        else if(GROUND_SELECT==BLUE_GROUNG) {
+        //            yaw_set=-10;
+        //            _rotate_angle=yaw_set;
+        //            state = ROTAT_RIGHT;
+        //            while(imuinfo.ActVal[0]>=_rotate_angle)
+        //                osDelay(20);
+        //        }
 
-        IndLED_On( IndColorRed );
+        //////////////è¶Šæ²™ä¸˜//////////////
+
+        IndLED_On(IndColorRed);
 
         state = STOP;
-        vTaskDelay( 200 );
+        vTaskDelay(200);
 
         state = REALSE;
-        vTaskDelay( 300 );
+        vTaskDelay(300);
 
-        pid_spd_out_limit =  6700;
+        pid_spd_out_limit = 6700;
 
-        StartJump( HAL_GetTick( ) ); //µÚÒ»´ÎÆğÌø
-        vTaskDelay( 2300 );
+        StartJump(HAL_GetTick());  //ç¬¬ä¸€æ¬¡èµ·è·³
+        vTaskDelay(2300);
 
         state = REALSE;
-        StartJump(HAL_GetTick());	//µÚ¶ş´ÎÆğÌø
-        vTaskDelay( 2300 );
+        StartJump(HAL_GetTick());  //ç¬¬äºŒæ¬¡èµ·è·³
+        vTaskDelay(2300);
 
-        pid_spd_out_limit =  6000;
+        pid_spd_out_limit = 6000;
 
-        IndLED_Off( ); //Ö¸Ê¾µÆÃğ
+        IndLED_Off();  //æŒ‡ç¤ºç¯ç­
 
-        //////////////Ô½É³Çğ½áÊø//////////////
+        //////////////è¶Šæ²™ä¸˜ç»“æŸ//////////////
 
+        pid_spd_out_limit = 6000;
 
+        //////////è¶Šè¿‡å°é˜¶ä¹‹åçš„ç›´çº¿è¡Œèµ°éƒ¨åˆ†
+        state = TROT;
+        //        if(GROUND_SELECT==RED_GROUNG) {  //çº¢è“åœºåˆ¤æ–­ çº¢åœº
+        //            yaw_set=14.5;
+        //            _rotate_angle=yaw_set;
+        //            LinearCorrection=normal_correction;        //æ‰“å¼€ç›´çº¿çŸ«æ­£
+        //            while(imuinfo.ActVal[0]<=(_rotate_angle-1.1))  //å¿«é€Ÿè½¬è¿‡æ¥
+        //                osDelay(50);
 
-        pid_spd_out_limit=  6000;
+        //            yaw_set=13.6;  //è®¾å®šè§’åº¦ä¸º13
+        //        }
+        //        else if(GROUND_SELECT==BLUE_GROUNG) {
+        //            yaw_set=-14.5;
+        //            _rotate_angle=yaw_set;
+        //            LinearCorrection=normal_correction;        //æ‰“å¼€ç›´çº¿çŸ«æ­£
+        //            while(imuinfo.ActVal[0]>=(_rotate_angle+1.1))
+        //                osDelay(50);
 
-        //////////Ô½¹ıÌ¨½×Ö®ºóµÄÖ±ÏßĞĞ×ß²¿·Ö
-        state=TROT;
-//        if(GROUND_SELECT==RED_GROUNG) {  //ºìÀ¶³¡ÅĞ¶Ï ºì³¡
-//            yaw_set=14.5;
-//            _rotate_angle=yaw_set;
-//            LinearCorrection=normal_correction;		//´ò¿ªÖ±Ïß½ÃÕı
-//            while(imuinfo.ActVal[0]<=(_rotate_angle-1.1))  //¿ìËÙ×ª¹ıÀ´
-//                osDelay(50);
+        //            yaw_set=-13.6;
+        //        }
+        //////////ç›´çº¿è¡Œèµ°éƒ¨åˆ†å®Œ
 
-//            yaw_set=13.6;  //Éè¶¨½Ç¶ÈÎª13
-//        }
-//        else if(GROUND_SELECT==BLUE_GROUNG) {
-//            yaw_set=-14.5;
-//            _rotate_angle=yaw_set;
-//            LinearCorrection=normal_correction;		//´ò¿ªÖ±Ïß½ÃÕı
-//            while(imuinfo.ActVal[0]>=(_rotate_angle+1.1))
-//                osDelay(50);
+        //        OpenMvInspect(openmv_Yellow); //ç­‰å¾…æ£€æµ‹åˆ°é»„è‰² è‰²å—----------è¶Šç»³å­æ£€æµ‹
+        //        IndLED_On(IndColorRed);  //æŒ‡ç¤ºç¯å¼€
 
-//            yaw_set=-13.6;
-//        }
-        //////////Ö±ÏßĞĞ×ß²¿·ÖÍê
+        //        //////åˆ°è¾¾é»„è‰²åŒºåŸŸä¹‹åè½¬å¼¯åŠ¨ä½œ
+        //        if(GROUND_SELECT==RED_GROUNG) {  //çº¢è“åœºåˆ¤æ–­ çº¢åœº
+        //            yaw_set=0;
+        //            _rotate_angle=yaw_set;
+        //            while(imuinfo.ActVal[0]>=(_rotate_angle+5.5))
+        //                osDelay(20);
+        //        }
+        //        else if(GROUND_SELECT==BLUE_GROUNG) {
+        //            yaw_set=0;
+        //            _rotate_angle=yaw_set;
+        //            while(imuinfo.ActVal[0]<=(_rotate_angle-5.5))
+        //                osDelay(20);
+        //        }
+        //        IndLED_Off();
 
+        //        if(GROUND_SELECT==RED_GROUNG) {  //çº¢è“åœºåˆ¤æ–­ çº¢åœº
+        //            yaw_set=0;
+        //            _rotate_angle=yaw_set;
+        //            state = ROTAT_RIGHT;
+        //            while(imuinfo.ActVal[0]>=(_rotate_angle+0.5))
+        //                osDelay(20);
 
+        //        }
+        //        else if(GROUND_SELECT==BLUE_GROUNG) {
+        //            yaw_set=0;
+        //            _rotate_angle=yaw_set;
+        //            state = ROTAT_LEFT;
+        //            while(imuinfo.ActVal[0]<=(_rotate_angle-0.5))
+        //                osDelay(20);
 
-//        OpenMvInspect(openmv_Yellow); //µÈ´ı¼ì²âµ½»ÆÉ« É«¿é----------Ô½Éş×Ó¼ì²â
-//        IndLED_On(IndColorRed);  //Ö¸Ê¾µÆ¿ª
+        //        }
+        //////è½¬å¼¯åŠ¨ä½œç»“æŸ
 
+    restart2:
 
-//        //////µ½´ï»ÆÉ«ÇøÓòÖ®ºó×ªÍä¶¯×÷
-//        if(GROUND_SELECT==RED_GROUNG) {  //ºìÀ¶³¡ÅĞ¶Ï ºì³¡
-//            yaw_set=0;
-//            _rotate_angle=yaw_set;
-//            while(imuinfo.ActVal[0]>=(_rotate_angle+5.5))
-//                osDelay(20);
-//        }
-//        else if(GROUND_SELECT==BLUE_GROUNG) {
-//            yaw_set=0;
-//            _rotate_angle=yaw_set;
-//            while(imuinfo.ActVal[0]<=(_rotate_angle-5.5))
-//                osDelay(20);
-//        }
-//        IndLED_Off();
-
-
-//        if(GROUND_SELECT==RED_GROUNG) {  //ºìÀ¶³¡ÅĞ¶Ï ºì³¡
-//            yaw_set=0;
-//            _rotate_angle=yaw_set;
-//            state = ROTAT_RIGHT;
-//            while(imuinfo.ActVal[0]>=(_rotate_angle+0.5))
-//                osDelay(20);
-
-//        }
-//        else if(GROUND_SELECT==BLUE_GROUNG) {
-//            yaw_set=0;
-//            _rotate_angle=yaw_set;
-//            state = ROTAT_LEFT;
-//            while(imuinfo.ActVal[0]<=(_rotate_angle-0.5))
-//                osDelay(20);
-
-//        }
-        //////×ªÍä¶¯×÷½áÊø
-
-
-restart2:
-
-        pid_spd_out_limit=  6000;
-        state=TROT;
-        yaw_set=0.0;
-        LinearCorrection=normal_correction;		//´ò¿ªÖ±Ïß½ÃÕı
+        pid_spd_out_limit = 6000;
+        state             = TROT;
+        yaw_set           = 0.0;
+        LinearCorrection  = normal_correction;  //æ‰“å¼€ç›´çº¿çŸ«æ­£
         OpenMvInspect(openmv_Yellow);
 
-				
-        state=STOP;
+        state = STOP;
         vTaskDelay(500);
 
-//				state=WALK_BACK;
-//				 vTaskDelay(1000);
+        //                state=WALK_BACK;
+        //                 vTaskDelay(1000);
 
-//        state=STOP;
-//        vTaskDelay(500);
+        //        state=STOP;
+        //        vTaskDelay(500);
 
+        ////èµ·è·³åŠ¨ä½œç»„åˆ
+        pid_spd_out_limit = 6700;
 
-        ////ÆğÌø¶¯×÷×éºÏ
-        pid_spd_out_limit=  6700;
-
-        jump_angle=45.5;
-        jump_extension=28.8;
+        jump_angle     = 45.5;
+        jump_extension = 28.8;
 
         state = REALSE;
-        StartJump(HAL_GetTick());	//µÚÒ»´ÎÆğÌø
+        StartJump(HAL_GetTick());  //ç¬¬ä¸€æ¬¡èµ·è·³
         vTaskDelay(2200);
 
-
-        //////////µÚÒ»´ÎÆğÌøÖ®ºóµ÷Õû×Ô¼ºµÄ×ËÌ¬
-        if(imuinfo.ActVal[0]>=0) {
-            yaw_set=0-0;
-            _rotate_angle=yaw_set;
-            state = ROTAT_RIGHT;
-            while(imuinfo.ActVal[0]>=(_rotate_angle+1.2))
+        //////////ç¬¬ä¸€æ¬¡èµ·è·³ä¹‹åè°ƒæ•´è‡ªå·±çš„å§¿æ€
+        if (imuinfo.ActVal[0] >= 0)
+        {
+            yaw_set       = 0 - 0;
+            _rotate_angle = yaw_set;
+            state         = ROTAT_RIGHT;
+            while (imuinfo.ActVal[0] >= (_rotate_angle + 1.2))
                 osDelay(10);
         }
-        else if(imuinfo.ActVal[0]<=0) {
-            yaw_set=0-0;
-            _rotate_angle=yaw_set;
-            state = ROTAT_LEFT;
-            while(imuinfo.ActVal[0]<=(_rotate_angle-1.2))
+        else if (imuinfo.ActVal[0] <= 0)
+        {
+            yaw_set       = 0 - 0;
+            _rotate_angle = yaw_set;
+            state         = ROTAT_LEFT;
+            while (imuinfo.ActVal[0] <= (_rotate_angle - 1.2))
                 osDelay(10);
         }
-        //////////×ËÌ¬µ÷Õû½áÊø
-
+        //////////å§¿æ€è°ƒæ•´ç»“æŸ
 
         state = REALSE;
-        StartJump(HAL_GetTick());	//µÚ¶ş´ÎÆğÌø
+        StartJump(HAL_GetTick());  //ç¬¬äºŒæ¬¡èµ·è·³
         vTaskDelay(2100);
 
         state = REALSE;
-        StartJump(HAL_GetTick());	//µÚÈı´Î´ÎÆğÌø
+        StartJump(HAL_GetTick());  //ç¬¬ä¸‰æ¬¡æ¬¡èµ·è·³
         vTaskDelay(2100);
-
 
         state = REALSE;
-        StartJump(HAL_GetTick());	//µÚÈı´Î´ÎÆğÌø
+        StartJump(HAL_GetTick());  //ç¬¬ä¸‰æ¬¡æ¬¡èµ·è·³
         vTaskDelay(2100);
 
+        pid_spd_out_limit = 6700;
 
-        pid_spd_out_limit=  6700;
+        //è·¨ç»³å­ä¼ ç»Ÿæ­¥æ€   æ—¶é—´20s
+        //    CrossTheLine();
+        //    yaw_set=0-0; //èˆªå‘è§’è®¾å®š 0 è¡¥å¿-0
+        //            state=TEST1;
+        //            vTaskDelay(1000);
 
+    restartclimb:
 
-        //¿çÉş×Ó´«Í³²½Ì¬   Ê±¼ä20s
-        //	CrossTheLine();
-        //	yaw_set=0-0; //º½Ïò½ÇÉè¶¨ 0 ²¹³¥-0
-//        	state=TEST1;
-//        	vTaskDelay(1000);
+        state = STOP;
 
-
-restartclimb:
-
-        state= STOP;
-
-        //////////ÉÏÆÂ
+        //////////ä¸Šå¡
         Climbing_Comb();
-        //////////ÉÏÆÂÍê±Ï
+        //////////ä¸Šå¡å®Œæ¯•
 
-        while(1)		//Í£
+        while (1)  //åœ
             vTaskDelay(500);
-
-
     }
 }

@@ -1,25 +1,24 @@
 #include "navigation.h"
 
-
 int LinearCorrection = Deny;
 
 bool BalanceCorrection = Deny;
 
-bool _Sensor[10];
-float step_len_initial = 14;
+bool  _Sensor[10];
+float step_len_initial  = 14;
 float step_high_initial = 16;
 
-float step_len_dev = 0.0;
-float step_high_dev = 0.0;
+float step_len_dev       = 0.0;
+float step_high_dev      = 0.0;
 float flight_percent_dev = 0.0;
 
 float yaw_now = 0.0;
 float yaw_set = 0.0;
 
-float roll_set = 0.0;
+float roll_set  = 0.0;
 float pitch_set = 0.0;
 
-float roll_offset = 0.0;
+float roll_offset  = 0.0;
 float pitch_offset = 0.0;
 
 float _dev_angel;
@@ -30,14 +29,11 @@ int _count_navi;
 
 void Navi_task(void *pvParameters)
 {
-
-
-
-    for(;;)
+    for (;;)
         navigation_execute();
 }
 
-/*------------------------Å·À­½ÇÆæµã---------------------------------
+/*------------------------æ¬§æ‹‰è§’å¥‡ç‚¹---------------------------------
 
 ------- -180 --- 0 --- +180 -------
 
@@ -45,146 +41,152 @@ void Navi_task(void *pvParameters)
 
 */
 
-
-float normal_params_l,normal_params_r;//×óÍÈ²ÎÊı£¬ÓÒÍÈ²ÎÊı¡£
-void navigation_execute(void)
+float normal_params_l, normal_params_r;  //å·¦è…¿å‚æ•°ï¼Œå³è…¿å‚æ•°ã€‚
+void  navigation_execute(void)
 {
+    //    _Pitch_rev=_Pitch_initial-imuinfo.ActVal[1];
+    //    _Roll_rev=_Roll_initial-imuinfo.ActVal[2];
 
-//    _Pitch_rev=_Pitch_initial-imuinfo.ActVal[1];
-//    _Roll_rev=_Roll_initial-imuinfo.ActVal[2];
-
-    if(LinearCorrection == normal_correction)		//Ö±Ïß½ÃÕı
+    if (LinearCorrection == normal_correction)  //ç›´çº¿çŸ«æ­£
     {
-
-        step_len_dev = pid_calc(&pid_imu[2],imuinfo.ActVal[0]/1.0,yaw_set/1.0);  //¼ÆËãÍÓÂİÒÇyawÖá½Ç¶È£¬Êä³ö¸øÁ½ÍÈÍÈ²¿²îËÙ ±£³Ö½Ç¶È
+        step_len_dev = pid_calc(&pid_imu[2], imuinfo.ActVal[0] / 1.0, yaw_set / 1.0);  //è®¡ç®—é™€èºä»ªyawè½´è§’åº¦ï¼Œè¾“å‡ºç»™ä¸¤è…¿è…¿éƒ¨å·®é€Ÿ ä¿æŒè§’åº¦
 
         float _dev_limit = 14.0;
-        if(step_len_dev>_dev_limit)	step_len_dev=_dev_limit;
-        else if(step_len_dev<-_dev_limit)	step_len_dev=-_dev_limit;
+        if (step_len_dev > _dev_limit)
+            step_len_dev = _dev_limit;
+        else if (step_len_dev < -_dev_limit)
+            step_len_dev = -_dev_limit;
 
-        normal_params_l=step_len_initial-step_len_dev;
-        normal_params_r=step_len_initial+step_len_dev;
-        if(normal_params_l<0) normal_params_l=0;
-        if(normal_params_r<0) normal_params_r=0;
+        normal_params_l = step_len_initial - step_len_dev;
+        normal_params_r = step_len_initial + step_len_dev;
+        if (normal_params_l < 0)
+            normal_params_l = 0;
+        if (normal_params_r < 0)
+            normal_params_r = 0;
 
-        state_detached_params[TROT].detached_params_0.step_length=normal_params_l;
-        state_detached_params[TROT].detached_params_2.step_length=normal_params_l;
-        state_detached_params[TROT].detached_params_1.step_length=normal_params_r;
-        state_detached_params[TROT].detached_params_3.step_length=normal_params_r;
+        state_detached_params[TROT].detached_params_0.step_length = normal_params_l;
+        state_detached_params[TROT].detached_params_2.step_length = normal_params_l;
+        state_detached_params[TROT].detached_params_1.step_length = normal_params_r;
+        state_detached_params[TROT].detached_params_3.step_length = normal_params_r;
 
-//				flight_percent_dev=pid_calc(&pid_imu[2],imuinfo.ActVal[0]/100,yaw_set/100);
+        //                flight_percent_dev=pid_calc(&pid_imu[2],imuinfo.ActVal[0]/100,yaw_set/100);
 
-//        if(flight_percent_dev>0.25)	flight_percent_dev=0.25;
-//        else if(flight_percent_dev<-0.25)	flight_percent_dev=-0.25;
+        //        if(flight_percent_dev>0.25)    flight_percent_dev=0.25;
+        //        else if(flight_percent_dev<-0.25)    flight_percent_dev=-0.25;
 
-//        state_detached_params[TROT].detached_params_0.flight_percent=0.25+flight_percent_dev;
-//        state_detached_params[TROT].detached_params_2.flight_percent=0.25+flight_percent_dev;
+        //        state_detached_params[TROT].detached_params_0.flight_percent=0.25+flight_percent_dev;
+        //        state_detached_params[TROT].detached_params_2.flight_percent=0.25+flight_percent_dev;
 
-//        state_detached_params[TROT].detached_params_1.flight_percent=0.25-flight_percent_dev;
-//        state_detached_params[TROT].detached_params_3.flight_percent=0.25-flight_percent_dev;
-
+        //        state_detached_params[TROT].detached_params_1.flight_percent=0.25-flight_percent_dev;
+        //        state_detached_params[TROT].detached_params_3.flight_percent=0.25-flight_percent_dev;
     }
 
-    else if(LinearCorrection==test1_correction)
+    else if (LinearCorrection == test1_correction)
     {
-        //test1²½Ì¬ ¾ÀÆ«
-        step_len_dev = pid_calc(&pid_test1,imuinfo.ActVal[0]/1.0,yaw_set/1.0);  //¼ÆËãÍÓÂİÒÇyawÖá½Ç¶È£¬Êä³ö¸øÁ½ÍÈÍÈ²¿²îËÙ ±£³Ö½Ç¶È
+        //test1æ­¥æ€ çº å
+        step_len_dev = pid_calc(&pid_test1, imuinfo.ActVal[0] / 1.0, yaw_set / 1.0);  //è®¡ç®—é™€èºä»ªyawè½´è§’åº¦ï¼Œè¾“å‡ºç»™ä¸¤è…¿è…¿éƒ¨å·®é€Ÿ ä¿æŒè§’åº¦
 
         float _dev_limit = 6.0;
-        if(step_len_dev>_dev_limit)	step_len_dev=_dev_limit;
-        else if(step_len_dev<-_dev_limit)	step_len_dev=-_dev_limit;
+        if (step_len_dev > _dev_limit)
+            step_len_dev = _dev_limit;
+        else if (step_len_dev < -_dev_limit)
+            step_len_dev = -_dev_limit;
 
-        state_detached_params[TEST1].detached_params_0.step_length=10-step_len_dev;
-        state_detached_params[TEST1].detached_params_2.step_length=10-step_len_dev;
+        state_detached_params[TEST1].detached_params_0.step_length = 10 - step_len_dev;
+        state_detached_params[TEST1].detached_params_2.step_length = 10 - step_len_dev;
 
-        state_detached_params[TEST1].detached_params_1.step_length=10+step_len_dev;
-        state_detached_params[TEST1].detached_params_3.step_length=10+step_len_dev;
-
+        state_detached_params[TEST1].detached_params_1.step_length = 10 + step_len_dev;
+        state_detached_params[TEST1].detached_params_3.step_length = 10 + step_len_dev;
     }
 
-    else	if(LinearCorrection==climbing_correction)
+    else if (LinearCorrection == climbing_correction)
     {
-//        step_len_dev=pid_calc(&pid_climbing,imuinfo.ActVal[0]/1.2,yaw_set/1.2);  //¼ÆËãÍÓÂİÒÇyawÖá½Ç¶È£¬Êä³ö¸øÁ½ÍÈÍÈ²¿²îËÙ ±£³Ö½Ç¶È
+        //        step_len_dev=pid_calc(&pid_climbing,imuinfo.ActVal[0]/1.2,yaw_set/1.2);  //è®¡ç®—é™€èºä»ªyawè½´è§’åº¦ï¼Œè¾“å‡ºç»™ä¸¤è…¿è…¿éƒ¨å·®é€Ÿ ä¿æŒè§’åº¦
 
-//        float _dev_limit = 10.0;
-//        if(step_len_dev>_dev_limit)	step_len_dev=_dev_limit;
-//        else if(step_len_dev<-_dev_limit)	step_len_dev=-_dev_limit;
+        //        float _dev_limit = 10.0;
+        //        if(step_len_dev>_dev_limit)    step_len_dev=_dev_limit;
+        //        else if(step_len_dev<-_dev_limit)    step_len_dev=-_dev_limit;
 
-//        normal_params_l=10-step_len_dev;
-//        normal_params_r=10+step_len_dev;
-//        if(normal_params_l<0) normal_params_l=0;
-//        if(normal_params_r<0) normal_params_r=0;
+        //        normal_params_l=10-step_len_dev;
+        //        normal_params_r=10+step_len_dev;
+        //        if(normal_params_l<0) normal_params_l=0;
+        //        if(normal_params_r<0) normal_params_r=0;
 
-//        state_detached_params[CLIMBING].detached_params_0.step_length=normal_params_l;
-//        state_detached_params[CLIMBING].detached_params_2.step_length=normal_params_l;
-//        state_detached_params[CLIMBING].detached_params_1.step_length=normal_params_r;
-//        state_detached_params[CLIMBING].detached_params_3.step_length=normal_params_r;
+        //        state_detached_params[CLIMBING].detached_params_0.step_length=normal_params_l;
+        //        state_detached_params[CLIMBING].detached_params_2.step_length=normal_params_l;
+        //        state_detached_params[CLIMBING].detached_params_1.step_length=normal_params_r;
+        //        state_detached_params[CLIMBING].detached_params_3.step_length=normal_params_r;
 
-        flight_percent_dev=pid_calc(&pid_climbing,imuinfo.ActVal[0]/100,yaw_set/100);
+        flight_percent_dev = pid_calc(&pid_climbing, imuinfo.ActVal[0] / 100, yaw_set / 100);
 
-        if(flight_percent_dev>0.25)	flight_percent_dev=0.25;
-        else if(flight_percent_dev<-0.25)	flight_percent_dev=-0.25;
+        if (flight_percent_dev > 0.25)
+            flight_percent_dev = 0.25;
+        else if (flight_percent_dev < -0.25)
+            flight_percent_dev = -0.25;
 
-//			        if(flight_percent_dev>0.25)	flight_percent_dev=0.25;
-//        else if(flight_percent_dev<-0.25)	flight_percent_dev=-0.25;
+        //                    if(flight_percent_dev>0.25)    flight_percent_dev=0.25;
+        //        else if(flight_percent_dev<-0.25)    flight_percent_dev=-0.25;
 
+        state_detached_params[CLIMBING].detached_params_0.flight_percent = 0.25 - flight_percent_dev;  // +
+        state_detached_params[CLIMBING].detached_params_2.flight_percent = 0.25 - flight_percent_dev;  //
 
-        state_detached_params[CLIMBING].detached_params_0.flight_percent=0.25-flight_percent_dev;  // +
-        state_detached_params[CLIMBING].detached_params_2.flight_percent=0.25-flight_percent_dev;  //
-
-        state_detached_params[CLIMBING].detached_params_1.flight_percent=0.25+flight_percent_dev;  //
-        state_detached_params[CLIMBING].detached_params_3.flight_percent=0.25+flight_percent_dev;  //
-
+        state_detached_params[CLIMBING].detached_params_1.flight_percent = 0.25 + flight_percent_dev;  //
+        state_detached_params[CLIMBING].detached_params_3.flight_percent = 0.25 + flight_percent_dev;  //
     }
 
-    if(BalanceCorrection==Permit) 	//Æ½ºâ½ÃÕı
+    if (BalanceCorrection == Permit)  //å¹³è¡¡çŸ«æ­£
     {
-
-        if(!(state==STOP)) {		//Ö»ÓĞÔÚSTOP×´Ì¬ÏÂÄÜ¹»¿ªÆôÆ½ºâ½ÃÕı
-            printf("²»ÔÚSTOP×´Ì¬\r\n");
+        if (!(state == STOP))
+        {  //åªæœ‰åœ¨STOPçŠ¶æ€ä¸‹èƒ½å¤Ÿå¼€å¯å¹³è¡¡çŸ«æ­£
+            printf("ä¸åœ¨STOPçŠ¶æ€\r\n");
             return;
         }
 
-        roll_offset=15.0*sin(  pid_calc(&pid_imu[0],imuinfo.ActVal[2]*PI/180,roll_set)  );   //¼ÆËãÍÓÂİÒÇrollÖá½Ç¶È£¬Êä³öÍÈ²¿¸ß¶ÈĞŞÕıÖµ
+        roll_offset = 15.0 * sin(pid_calc(&pid_imu[0], imuinfo.ActVal[2] * PI / 180, roll_set));  //è®¡ç®—é™€èºä»ªrollè½´è§’åº¦ï¼Œè¾“å‡ºè…¿éƒ¨é«˜åº¦ä¿®æ­£å€¼
 
-        pitch_offset=22.5*sin(  pid_calc(&pid_imu[1],-(_Pitch_rev*PI/180)/2,pitch_set/2  )  );  //¼ÆËãÍÓÂİÒÇpitchÖá½Ç¶È£¬Êä³öÍÈ²¿¸ß¶ÈĞŞÕıÖµ
-
-        x = 0;
-        y = state_detached_params[TROT].detached_params_0.stance_height+roll_offset+pitch_offset;
-        if(y>29.5)	y=29.5;
-        else if(y<10.5)	y=10.5;
-        CartesianToTheta(1.0);
-        temp_pid.ref_agle[1]=-theta1*ReductionAndAngleRatio;
-        temp_pid.ref_agle[0]=-theta2*ReductionAndAngleRatio;
+        pitch_offset = 22.5 * sin(pid_calc(&pid_imu[1], -(_Pitch_rev * PI / 180) / 2, pitch_set / 2));  //è®¡ç®—é™€èºä»ªpitchè½´è§’åº¦ï¼Œè¾“å‡ºè…¿éƒ¨é«˜åº¦ä¿®æ­£å€¼
 
         x = 0;
-        y = state_detached_params[TROT].detached_params_1.stance_height-roll_offset+pitch_offset;
-        if(y>29.5)	y=29.5;
-        else if(y<10.5)	y=10.5;
+        y = state_detached_params[TROT].detached_params_0.stance_height + roll_offset + pitch_offset;
+        if (y > 29.5)
+            y = 29.5;
+        else if (y < 10.5)
+            y = 10.5;
         CartesianToTheta(1.0);
-        temp_pid.ref_agle[2]=theta1*ReductionAndAngleRatio;
-        temp_pid.ref_agle[3]=theta2*ReductionAndAngleRatio;
+        temp_pid.ref_agle[1] = -theta1 * ReductionAndAngleRatio;
+        temp_pid.ref_agle[0] = -theta2 * ReductionAndAngleRatio;
 
         x = 0;
-        y = state_detached_params[TROT].detached_params_2.stance_height+roll_offset-pitch_offset;
-        if(y>29.5)	y=29.5;
-        else if(y<10.5)	y=10.5;
+        y = state_detached_params[TROT].detached_params_1.stance_height - roll_offset + pitch_offset;
+        if (y > 29.5)
+            y = 29.5;
+        else if (y < 10.5)
+            y = 10.5;
         CartesianToTheta(1.0);
-        temp_pid.ref_agle[5]=-theta1*ReductionAndAngleRatio;
-        temp_pid.ref_agle[4]=-theta2*ReductionAndAngleRatio;
+        temp_pid.ref_agle[2] = theta1 * ReductionAndAngleRatio;
+        temp_pid.ref_agle[3] = theta2 * ReductionAndAngleRatio;
 
         x = 0;
-        y = state_detached_params[TROT].detached_params_3.stance_height-roll_offset-pitch_offset;
-        if(y>29.5)	y=29.5;
-        else if(y<10.5)	y=10.5;
+        y = state_detached_params[TROT].detached_params_2.stance_height + roll_offset - pitch_offset;
+        if (y > 29.5)
+            y = 29.5;
+        else if (y < 10.5)
+            y = 10.5;
         CartesianToTheta(1.0);
-        temp_pid.ref_agle[6]=theta1*ReductionAndAngleRatio;
-        temp_pid.ref_agle[7]=theta2*ReductionAndAngleRatio;
-        IsMotoReadyOrNot= IsReady;		//Êı¾İÌî³äÍê±Ï
+        temp_pid.ref_agle[5] = -theta1 * ReductionAndAngleRatio;
+        temp_pid.ref_agle[4] = -theta2 * ReductionAndAngleRatio;
 
+        x = 0;
+        y = state_detached_params[TROT].detached_params_3.stance_height - roll_offset - pitch_offset;
+        if (y > 29.5)
+            y = 29.5;
+        else if (y < 10.5)
+            y = 10.5;
+        CartesianToTheta(1.0);
+        temp_pid.ref_agle[6] = theta1 * ReductionAndAngleRatio;
+        temp_pid.ref_agle[7] = theta2 * ReductionAndAngleRatio;
+        IsMotoReadyOrNot     = IsReady;  //æ•°æ®å¡«å……å®Œæ¯•
     }
 
-
     vTaskDelay(200);
-
 }

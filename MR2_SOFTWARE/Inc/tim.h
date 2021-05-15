@@ -35,56 +35,56 @@
 #ifndef __tim_H
 #define __tim_H
 #ifdef __cplusplus
- extern "C" {
+extern "C"
+{
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
 #include "robocon.h"
-/* USER CODE BEGIN Includes */
-extern uint64_t times;
-/* USER CODE END Includes */
+#include "stm32f4xx_hal.h"
+    /* USER CODE BEGIN Includes */
+    extern uint64_t times;
+    /* USER CODE END Includes */
 
-extern TIM_HandleTypeDef htim2;
-extern TIM_HandleTypeDef htim3;
-extern TIM_HandleTypeDef htim4;
-extern TIM_HandleTypeDef htim5;
-extern TIM_HandleTypeDef htim8;
-extern TIM_HandleTypeDef htim12;
+    extern TIM_HandleTypeDef htim2;
+    extern TIM_HandleTypeDef htim3;
+    extern TIM_HandleTypeDef htim4;
+    extern TIM_HandleTypeDef htim5;
+    extern TIM_HandleTypeDef htim8;
+    extern TIM_HandleTypeDef htim12;
 
-/* USER CODE BEGIN Private defines */
-extern TIM_HandleTypeDef TIM3_Handler;      //∂® ±∆˜æ‰±˙ 
+    /* USER CODE BEGIN Private defines */
+    extern TIM_HandleTypeDef TIM3_Handler;  //ÂÆöÊó∂Âô®Âè•ÊüÑ
 
-extern uint8_t  TIM2CH3_CAPTURE_STA;	// ‰»Î≤∂ªÒ◊¥Ã¨		    				
-extern uint32_t	TIM2CH3_CAPTURE_VAL;	// ‰»Î≤∂ªÒ÷µ(TIM2/TIM2 «32Œª)
+    extern uint8_t  TIM2CH3_CAPTURE_STA;  //ËæìÂÖ•ÊçïËé∑Áä∂ÊÄÅ
+    extern uint32_t TIM2CH3_CAPTURE_VAL;  //ËæìÂÖ•ÊçïËé∑ÂÄº(TIM2/TIM2ÊòØ32‰Ωç)
 
-extern u32 temp_cap_tim2;
-extern u16 ppm_rx[10];//ppm_rx[0]   1   Ω” ’µΩppm ˝æ›
+    extern u32 temp_cap_tim2;
+    extern u16 ppm_rx[10];  //ppm_rx[0]   1   Êé•Êî∂Âà∞ppmÊï∞ÊçÆ
 
-void TIM2_CH3_Cap_Init(uint32_t arr,uint16_t psc);
+    void TIM2_CH3_Cap_Init(uint32_t arr, uint16_t psc);
 
-/* USER CODE BEGIN Prototypes */
-extern TIM_HandleTypeDef TIM2_Handler;      //∂® ±∆˜5æ‰±˙
+    /* USER CODE BEGIN Prototypes */
+    extern TIM_HandleTypeDef TIM2_Handler;  //ÂÆöÊó∂Âô®5Âè•ÊüÑ
 
+    /* USER CODE END Private defines */
 
-/* USER CODE END Private defines */
+    extern void Error_Handler(void);
 
-extern void Error_Handler(void);
+    void MX_TIM2_Init(void);
+    void MX_TIM3_Init(void);
+    void MX_TIM4_Init(void);
+    void MX_TIM5_Init(void);
+    void MX_TIM8_Init(void);
+    void MX_TIM12_Init(void);
 
-void MX_TIM2_Init(void);
-void MX_TIM3_Init(void);
-void MX_TIM4_Init(void);
-void MX_TIM5_Init(void);
-void MX_TIM8_Init(void);
-void MX_TIM12_Init(void);
-                    
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
-                                                                                                
-void TIM3_Init(uint16_t arr,uint16_t psc);
+    void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
-/* USER CODE BEGIN Prototypes */
+    void TIM3_Init(uint16_t arr, uint16_t psc);
 
-/* USER CODE END Prototypes */
+    /* USER CODE BEGIN Prototypes */
+
+    /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
 }

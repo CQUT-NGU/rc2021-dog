@@ -2,18 +2,16 @@
 #define LED_H
 #include "robocon.h"
 
-#define IndicateLED_On HAL_GPIO_WritePin(GPIOI,GPIO_PIN_2,GPIO_PIN_SET)
-#define IndicateLED_Off HAL_GPIO_WritePin(GPIOI,GPIO_PIN_2,GPIO_PIN_RESET)
+#define IndicateLED_On  HAL_GPIO_WritePin(GPIOI, GPIO_PIN_2, GPIO_PIN_SET)
+#define IndicateLED_Off HAL_GPIO_WritePin(GPIOI, GPIO_PIN_2, GPIO_PIN_RESET)
 
-#define IndLED_BLUE HAL_GPIO_WritePin(GPIOA,GPIO_PIN_4,GPIO_PIN_SET)
-#define IndLED_GREEN HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,GPIO_PIN_SET)
-#define IndicateLED_On HAL_GPIO_WritePin(GPIOI,GPIO_PIN_2,GPIO_PIN_SET)
+#define IndLED_BLUE    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET)
+#define IndLED_GREEN   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET)
+#define IndicateLED_On HAL_GPIO_WritePin(GPIOI, GPIO_PIN_2, GPIO_PIN_SET)
 
-
-#define IndColorRed 0
-#define IndColorBlue 1
+#define IndColorRed   0
+#define IndColorBlue  1
 #define IndColorGreen 2
-
 
 void led_configuration(void);
 

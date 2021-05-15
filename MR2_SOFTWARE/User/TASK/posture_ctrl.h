@@ -9,10 +9,10 @@
 #define ReductionAndAngleRatio 436.926337  //3591/187*8191/360=436.926337
 
 #define YES 1
-#define NO 0
+#define NO  0
 
 extern float _climbing_offset_angle;
-extern bool climbing_offset_flag;
+extern bool  climbing_offset_flag;
 
 extern const float TROT_step_length2;
 extern const float TROT_up_amp2;
@@ -23,17 +23,16 @@ extern const float TROT_up_amp;
 extern const float TROT_down_amp;
 extern const float TROT_flight_percent;
 extern const float TROT_freq;
-extern bool _leg_active[4];
-extern bool rc_ctrl_flag;
+extern bool        _leg_active[4];
+extern bool        rc_ctrl_flag;
 
 extern float x, y, theta1, theta2;
 
-extern float _angle_initial,_rotate_angle;
+extern float _angle_initial, _rotate_angle;
 
-extern bool TurnLeftFlag1,TurnLeftFlag2,TurnRightFlag1,TurnRightFlag2,ClimbingFlag1,ClimbingFlag2;
+extern bool TurnLeftFlag1, TurnLeftFlag2, TurnRightFlag1, TurnRightFlag2, ClimbingFlag1, ClimbingFlag2;
 
 extern float now_time;
-
 
 typedef struct
 {
@@ -49,70 +48,65 @@ typedef struct
 } Coordinate_Trans_Data;
 extern Coordinate_Trans_Data coor_calc;
 
-
-enum States {
-
-    TROT = 0,
-    TEST1 = 1,
-    TEST2 = 2,
-    TEST3 = 3,
-    TEST4 = 4,
-    TEST5 = 5,
-    TEST6 = 6,
-    TEST7 = 7,
-    TEST8 = 8,
-    TEST9 = 9,
-    TEST10 = 10,
-    TEST11 = 11,
-    TEST12 = 12,
+enum States
+{
+    TROT     = 0,
+    TEST1    = 1,
+    TEST2    = 2,
+    TEST3    = 3,
+    TEST4    = 4,
+    TEST5    = 5,
+    TEST6    = 6,
+    TEST7    = 7,
+    TEST8    = 8,
+    TEST9    = 9,
+    TEST10   = 10,
+    TEST11   = 11,
+    TEST12   = 12,
     CLIMBING = 13,
 
-
-    WALK = 14,
-    WALK_BACK = 15,
-    ROTAT_LEFT = 16,
+    WALK        = 14,
+    WALK_BACK   = 15,
+    ROTAT_LEFT  = 16,
     ROTAT_RIGHT = 17,
 
+    BOUND  = 18,  // è·³è·‘
+    GALLOP = 19,  // è¢­æ­¥
 
-    BOUND = 18,	// ÌøÅÜ
-    GALLOP = 19, // Ï®²½
-
-
-
-    STOP = 20,
+    STOP   = 20,
     REALSE = 21,
-    JUMP = 22,
-    START = 23,
-    END = 24
-
+    JUMP   = 22,
+    START  = 23,
+    END    = 24
 };
 extern enum States state;
 
+typedef struct
+{  // è…¿éƒ¨PIDå¢ç›Šç»“æ„ä½“
 
-typedef struct  {		// ÍÈ²¿PIDÔöÒæ½á¹¹Ìå
-
-    float kp_pos;		//Î»ÖÃ»·
+    float kp_pos;  //ä½ç½®ç¯
     float kd_pos;
 
-    float kp_spd;		//ËÙ¶È»·
+    float kp_spd;  //é€Ÿåº¦ç¯
     float kd_spd;
 
 } LegGain;
 extern LegGain test_gait_gains;
 
-typedef struct  {		        // ÍÈ²¿²ÎÊı½á¹¹Ìå
-    float stance_height ;   // ¹·Éíµ½µØÃæµÄ¾àÀë (cm)
-    float step_length ;     // Ò»²½µÄ¾àÀë (cm)
-    float up_amp ;          // ÉÏ²¿Õñ·ùy (cm)
-    float down_amp ;        // ÏÂ²¿Õñ·ù (cm)
-    float flight_percent ;  // °Ú¶¯Ïà°Ù·Ö±È (cm)
-    float freq ;            // Ò»²½µÄÆµÂÊ (Hz)
+typedef struct
+{                          // è…¿éƒ¨å‚æ•°ç»“æ„ä½“
+    float stance_height;   // ç‹—èº«åˆ°åœ°é¢çš„è·ç¦» (cm)
+    float step_length;     // ä¸€æ­¥çš„è·ç¦» (cm)
+    float up_amp;          // ä¸Šéƒ¨æŒ¯å¹…y (cm)
+    float down_amp;        // ä¸‹éƒ¨æŒ¯å¹… (cm)
+    float flight_percent;  // æ‘†åŠ¨ç›¸ç™¾åˆ†æ¯” (cm)
+    float freq;            // ä¸€æ­¥çš„é¢‘ç‡ (Hz)
 } GaitParams;
 extern GaitParams gait_params;
 extern GaitParams state_gait_params[];
 
-typedef struct {
-
+typedef struct
+{
     GaitParams detached_params_0;
     GaitParams detached_params_1;
 
@@ -123,23 +117,27 @@ typedef struct {
 extern DetachedParam detached_params;
 extern DetachedParam state_detached_params[];
 
-extern DetachedParam  RcDetachedParam;
+extern DetachedParam RcDetachedParam;
 
-void gait(	GaitParams params,LegGain gait_gains,
-            float leg0_offset, float leg1_offset,float leg2_offset, float leg3_offset,
-            float leg0_direction, float leg1_direction,float leg2_direction, float leg3_direction);
-void gait_detached(	DetachedParam d_params,
-                    float leg0_offset, float leg1_offset,float leg2_offset, float leg3_offset,
-                    float leg0_direction, float leg1_direction,float leg2_direction, float leg3_direction);
-void CoupledMoveLeg(float t, GaitParams params,float gait_offset, float leg_direction, int LegId);
-void CycloidTrajectory (float t, GaitParams params, float gait_offset) ;
-void SinTrajectry (float t, GaitParams params, float gait_offset) ;
-void CartesianToTheta(float leg_direction) ;
-void SetCoupledPosition( int LegId );
-void CommandAllLegs( LegGain gains );
-bool IsValidLegGain( LegGain gains );
-bool IsValidGaitParams( GaitParams params );
-void ChangeTheGainsOfPD( LegGain gains );
-void RenewYaw ( void );
-void CommandAllLegs_v( void );
+void gait(GaitParams params, LegGain gait_gains, float leg0_offset, float leg1_offset, float leg2_offset, float leg3_offset, float leg0_direction, float leg1_direction, float leg2_direction, float leg3_direction);
+void gait_detached(DetachedParam d_params,
+                   float         leg0_offset,
+                   float         leg1_offset,
+                   float         leg2_offset,
+                   float         leg3_offset,
+                   float         leg0_direction,
+                   float         leg1_direction,
+                   float         leg2_direction,
+                   float         leg3_direction);
+void CoupledMoveLeg(float t, GaitParams params, float gait_offset, float leg_direction, int LegId);
+void CycloidTrajectory(float t, GaitParams params, float gait_offset);
+void SinTrajectry(float t, GaitParams params, float gait_offset);
+void CartesianToTheta(float leg_direction);
+void SetCoupledPosition(int LegId);
+void CommandAllLegs(LegGain gains);
+bool IsValidLegGain(LegGain gains);
+bool IsValidGaitParams(GaitParams params);
+void ChangeTheGainsOfPD(LegGain gains);
+void RenewYaw(void);
+void CommandAllLegs_v(void);
 #endif

@@ -8,40 +8,40 @@
 
 #include "logicalflow_task.h"
 
-//		RED_GROUNG		BLUE_GROUNG
+//        RED_GROUNG        BLUE_GROUNG
 
-bool GROUND_SELECT=RED_GROUNG;  //ºìÀ¶³¡Ñ¡Ôñ
+bool GROUND_SELECT=RED_GROUNG;  //çº¢è“åœºé€‰æ‹©
 
 bool restartflag = 0;
 
-/*********´«¸ĞÆ÷¶Ë¿ÚËµÃ÷********************
+/*********ä¼ æ„Ÿå™¨ç«¯å£è¯´æ˜********************
 *
-*¶æ»úËµÃ÷£º1ºÅ£¨Éı¸Ë¶æ»ú£©H:PD12		2ºÅ£¨ÁîÅÆ¶æ»ú£©G:PD13		3ºÅ£¨½âËø¶æ»ú£©F:PD14
+*èˆµæœºè¯´æ˜ï¼š1å·ï¼ˆå‡æ†èˆµæœºï¼‰H:PD12        2å·ï¼ˆä»¤ç‰Œèˆµæœºï¼‰G:PD13        3å·ï¼ˆè§£é”èˆµæœºï¼‰F:PD14
 *
-*ÏŞÎ»¿ª¹Ø		ÖØÆô1 X:PI6		ÖØÆô2 A:PI0		ÖØÆôCLIMB C:PH11  ÖØÆôSTA W:PI5		Æô¶¯B:PH12
-*¹âµç¿ª¹Ø£¨»ÓÊÖ¿ªÊ¼ÉÏÆÂ£©¹âµç1 S:PA0 ¹âµç2 T:PA1
+*é™ä½å¼€å…³        é‡å¯1 X:PI6        é‡å¯2 A:PI0        é‡å¯CLIMB C:PH11  é‡å¯STA W:PI5        å¯åŠ¨B:PH12
+*å…‰ç”µå¼€å…³ï¼ˆæŒ¥æ‰‹å¼€å§‹ä¸Šå¡ï¼‰å…‰ç”µ1 S:PA0 å…‰ç”µ2 T:PA1
 *
-*Ö¸Ê¾LED Z PI2
+*æŒ‡ç¤ºLED Z PI2
 **/
 
 /**
-*		¿ØÖÆÕû¸ö±ÈÈüµÄÂß¼­¹ı³Ì
+*        æ§åˆ¶æ•´ä¸ªæ¯”èµ›çš„é€»è¾‘è¿‡ç¨‹
 */
 void LogicalFlow_task(void *pvParameters)
 {
     for(;;) {
-			
-			CAN_RoboModule_DRV_Position_Mode(0,1,2000,2050*4*15.15);  //2100
+            
+            CAN_RoboModule_DRV_Position_Mode(0,1,2000,2050*4*15.15);  //2100
         osDelay(2000);
         CAN_RoboModule_DRV_Position_Mode(0,1,2000,0);
-			
-			
-			
+            
+            
+            
 
         while(1)
         {
             vTaskDelay(100);
-            if(keyRestart1==0) {//ÖØÆô1 U:PA2
+            if(keyRestart1==0) {//é‡å¯1 U:PA2
                 while(keyRestart1==0)
                     vTaskDelay(20);
 
@@ -50,7 +50,7 @@ void LogicalFlow_task(void *pvParameters)
                 IndLED_On(IndColorRed);
                 goto restart1;
             }
-            else if(keyRestart2==0) { //ÖØÆô2 V:PA3
+            else if(keyRestart2==0) { //é‡å¯2 V:PA3
                 while(keyRestart2==0)
                     vTaskDelay(20);
 
@@ -59,7 +59,7 @@ void LogicalFlow_task(void *pvParameters)
                 IndLED_On(IndColorGreen);
                 goto restart2;
             }
-            else if(keyRestartclimb==0) //ÖØÆôclimb
+            else if(keyRestartclimb==0) //é‡å¯climb
             {
                 while(keyRestartclimb==0)
                     vTaskDelay(20);
@@ -80,13 +80,13 @@ void LogicalFlow_task(void *pvParameters)
         }
 
 
-        while((keyInf2!=0)) //µÈ´ıÁîÅÆ¹âµç¿ª¹Ø´¥·¢
+        while((keyInf2!=0)) //ç­‰å¾…ä»¤ç‰Œå…‰ç”µå¼€å…³è§¦å‘
             vTaskDelay(500);
 
         IndLED_Off();
 
         IndLED_On(IndColorRed);
-        vTaskDelay(1500);  				//µÈ´ı mr1×ß
+        vTaskDelay(1500);                  //ç­‰å¾… mr1èµ°
         Servo1_CLOSE;
 
 
@@ -98,27 +98,27 @@ void LogicalFlow_task(void *pvParameters)
 
         pid_spd_out_limit=  4000;
 
-        yaw_set=0;  //------º½Ïò½ÇÉè¶¨Îª0
-        LinearCorrection=normal_correction;		//´ò¿ªÖ±Ïß½ÃÕı
+        yaw_set=0;  //------èˆªå‘è§’è®¾å®šä¸º0
+        LinearCorrection=normal_correction;        //æ‰“å¼€ç›´çº¿çŸ«æ­£
 
-        state = TROT;		//Ğ¡ÅÜ²½Ì¬
+        state = TROT;        //å°è·‘æ­¥æ€
 
-        vTaskDelay(2500);  				//µÈ´ı ²»¼ì²âµ½ºìÉ«Æô¶¯ÇøÓò
+        vTaskDelay(2500);                  //ç­‰å¾… ä¸æ£€æµ‹åˆ°çº¢è‰²å¯åŠ¨åŒºåŸŸ
 
-        OpenMvInspect(openmv_Red);  //¼ì²âµ½ºìÉ«  ¿ªÊ¼×ªÍä
+        OpenMvInspect(openmv_Red);  //æ£€æµ‹åˆ°çº¢è‰²  å¼€å§‹è½¬å¼¯
 
 restart1:
         /////restart only
         pid_spd_out_limit=  4000;
-        yaw_set=0;  //------º½Ïò½ÇÉè¶¨Îª0
-        LinearCorrection=normal_correction;		//´ò¿ªÖ±Ïß½ÃÕı
-        state = TROT;		//Ğ¡ÅÜ²½Ì¬
+        yaw_set=0;  //------èˆªå‘è§’è®¾å®šä¸º0
+        LinearCorrection=normal_correction;        //æ‰“å¼€ç›´çº¿çŸ«æ­£
+        state = TROT;        //å°è·‘æ­¥æ€
         /////------end
 
-        IndLED_On(IndColorRed);  //ºìµÆÖ¸Ê¾
+        IndLED_On(IndColorRed);  //çº¢ç¯æŒ‡ç¤º
 
 
-        if(GROUND_SELECT==RED_GROUNG) {//ºìÀ¶³¡ÅĞ¶Ï ºì³¡
+        if(GROUND_SELECT==RED_GROUNG) {//çº¢è“åœºåˆ¤æ–­ çº¢åœº
             yaw_set=10;
             _rotate_angle=yaw_set;
             while(imuinfo.ActVal[0]<=(_rotate_angle-4))
@@ -131,10 +131,10 @@ restart1:
                 osDelay(50);
         }
 
-        IndLED_Off(); //Ö¸Ê¾µÆÃğ
-        OpenMvInspect(openmv_Yellow);  // -------- µÈ´ı¼ì²âµ½×ªÍä »ÆÉ« --É³Çğ
+        IndLED_Off(); //æŒ‡ç¤ºç¯ç­
+        OpenMvInspect(openmv_Yellow);  // -------- ç­‰å¾…æ£€æµ‹åˆ°è½¬å¼¯ é»„è‰² --æ²™ä¸˜
 
-        if(GROUND_SELECT==RED_GROUNG) {//ºìÀ¶³¡ÅĞ¶Ï ºì³¡
+        if(GROUND_SELECT==RED_GROUNG) {//çº¢è“åœºåˆ¤æ–­ çº¢åœº
             yaw_set=10;
             _rotate_angle=yaw_set;
             state = ROTAT_LEFT;
@@ -150,7 +150,7 @@ restart1:
         }
 
 
-        //////////////Ô½É³Çğ//////////////
+        //////////////è¶Šæ²™ä¸˜//////////////
 
         IndLED_On(IndColorRed);
 
@@ -162,58 +162,58 @@ restart1:
 
         pid_spd_out_limit=  6700;
 
-        StartJump(HAL_GetTick()); //µÚÒ»´ÎÆğÌø
+        StartJump(HAL_GetTick()); //ç¬¬ä¸€æ¬¡èµ·è·³
         vTaskDelay(2600);
 
         state = REALSE;
-        StartJump(HAL_GetTick());	//µÚ¶ş´ÎÆğÌø
+        StartJump(HAL_GetTick());    //ç¬¬äºŒæ¬¡èµ·è·³
         vTaskDelay(2600);
 
         pid_spd_out_limit=  4000;
 
-        IndLED_Off(); //Ö¸Ê¾µÆÃğ
+        IndLED_Off(); //æŒ‡ç¤ºç¯ç­
 
-        //////////////Ô½É³Çğ½áÊø//////////////
+        //////////////è¶Šæ²™ä¸˜ç»“æŸ//////////////
 
 
 
         pid_spd_out_limit=  4000;
 
-        //////////Ô½¹ıÌ¨½×Ö®ºóµÄÖ±ÏßĞĞ×ß²¿·Ö
+        //////////è¶Šè¿‡å°é˜¶ä¹‹åçš„ç›´çº¿è¡Œèµ°éƒ¨åˆ†
         state=TROT;
-        if(GROUND_SELECT==RED_GROUNG) {  //ºìÀ¶³¡ÅĞ¶Ï ºì³¡
+        if(GROUND_SELECT==RED_GROUNG) {  //çº¢è“åœºåˆ¤æ–­ çº¢åœº
             yaw_set=14.5;
             _rotate_angle=yaw_set;
-            LinearCorrection=normal_correction;		//´ò¿ªÖ±Ïß½ÃÕı
-            while(imuinfo.ActVal[0]<=(_rotate_angle-1.1))  //¿ìËÙ×ª¹ıÀ´
+            LinearCorrection=normal_correction;        //æ‰“å¼€ç›´çº¿çŸ«æ­£
+            while(imuinfo.ActVal[0]<=(_rotate_angle-1.1))  //å¿«é€Ÿè½¬è¿‡æ¥
                 osDelay(50);
 
-            yaw_set=13.6;  //Éè¶¨½Ç¶ÈÎª13
+            yaw_set=13.6;  //è®¾å®šè§’åº¦ä¸º13
         }
         else if(GROUND_SELECT==BLUE_GROUNG) {
             yaw_set=-14.5;
             _rotate_angle=yaw_set;
-            LinearCorrection=normal_correction;		//´ò¿ªÖ±Ïß½ÃÕı
+            LinearCorrection=normal_correction;        //æ‰“å¼€ç›´çº¿çŸ«æ­£
             while(imuinfo.ActVal[0]>=(_rotate_angle+1.1))
                 osDelay(50);
 
             yaw_set=-13.6;
         }
-        //////////Ö±ÏßĞĞ×ß²¿·ÖÍê
+        //////////ç›´çº¿è¡Œèµ°éƒ¨åˆ†å®Œ
 
 
 
-        OpenMvInspect(openmv_Yellow); //µÈ´ı¼ì²âµ½»ÆÉ« É«¿é----------Ô½Éş×Ó¼ì²â
-        IndLED_On(IndColorRed);  //Ö¸Ê¾µÆ¿ª
+        OpenMvInspect(openmv_Yellow); //ç­‰å¾…æ£€æµ‹åˆ°é»„è‰² è‰²å—----------è¶Šç»³å­æ£€æµ‹
+        IndLED_On(IndColorRed);  //æŒ‡ç¤ºç¯å¼€
 
-				
+                
 
 
-				
-				
-				
-        //////µ½´ï»ÆÉ«ÇøÓòÖ®ºó×ªÍä¶¯×÷
-        if(GROUND_SELECT==RED_GROUNG) {  //ºìÀ¶³¡ÅĞ¶Ï ºì³¡
+                
+                
+                
+        //////åˆ°è¾¾é»„è‰²åŒºåŸŸä¹‹åè½¬å¼¯åŠ¨ä½œ
+        if(GROUND_SELECT==RED_GROUNG) {  //çº¢è“åœºåˆ¤æ–­ çº¢åœº
             yaw_set=0;
             _rotate_angle=yaw_set;
             while(imuinfo.ActVal[0]>=(_rotate_angle+5.5))
@@ -228,7 +228,7 @@ restart1:
         IndLED_Off();
 
 
-        if(GROUND_SELECT==RED_GROUNG) {  //ºìÀ¶³¡ÅĞ¶Ï ºì³¡
+        if(GROUND_SELECT==RED_GROUNG) {  //çº¢è“åœºåˆ¤æ–­ çº¢åœº
             yaw_set=0;
             _rotate_angle=yaw_set;
             state = ROTAT_RIGHT;
@@ -244,42 +244,42 @@ restart1:
                 osDelay(20);
 
         }
-        //////×ªÍä¶¯×÷½áÊø
-				
-				
-								restart2:
+        //////è½¬å¼¯åŠ¨ä½œç»“æŸ
+                
+                
+                                restart2:
 
         pid_spd_out_limit=  4000;
         state=TROT;
         yaw_set=0.0;
-        LinearCorrection=normal_correction;		//´ò¿ªÖ±Ïß½ÃÕı
+        LinearCorrection=normal_correction;        //æ‰“å¼€ç›´çº¿çŸ«æ­£
  OpenMvInspect(openmv_Yellow);
-				
-				
+                
+                
 
 
         state=STOP;
         vTaskDelay(500);
 
-//				state=WALK_BACK;
-//				 vTaskDelay(1000);
+//                state=WALK_BACK;
+//                 vTaskDelay(1000);
 
 //        state=STOP;
 //        vTaskDelay(500);
 
 
-        ////ÆğÌø¶¯×÷×éºÏ
+        ////èµ·è·³åŠ¨ä½œç»„åˆ
         pid_spd_out_limit=  6900;
 
         jump_angle=45.5;
         jump_extension=28.8;
 
         state = REALSE;
-        StartJump(HAL_GetTick());	//µÚÒ»´ÎÆğÌø
+        StartJump(HAL_GetTick());    //ç¬¬ä¸€æ¬¡èµ·è·³
         vTaskDelay(2200);
 
 
-        //////////µÚÒ»´ÎÆğÌøÖ®ºóµ÷Õû×Ô¼ºµÄ×ËÌ¬
+        //////////ç¬¬ä¸€æ¬¡èµ·è·³ä¹‹åè°ƒæ•´è‡ªå·±çš„å§¿æ€
         if(imuinfo.ActVal[0]>=0) {
             yaw_set=0-0;
             _rotate_angle=yaw_set;
@@ -294,42 +294,42 @@ restart1:
             while(imuinfo.ActVal[0]<=(_rotate_angle-1.2))
                 osDelay(10);
         }
-        //////////×ËÌ¬µ÷Õû½áÊø
+        //////////å§¿æ€è°ƒæ•´ç»“æŸ
 
 
         state = REALSE;
-        StartJump(HAL_GetTick());	//µÚ¶ş´ÎÆğÌø
+        StartJump(HAL_GetTick());    //ç¬¬äºŒæ¬¡èµ·è·³
         vTaskDelay(2500);
 
         state = REALSE;
-        StartJump(HAL_GetTick());	//µÚÈı´Î´ÎÆğÌø
+        StartJump(HAL_GetTick());    //ç¬¬ä¸‰æ¬¡æ¬¡èµ·è·³
         vTaskDelay(2500);
 
 
         state = REALSE;
-        StartJump(HAL_GetTick());	//µÚÈı´Î´ÎÆğÌø
+        StartJump(HAL_GetTick());    //ç¬¬ä¸‰æ¬¡æ¬¡èµ·è·³
         vTaskDelay(2500);
 
 
         pid_spd_out_limit=  6700;
 
 
-        //¿çÉş×Ó´«Í³²½Ì¬   Ê±¼ä20s
-        //	CrossTheLine();
-        //	yaw_set=0-0; //º½Ïò½ÇÉè¶¨ 0 ²¹³¥-0
-//        	state=TEST1;
-//        	vTaskDelay(1000);
+        //è·¨ç»³å­ä¼ ç»Ÿæ­¥æ€   æ—¶é—´20s
+        //    CrossTheLine();
+        //    yaw_set=0-0; //èˆªå‘è§’è®¾å®š 0 è¡¥å¿-0
+//            state=TEST1;
+//            vTaskDelay(1000);
 
 
 restartclimb:
 
         state= STOP;
 
-        //////////ÉÏÆÂ
+        //////////ä¸Šå¡
         Climbing_Comb();
-        //////////ÉÏÆÂÍê±Ï
+        //////////ä¸Šå¡å®Œæ¯•
 
-        while(1)		//Í£
+        while(1)        //åœ
             vTaskDelay(500);
 
 

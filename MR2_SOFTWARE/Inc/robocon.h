@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
   * @file           : __ROBOCON_H.h
-  * @brief          : ËùÓĞµÄÓÃ»§Ìí¼ÓµÄ±ÈÈüº¯ÊıÍ·ÎÄ¼ş¶¼·Åµ½Õâ¶ù
-  *                   Ê¹ÓÃÊ±Ö»ĞèÒª°üº¬´ËÎÄ¼ş¼´¿É
+  * @brief          : æ‰€æœ‰çš„ç”¨æˆ·æ·»åŠ çš„æ¯”èµ›å‡½æ•°å¤´æ–‡ä»¶éƒ½æ”¾åˆ°è¿™å„¿
+  *                   ä½¿ç”¨æ—¶åªéœ€è¦åŒ…å«æ­¤æ–‡ä»¶å³å¯
   ******************************************************************************
   ******************************************************************************
   */
@@ -10,44 +10,39 @@
 #ifndef __ROBOCON_H
 #define __ROBOCON_H
 
-
-
-/* ÏµÍ³ ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
-
+/* ç³»ç»Ÿ ------------------------------------------------------------------*/
 #include "FreeRTOS.h"
-#include "task.h"
 #include "cmsis_os.h"
-
 #include "main.h"
-
-#include "string.h"
 #include "stdlib.h"
+#include "stm32f4xx_hal.h"
+#include "string.h"
+#include "task.h"
 
-/* ÍâÉè ------------------------------------------------------------------*/
-#include "mytype.h"
-#include "usart.h"
+/* å¤–è®¾ ------------------------------------------------------------------*/
+#include "can.h"
+#include "dma.h"
 #include "gpio.h"
 #include "math.h"
-#include "can.h"
-#include "tim.h"
+#include "mytype.h"
 #include "spi.h"
-#include "dma.h"
+#include "tim.h"
+#include "usart.h"
 
 /* APP ------------------------------------------------------------------*/
 #include "combinations.h"
-#include "power_ctrl.h"
 #include "jump.h"
+#include "power_ctrl.h"
 
 /* TASK ------------------------------------------------------------------*/
-#include "posture_ctrl.h"
-#include "moto_ctrl.h"
-#include "debug.h"
-#include "navigation.h"
 #include "Remote_Control.h"
-#include "remote_control_task.h"
-#include "logicalflow_task.h"
+#include "debug.h"
 #include "detect_task.h"
+#include "logicalflow_task.h"
+#include "moto_ctrl.h"
+#include "navigation.h"
+#include "posture_ctrl.h"
+#include "remote_control_task.h"
 
 /* AHRS ------------------------------------------------------------------*/
 #include "imu.h"
@@ -59,13 +54,12 @@
 #include "servo.h"
 #include "stepmotor.h"
 
-
 /* BSP ------------------------------------------------------------------*/
-#include "bsp_uart.h"
 #include "bsp_can.h"
 #include "bsp_rc.h"
+#include "bsp_uart.h"
 #include "pid.h"
-#include "vcan.h"
 #include "robomoudle.h"
+#include "vcan.h"
 
 #endif /* __ROBOCON_H */

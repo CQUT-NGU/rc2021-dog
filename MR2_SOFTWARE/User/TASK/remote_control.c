@@ -1,8 +1,8 @@
 /**
   ****************************(C) COPYRIGHT 2016 DJI****************************
   * @file       remote_control.c/h
-  * @brief      Ò£¿ØÆ÷´¦Àí£¬Ò£¿ØÆ÷Í¨¹ýDMA´®¿Ú½ÓÊÕÊý¾Ý£¬ÀûÓÃ´®¿Ú¿ÕÏÐÖÐ¶ÏÀ´À­Æð´¦
-  *            	Àíº¯Êý
+  * @brief      é¥æŽ§å™¨å¤„ç†ï¼Œé¥æŽ§å™¨é€šè¿‡DMAä¸²å£æŽ¥æ”¶æ•°æ®ï¼Œåˆ©ç”¨ä¸²å£ç©ºé—²ä¸­æ–­æ¥æ‹‰èµ·å¤„
+  *                ç†å‡½æ•°
   ==============================================================================
   **************************** HBUT ROBOCON 2019****************************
   */
@@ -10,143 +10,137 @@
 #include "Remote_Control.h"
 extern TaskHandle_t LogicalFlowTask_Handler;
 
-float step_len_throttle;        //²½³¤¸Ë¡£
-float step_len_throttle_yaw;    //²½³¤¸Ëº½Ïò½Ç¡£
-float rc_params_l,rc_params_r;  //Ò£¿Ø×óÍÈ²ÎÊý£¬Ò£¿ØÓÒÍÈ²ÎÊý¡£
+float step_len_throttle;         //æ­¥é•¿æ†ã€‚
+float step_len_throttle_yaw;     //æ­¥é•¿æ†èˆªå‘è§’ã€‚
+float rc_params_l, rc_params_r;  //é¥æŽ§å·¦è…¿å‚æ•°ï¼Œé¥æŽ§å³è…¿å‚æ•°ã€‚
 
-float step_len_rotate_angle;    //²½³¤¸ËÐý×ª½Ç¡£
+float step_len_rotate_angle;  //æ­¥é•¿æ†æ—‹è½¬è§’ã€‚
 
 bool StartFlag = 0;
 
 void rc_params_clean(void)
 {
-    step_len_throttle=0;
-    step_len_throttle_yaw=0;
-    step_len_rotate_angle=0;
-    state_gait_params[ROTAT_LEFT].step_length=0;
-    RcDetachedParam.detached_params_0.step_length=0;
-    RcDetachedParam.detached_params_2.step_length=0;
-    RcDetachedParam.detached_params_1.step_length=0;
-    RcDetachedParam.detached_params_3.step_length=0;
-
+    step_len_throttle                             = 0;
+    step_len_throttle_yaw                         = 0;
+    step_len_rotate_angle                         = 0;
+    state_gait_params[ROTAT_LEFT].step_length     = 0;
+    RcDetachedParam.detached_params_0.step_length = 0;
+    RcDetachedParam.detached_params_2.step_length = 0;
+    RcDetachedParam.detached_params_1.step_length = 0;
+    RcDetachedParam.detached_params_3.step_length = 0;
 }
 
-void Rc_task( void *pvParameters )
+void Rc_task(void *pvParameters)
 {
+    //    while(!imu_rec_flag)        //ç­‰å¾…ACTIONåˆå§‹åŒ–
+    //    {
+    //        IndLED_On(IndColorGreen);
+    //        vTaskDelay(50);
+    //        IndLED_Off();
+    //        vTaskDelay(50);
+    //    }
 
-//    while(!imu_rec_flag)		//µÈ´ýACTION³õÊ¼»¯
-//    {
-//        IndLED_On(IndColorGreen);
-//        vTaskDelay(50);
-//        IndLED_Off();
-//        vTaskDelay(50);
-//    }
+    //    IndLED_On(IndColorRed);
 
-//    IndLED_On(IndColorRed);
+    //    ActionDoneBuzzer();
 
-//    ActionDoneBuzzer();
-
-    while( 1 )
+    while (1)
     {
-        //----------------------Æô¶¯°´¼ü---°åÔØ°´¼ü-------------------//
-        if( keyStart == 0 && StartFlag == 0 )  //599ÉÏ 1599ÏÂ
+        //----------------------å¯åŠ¨æŒ‰é”®---æ¿è½½æŒ‰é”®-------------------//
+        if (keyStart == 0 && StartFlag == 0)  //599ä¸Š 1599ä¸‹
         {
-            while( keyStart == 0 )
-                vTaskDelay( 20 );
-            StartPosToMiddlePos( );
+            while (keyStart == 0)
+                vTaskDelay(20);
+            StartPosToMiddlePos();
             StartFlag = 1;
             IndicateLED_Off;
-            IndLED_On( IndColorGreen );
+            IndLED_On(IndColorGreen);
         }
-        else if( keyStart == 0 && StartFlag == 1 )
+        else if (keyStart == 0 && StartFlag == 1)
         {
-            while(keyStart==0)
-                vTaskDelay( 20 );
-            CAN_RoboModule_DRV_Position_Mode(0,1,2000,0);
-            MiddlePosToEndPos( );
+            while (keyStart == 0)
+                vTaskDelay(20);
+            CAN_RoboModule_DRV_Position_Mode(0, 1, 2000, 0);
+            MiddlePosToEndPos();
             StartFlag = 0;
         }
 
-//----------------------Ò£¿ØÇøÓò-------------------------------------------------//
+        //----------------------é¥æŽ§åŒºåŸŸ-------------------------------------------------//
 
-//        if(ppm_rx[7]>590&&ppm_rx[7]<1600)  //VRA    Ñ¡ÔñÊÇ·ñ¿ªÆôÒ£¿Ø¿ØÖÆ    600 850 1100 1350 1600
-//        {
-//            rc_ctrl_flag = 1;
+        //        if(ppm_rx[7]>590&&ppm_rx[7]<1600)  //VRA    é€‰æ‹©æ˜¯å¦å¼€å¯é¥æŽ§æŽ§åˆ¶    600 850 1100 1350 1600
+        //        {
+        //            rc_ctrl_flag = 1;
 
-
-     
-        //----------------------Ìø----------------------//
-        if(ppm_rx[5]>1500)  //599ÉÏ 1599ÏÂ
+        //----------------------è·³----------------------//
+        if (ppm_rx[5] > 1500)  //599ä¸Š 1599ä¸‹
         {
-            while(ppm_rx[5]>1500)
+            while (ppm_rx[5] > 1500)
                 vTaskDelay(200);
             state = REALSE;
-            StartJump( HAL_GetTick( ) );
-						vTaskDelay(2000);
+            StartJump(HAL_GetTick());
+            vTaskDelay(2000);
             printf("JUMP\r\n");
         }
 
-				
-				
-				
-            //------------------------ÓÍÃÅ--------------------------//
-            if(ppm_rx[3]>590&&ppm_rx[3]<660) { //599ÉÏ 1599ÏÂ  ÓÍÃÅ
+        //------------------------æ²¹é—¨--------------------------//
+        if (ppm_rx[3] > 590 && ppm_rx[3] < 660)
+        {  //599ä¸Š 1599ä¸‹  æ²¹é—¨
 
-                if( ppm_rx[ 4 ] > 600&&ppm_rx[4]<900) {  //×ó´ò
-                    step_len_rotate_angle = ((float)(-(ppm_rx[4]-1100+200)))/100 * 4;
-                    state=ROTAT_LEFT;
-                    state_gait_params[ROTAT_LEFT].step_length=step_len_rotate_angle;
-                    vTaskDelay(50);
-                }
-
-                else if(ppm_rx[4]>1300&&ppm_rx[4]<1600) {//ÓÒ´ò
-                    step_len_rotate_angle=(float)(ppm_rx[4]-1100-200)/100 * 4;
-                    state=ROTAT_RIGHT;
-                    state_gait_params[ROTAT_RIGHT].step_length=step_len_rotate_angle;
-                    vTaskDelay(50);
-                }
-
-                else {
-                    rc_params_clean();
-                    state = REALSE;
-                    vTaskDelay(5);
-                }
+            if (ppm_rx[4] > 600 && ppm_rx[4] < 900)
+            {  //å·¦æ‰“
+                step_len_rotate_angle                     = ((float)(-(ppm_rx[4] - 1100 + 200))) / 100 * 4;
+                state                                     = ROTAT_LEFT;
+                state_gait_params[ROTAT_LEFT].step_length = step_len_rotate_angle;
+                vTaskDelay(50);
             }
-            else if(ppm_rx[3]>=660&&ppm_rx[3]<800) {
+
+            else if (ppm_rx[4] > 1300 && ppm_rx[4] < 1600)
+            {  //å³æ‰“
+                step_len_rotate_angle                      = (float)(ppm_rx[4] - 1100 - 200) / 100 * 4;
+                state                                      = ROTAT_RIGHT;
+                state_gait_params[ROTAT_RIGHT].step_length = step_len_rotate_angle;
+                vTaskDelay(50);
+            }
+
+            else
+            {
                 rc_params_clean();
-                state = STOP;
+                state = REALSE;
                 vTaskDelay(5);
             }
-            else if(ppm_rx[3]>=800&&ppm_rx[3]<900) {
-                rc_params_clean();
-                state = TROT;
-                vTaskDelay(5);
-            }
-            else if( ppm_rx[ 3 ] >= 900 && ppm_rx[ 3 ] < 1600 ) {
-                vTaskDelay( 5 );
+        }
+        else if (ppm_rx[3] >= 660 && ppm_rx[3] < 800)
+        {
+            rc_params_clean();
+            state = STOP;
+            vTaskDelay(5);
+        }
+        else if (ppm_rx[3] >= 800 && ppm_rx[3] < 900)
+        {
+            rc_params_clean();
+            state = TROT;
+            vTaskDelay(5);
+        }
+        else if (ppm_rx[3] >= 900 && ppm_rx[3] < 1600)
+        {
+            vTaskDelay(5);
 
-                step_len_throttle = ( ( float ) ppm_rx[ 3 ] - 900 ) / 100 * 3; //0-21
-                step_len_throttle_yaw = ( ( float ) ppm_rx[ 1 ] - 1099 ) / 100 * 3;
+            step_len_throttle     = ((float)ppm_rx[3] - 900) / 100 * 3;  //0-21
+            step_len_throttle_yaw = ((float)ppm_rx[1] - 1099) / 100 * 3;
 
-                rc_params_l=step_len_throttle+step_len_throttle_yaw;
-                rc_params_r=step_len_throttle-step_len_throttle_yaw;
-                if(rc_params_l<0) rc_params_l=0;
-                if(rc_params_r<0) rc_params_r=0;
+            rc_params_l = step_len_throttle + step_len_throttle_yaw;
+            rc_params_r = step_len_throttle - step_len_throttle_yaw;
+            if (rc_params_l < 0)
+                rc_params_l = 0;
+            if (rc_params_r < 0)
+                rc_params_r = 0;
 
-                RcDetachedParam.detached_params_0.step_length=rc_params_l;
-                RcDetachedParam.detached_params_2.step_length=rc_params_l;
-                RcDetachedParam.detached_params_1.step_length=rc_params_r;
-                RcDetachedParam.detached_params_3.step_length=rc_params_r;
-            }
-
-
-
-
-
+            RcDetachedParam.detached_params_0.step_length = rc_params_l;
+            RcDetachedParam.detached_params_2.step_length = rc_params_l;
+            RcDetachedParam.detached_params_1.step_length = rc_params_r;
+            RcDetachedParam.detached_params_3.step_length = rc_params_r;
+        }
 
         vTaskDelay(100);
-
     }
-
-
 }

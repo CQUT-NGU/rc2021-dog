@@ -25,12 +25,11 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 
-
-
-enum {
-    LLAST	= 0,
-    LAST 	= 1,
-    NOW 	= 2,
+enum
+{
+    LLAST = 0,
+    LAST  = 1,
+    NOW   = 2,
 
     POSITION_PID,
     DELTA_PID,
@@ -41,51 +40,50 @@ typedef struct __pid_t
     float i;
     float d;
 
-    float set[3];				//Ä¿±êÖµ,°üº¬NOW£¬ LAST£¬ LLASTÉÏÉÏ´Î
-    float get[3];				//²âÁ¿Öµ
-    float err[3];				//Îó²î
+    float set[3];  //ç›®æ ‡å€¼,åŒ…å«NOWï¼Œ LASTï¼Œ LLASTä¸Šä¸Šæ¬¡
+    float get[3];  //æµ‹é‡å€¼
+    float err[3];  //è¯¯å·®
 
+    float pout;  //pè¾“å‡º
+    float iout;  //iè¾“å‡º
+    float dout;  //dè¾“å‡º
 
-    float pout;							//pÊä³ö
-    float iout;							//iÊä³ö
-    float dout;							//dÊä³ö
-
-    float pos_out;						//±¾´ÎÎ»ÖÃÊ½Êä³ö
-    float last_pos_out;				//ÉÏ´ÎÊä³ö
-    float delta_u;						//±¾´ÎÔöÁ¿Öµ
-    float delta_out;					//±¾´ÎÔöÁ¿Ê½Êä³ö = last_delta_out + delta_u
+    float pos_out;       //æœ¬æ¬¡ä½ç½®å¼è¾“å‡º
+    float last_pos_out;  //ä¸Šæ¬¡è¾“å‡º
+    float delta_u;       //æœ¬æ¬¡å¢é‡å€¼
+    float delta_out;     //æœ¬æ¬¡å¢é‡å¼è¾“å‡º = last_delta_out + delta_u
     float last_delta_out;
 
-    float max_err;
-    float deadband;				//err < deadband return
+    float    max_err;
+    float    deadband;  //err < deadband return
     uint32_t pid_mode;
-    uint32_t MaxOutput;				//Êä³öÏŞ·ù
-    uint32_t IntegralLimit;		//»ı·ÖÏŞ·ù
+    uint32_t MaxOutput;      //è¾“å‡ºé™å¹…
+    uint32_t IntegralLimit;  //ç§¯åˆ†é™å¹…
 
-    void (*f_param_init)(struct __pid_t *pid,  //PID²ÎÊı³õÊ¼»¯
-                         uint32_t pid_mode,
-                         uint32_t maxOutput,
-                         uint32_t integralLimit,
-                         float p,
-                         float i,
-                         float d);
-    void (*f_pid_reset)(struct __pid_t *pid, float p, float i, float d);		//pidÈı¸ö²ÎÊıĞŞ¸Ä
+    void (*f_param_init)(struct __pid_t *pid,  //PIDå‚æ•°åˆå§‹åŒ–
+                         uint32_t        pid_mode,
+                         uint32_t        maxOutput,
+                         uint32_t        integralLimit,
+                         float           p,
+                         float           i,
+                         float           d);
+    void (*f_pid_reset)(struct __pid_t *pid, float p, float i, float d);  //pidä¸‰ä¸ªå‚æ•°ä¿®æ”¹
 
 } pid_t;
 
 void PID_struct_init(
-    pid_t* pid,
+    pid_t *  pid,
     uint32_t mode,
     uint32_t maxout,
     uint32_t intergral_limit,
 
-    float 	kp,
-    float 	ki,
-    float 	kd);
+    float kp,
+    float ki,
+    float kd);
 
-float pid_calc(pid_t* pid, float fdb, float ref);
-void pid_reset(pid_t	*pid, float kp, float ki, float kd);
-void pid_reset_kpkd(pid_t	*pid, float kp, float kd);
+float pid_calc(pid_t *pid, float fdb, float ref);
+void  pid_reset(pid_t *pid, float kp, float ki, float kd);
+void  pid_reset_kpkd(pid_t *pid, float kp, float kd);
 
 extern pid_t pid_pos[8];
 extern pid_t pid_spd[8];
@@ -106,12 +104,11 @@ extern pid_t pid_rotate[2];
 //extern pid_t pid_chassis_angle;
 //extern pid_t pid_poke;
 //extern pid_t pid_poke_omg;
-//extern pid_t pid_imu_tmp;		//imu_temperature
-//extern pid_t pid_cali_bby;	//big buff yaw
+//extern pid_t pid_imu_tmp;        //imu_temperature
+//extern pid_t pid_cali_bby;    //big buff yaw
 //extern pid_t pid_cali_bbp;
 //extern pid_t pid_omg;
 //extern pid_t pid_pos;
 //extern pid_t pid_spd[2];
 //extern pid_t pid_pos[2];
 #endif
-

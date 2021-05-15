@@ -3,427 +3,377 @@
 
 /* TASK ------------------------------------------------------------------*/
 
-#define START_TASK_PRIO		0
-#define START_STK_SIZE 		128
+#define START_TASK_PRIO 0
+#define START_STK_SIZE  128
 TaskHandle_t StartTask_Handler;
-void start_task(void *pvParameters);
+void         start_task(void* pvParameters);
 
-#define MotorControl_TASK_PRIO		4
-#define MotorControl_STK_SIZE 		256
+#define MotorControl_TASK_PRIO 4
+#define MotorControl_STK_SIZE  256
 TaskHandle_t MotorControlTask_Handler;
-void MotorControl_task(void *pvParameters);
+void         MotorControl_task(void* pvParameters);
 
-#define PostureControl_TASK_PRIO		5
-#define PostureControl_STK_SIZE 		256
+#define PostureControl_TASK_PRIO 5
+#define PostureControl_STK_SIZE  256
 TaskHandle_t PostureControlTask_Handler;
-void PostureControl_task(void *pvParameters);
+void         PostureControl_task(void* pvParameters);
 
-#define Navi_TASK_PRIO		5
-#define Navi_STK_SIZE 		256
+#define Navi_TASK_PRIO 5
+#define Navi_STK_SIZE  256
 TaskHandle_t NaviTask_Handler;
-void Navi_task(void *pvParameters);
+void         Navi_task(void* pvParameters);
 
-#define Detect_TASK_PRIO		6
-#define Detect_STK_SIZE 		128
+#define Detect_TASK_PRIO 6
+#define Detect_STK_SIZE  128
 TaskHandle_t DetectTask_Handler;
-void Detect_task(void *pvParameters);
+void         Detect_task(void* pvParameters);
 
-#define Debug_TASK_PRIO		6
-#define Debug_STK_SIZE 		256
+#define Debug_TASK_PRIO 6
+#define Debug_STK_SIZE  256
 TaskHandle_t DebugTask_Handler;
-void Debug_task(void *pvParameters);
+void         Debug_task(void* pvParameters);
 
-#define Rc_TASK_PRIO		6
-#define Rc_STK_SIZE 		256
+#define Rc_TASK_PRIO 6
+#define Rc_STK_SIZE  256
 TaskHandle_t RcTask_Handler;
-void Rc_task(void *pvParameters);
+void         Rc_task(void* pvParameters);
 
-#define VcanGC_TASK_PRIO		6
-#define VcanGC_STK_SIZE 		256
+#define VcanGC_TASK_PRIO 6
+#define VcanGC_STK_SIZE  256
 TaskHandle_t VcanGCTask_Handler;
-void VcanGC_task(void *pvParameters);
+void         VcanGC_task(void* pvParameters);
 
-#define Test_TASK_PRIO		6
-#define Test_STK_SIZE 		256
+#define Test_TASK_PRIO 6
+#define Test_STK_SIZE  256
 TaskHandle_t TestTask_Handler;
-void Test_task(void *pvParameters);
+void         Test_task(void* pvParameters);
 
-#define LogicalFlow_TASK_PRIO		6
-#define LogicalFlow_STK_SIZE 		256
+#define LogicalFlow_TASK_PRIO 6
+#define LogicalFlow_STK_SIZE  256
 TaskHandle_t LogicalFlowTask_Handler;
-void LogicalFlow_task(void *pvParameters);
+void         LogicalFlow_task(void* pvParameters);
 
-
-void SystemClock_Config(void);
+void        SystemClock_Config(void);
 static void MX_NVIC_Init(void);
-
 
 int main(void)
 {
-    HAL_Init( );						//Halø‚≥ı ºªØ
-    SystemClock_Config( );	//œµÕ≥ ±÷”≥ı ºªØ
-    MX_GPIO_Init( );				//GPIO≥ı ºªØ
+    HAL_Init();            //HalÂ∫ìÂàùÂßãÂåñ
+    SystemClock_Config();  //Á≥ªÁªüÊó∂ÈíüÂàùÂßãÂåñ
+    MX_GPIO_Init();        //GPIOÂàùÂßãÂåñ
 
+    MX_DMA_Init();   //DMAÂàùÂßãÂåñ
+    MX_CAN1_Init();  //CAN1Êé•Âè£ÂàùÂßãÂåñ
 
-    MX_DMA_Init( );				//DMA≥ı ºªØ
-    MX_CAN1_Init( );				//CAN1Ω”ø⁄≥ı ºªØ
+    MX_CAN2_Init();  //CAN1Êé•Âè£ÂàùÂßãÂåñ
+    MX_SPI5_Init();  //spi5ÂàùÂßãÂåñ
 
-    MX_CAN2_Init( );				//CAN1Ω”ø⁄≥ı ºªØ
-    MX_SPI5_Init( );				//spi5≥ı ºªØ
+    MX_USART1_UART_Init();
+    MX_USART2_UART_Init();
+    uart_receive_init(&USART2_HUART);  //USART2DMAÁ©∫Èó≤‰∏≠Êñ≠
+    MX_USART3_UART_Init();
+    uart_receive_init(&USART3_HUART);  //USART3DMAÁ©∫Èó≤‰∏≠Êñ≠   ps2Êï∞ÊçÆ Áé∞Âú®ÊãøÊù•ÂÅö‰∏∫ openmv2ÁöÑÊé•Êî∂
+    MX_USART6_UART_Init();
+    uart_receive_init(&IMU_HUART);     //usart6DMAÊé•Êî∂ÈôÄËû∫‰ª™Êï∞ÊçÆ
+    MX_UART7_Init();                   //uart7DMAÊé•Êî∂
+    uart_receive_init(&OPENMV_HUART);  //USART7DMAÁ©∫Èó≤‰∏≠Êñ≠  openmv
+    MX_UART8_Init();                   //usart8DMAÂèëÈÄÅÊï∞ÊçÆÁªôÂ±±Â§ñ‰∏ä‰ΩçÊú∫
 
-	  MX_USART1_UART_Init( );
-    MX_USART2_UART_Init( );
-    uart_receive_init( &USART2_HUART );//USART2DMAø’œ–÷–∂œ
-    MX_USART3_UART_Init( );
-    uart_receive_init( &USART3_HUART );//USART3DMAø’œ–÷–∂œ   ps2 ˝æ› œ÷‘⁄ƒ√¿¥◊ˆŒ™ openmv2µƒΩ” ’
-    MX_USART6_UART_Init( );
-    uart_receive_init( &IMU_HUART );//usart6DMAΩ” ’Õ”¬›“« ˝æ›
-    MX_UART7_Init();			//uart7DMAΩ” ’
-    uart_receive_init(&OPENMV_HUART);//USART7DMAø’œ–÷–∂œ  openmv
-    MX_UART8_Init();		//usart8DMA∑¢ÀÕ ˝æ›∏¯…ΩÕ‚…œŒªª˙
+    MX_NVIC_Init();  //‰∏≠Êñ≠‰ºòÂÖàÁ∫ßÂàùÂßãÂåñ
+    //ÂÆöÊó∂Âô®Êó∂Èíü90MÂàÜÈ¢ëÁ≥ªÊï∞9000-1,ÂÆöÊó∂Âô®3ÁöÑÈ¢ëÁéá90M/9000=10KËá™Âä®ÈáçË£ÖËΩΩ10-1,ÂÆöÊó∂Âô®Âë®Êúü1ms
+    //TIM3_Init(10-1,9000-1);//ÂÆöÊó∂Âô®3ÂàùÂßãÂåñ Ê≠•ÊÄÅÈúáËç°Êó∂Èíü
 
-    MX_NVIC_Init();				//÷–∂œ”≈œ»º∂≥ı ºªØ
-    //∂® ±∆˜ ±÷”90M∑÷∆µœµ ˝9000-1,∂® ±∆˜3µƒ∆µ¬ 90M/9000=10K◊‘∂Ø÷ÿ◊∞‘ÿ10-1,∂® ±∆˜÷‹∆⁄1ms
-    //TIM3_Init(10-1,9000-1);//∂® ±∆˜3≥ı ºªØ ≤ΩÃ¨’µ¥ ±÷”
+    remote_control_init();
+    my_can_filter_init_recv_all(&hcan1);  //ÂºÄÂêØCANÊª§Ê≥¢Âô®
+    my_can_filter_init_recv_all(&hcan2);
+    HAL_CAN_Receive_IT(&hcan1, CAN_FIFO0);  //ÂºÄÂêØCAN1
+    HAL_CAN_Receive_IT(&hcan2, CAN_FIFO0);  //ÂºÄÂêØCAN2
 
-    remote_control_init( );
-    my_can_filter_init_recv_all( &hcan1 );//ø™∆ÙCAN¬À≤®∆˜
-		my_can_filter_init_recv_all( &hcan2 );
-    HAL_CAN_Receive_IT( &hcan1, CAN_FIFO0);//ø™∆ÙCAN1
-    HAL_CAN_Receive_IT( &hcan2, CAN_FIFO0);//ø™∆ÙCAN2
+    pid_param_init();              //ÊâÄÊúâ‰ΩøÁî®Âà∞ÁöÑPIDÂèÇÊï∞ÂàùÂßãÂåñ
+    buzzer_init(500 - 1, 90 - 1);  //ËúÇÈ∏£Âô®ÂàùÂßãÂåñ
+    led_configuration();           //ÊµÅÊ∞¥ÁÅØ Á∫¢ÁªøÁÅØÂàùÂßãÂåñ
+    //f=Tck/(psc+1)*(arr+1) ÂÆöÊó∂Âô®Êó∂Èíü‰∏∫90M  50Hz=180MHz/( 90 * 20000 )
+    Servo_Init(20000 - 1, 90 - 1);  //ËàµÊú∫PWMÈÄöÈÅìÂàùÂßãÂåñ
 
-    pid_param_init( );		//À˘”– π”√µΩµƒPID≤Œ ˝≥ı ºªØ
-    buzzer_init( 500 - 1, 90 - 1 );//∑‰√˘∆˜≥ı ºªØ
-    led_configuration( );	//¡˜ÀÆµ∆ ∫Ï¬Ãµ∆≥ı ºªØ
-    //f=Tck/(psc+1)*(arr+1) ∂® ±∆˜ ±÷”Œ™90M  50Hz=180MHz/( 90 * 20000 )
-    Servo_Init( 20000 - 1, 90 - 1 );//∂Êª˙PWMÕ®µ¿≥ı ºªØ
+    TIM2_CH3_Cap_Init(0XFFFFFFFF, 90 - 1);  //PWMÊçïËé∑ ‰ª•1MHZÁöÑÈ¢ëÁéáËÆ°Êï∞
 
-    TIM2_CH3_Cap_Init( 0XFFFFFFFF , 90 -  1 ); //PWM≤∂ªÒ “‘1MHZµƒ∆µ¬ º∆ ˝
+    Servo1_OPEN;  //ËàµÊú∫1Â§ç‰Ωç
 
-    Servo1_OPEN;//∂Êª˙1∏¥Œª
+    //    Servo2_DOWN_POS;//ËàµÊú∫2Â§ç‰Ωç
+    //    Servo3_CLOSE;
 
-
-//    Servo2_DOWN_POS;//∂Êª˙2∏¥Œª
-//    Servo3_CLOSE;
-
-    power_ctrl_on_all(); //ø™∆Ù»´≤øµƒ24V ‰≥ˆ
+    power_ctrl_on_all();  //ÂºÄÂêØÂÖ®ÈÉ®ÁöÑ24VËæìÂá∫
 
     printf("\r\n/*************SYSTEM INIT SUCCESS****************/ \r\n");
 
-    //¥¥Ω®ø™ º»ŒŒÒ
-    xTaskCreate((TaskFunction_t )start_task,            //»ŒŒÒ∫Ø ˝
-                (const char*    )"start_task",          //»ŒŒÒ√˚≥∆
-                (uint16_t       )START_STK_SIZE,        //»ŒŒÒ∂—’ª¥Û–°
-                (void*          )NULL,                  //¥´µ›∏¯»ŒŒÒ∫Ø ˝µƒ≤Œ ˝
-                (UBaseType_t    )START_TASK_PRIO,       //»ŒŒÒ”≈œ»º∂
-                (TaskHandle_t*  )&StartTask_Handler);   //»ŒŒÒæ‰±˙
-    vTaskStartScheduler();          //ø™∆Ù»ŒŒÒµ˜∂»
-
+    //ÂàõÂª∫ÂºÄÂßã‰ªªÂä°
+    xTaskCreate((TaskFunction_t)start_task,          //‰ªªÂä°ÂáΩÊï∞
+                (const char*)"start_task",           //‰ªªÂä°ÂêçÁß∞
+                (uint16_t)START_STK_SIZE,            //‰ªªÂä°Â†ÜÊ†àÂ§ßÂ∞è
+                (void*)NULL,                         //‰º†ÈÄíÁªô‰ªªÂä°ÂáΩÊï∞ÁöÑÂèÇÊï∞
+                (UBaseType_t)START_TASK_PRIO,        //‰ªªÂä°‰ºòÂÖàÁ∫ß
+                (TaskHandle_t*)&StartTask_Handler);  //‰ªªÂä°Âè•ÊüÑ
+    vTaskStartScheduler();                           //ÂºÄÂêØ‰ªªÂä°Ë∞ÉÂ∫¶
 }
 
-//ø™ º»ŒŒÒ»ŒŒÒ∫Ø ˝
-void start_task(void *pvParameters)
+//ÂºÄÂßã‰ªªÂä°‰ªªÂä°ÂáΩÊï∞
+void start_task(void* pvParameters)
 {
-    BeginWarnBuzzer();		//ø™ª˙Ã· æ“Ù
+    BeginWarnBuzzer();  //ÂºÄÊú∫ÊèêÁ§∫Èü≥
 
-    robomoudle_init();		//≥ı ºªØrobomoudle
+    robomoudle_init();  //ÂàùÂßãÂåñrobomoudle
 
-    taskENTER_CRITICAL();           //Ω¯»Î¡ŸΩÁ«¯
-    //¥¥Ω®MotorControl_task
-    xTaskCreate((TaskFunction_t )MotorControl_task,
-                (const char*    )"MotorControl_task",
-                (uint16_t       )MotorControl_STK_SIZE,
-                (void*          )NULL,
-                (UBaseType_t    )MotorControl_TASK_PRIO,
-                (TaskHandle_t*  )&MotorControlTask_Handler);
-    //¥¥Ω®PostureControl_task
-    xTaskCreate((TaskFunction_t )PostureControl_task,
-                (const char*    )"PostureControl_task",
-                (uint16_t       )PostureControl_STK_SIZE,
-                (void*          )NULL,
-                (UBaseType_t    )PostureControl_TASK_PRIO,
-                (TaskHandle_t*  )&PostureControlTask_Handler);
-    //¥¥Ω®NAVIGATION»ŒŒÒ
-//    xTaskCreate((TaskFunction_t )Navi_task,
-//                (const char*    )"Navi_task",
-//                (uint16_t       )Navi_STK_SIZE,
-//                (void*          )NULL,
-//                (UBaseType_t    )Navi_TASK_PRIO,
-//                (TaskHandle_t*  )&NaviTask_Handler);
-    //¥¥Ω®Detect»ŒŒÒ
-//    xTaskCreate((TaskFunction_t )Detect_task,
-//                (const char*    )"Detect_task",
-//                (uint16_t       )Detect_STK_SIZE,
-//                (void*          )NULL,
-//                (UBaseType_t    )Detect_TASK_PRIO,
-//                (TaskHandle_t*  )&DetectTask_Handler);
-    //¥¥Ω®Debug_task
-//    xTaskCreate((TaskFunction_t )Debug_task,
-//                (const char*    )"Debug_task",
-//                (uint16_t       )Debug_STK_SIZE,
-//                (void*          )NULL,
-//                (UBaseType_t    )Debug_TASK_PRIO,
-//                (TaskHandle_t*  )&DebugTask_Handler);
-    //¥¥Ω®Rc_task
-//    xTaskCreate((TaskFunction_t )Rc_task,
-//                (const char*    )"Rc_task",
-//                (uint16_t       )Rc_STK_SIZE,
-//                (void*          )NULL,
-//                (UBaseType_t    )Rc_TASK_PRIO,
-//                (TaskHandle_t*  )&RcTask_Handler);
-//    //¥¥Ω®VcanGC»ŒŒÒ VCAN ground control …ΩÕ‚…œŒªª˙
-//    xTaskCreate((TaskFunction_t )VcanGC_task,
-//                (const char*    )"VcanGC_task",
-//                (uint16_t       )VcanGC_STK_SIZE,
-//                (void*          )NULL,
-//                (UBaseType_t    )VcanGC_TASK_PRIO,
-//                (TaskHandle_t*  )&VcanGCTask_Handler);
-    //¥¥Ω®Test»ŒŒÒ
-//    xTaskCreate(  ( TaskFunction_t )Test_task,
-//									( const char*    )"Test_task",
-//									( uint16_t       )Test_STK_SIZE,
-//									( void*          )NULL,
-//									( UBaseType_t    )Test_TASK_PRIO,
-//									( TaskHandle_t*  )&TestTask_Handler );
-    //¥¥Ω®LogicalFlow»ŒŒÒ ¬ﬂº≠¡˜øÿ÷∆
-    xTaskCreate((TaskFunction_t )LogicalFlow_task,
-                (const char*    )"LogicalFlow_task",
-                (uint16_t       )LogicalFlow_STK_SIZE,
-                (void*           )NULL,
-                (UBaseType_t    )LogicalFlow_TASK_PRIO,
-                (TaskHandle_t*  )&LogicalFlowTask_Handler);
+    taskENTER_CRITICAL();  //ËøõÂÖ•‰∏¥ÁïåÂå∫
+    //ÂàõÂª∫MotorControl_task
+    xTaskCreate((TaskFunction_t)MotorControl_task,
+                (const char*)"MotorControl_task",
+                (uint16_t)MotorControl_STK_SIZE,
+                (void*)NULL,
+                (UBaseType_t)MotorControl_TASK_PRIO,
+                (TaskHandle_t*)&MotorControlTask_Handler);
+    //ÂàõÂª∫PostureControl_task
+    xTaskCreate((TaskFunction_t)PostureControl_task,
+                (const char*)"PostureControl_task",
+                (uint16_t)PostureControl_STK_SIZE,
+                (void*)NULL,
+                (UBaseType_t)PostureControl_TASK_PRIO,
+                (TaskHandle_t*)&PostureControlTask_Handler);
+    //ÂàõÂª∫NAVIGATION‰ªªÂä°
+    //    xTaskCreate((TaskFunction_t )Navi_task,
+    //                (const char*    )"Navi_task",
+    //                (uint16_t       )Navi_STK_SIZE,
+    //                (void*          )NULL,
+    //                (UBaseType_t    )Navi_TASK_PRIO,
+    //                (TaskHandle_t*  )&NaviTask_Handler);
+    //ÂàõÂª∫Detect‰ªªÂä°
+    //    xTaskCreate((TaskFunction_t )Detect_task,
+    //                (const char*    )"Detect_task",
+    //                (uint16_t       )Detect_STK_SIZE,
+    //                (void*          )NULL,
+    //                (UBaseType_t    )Detect_TASK_PRIO,
+    //                (TaskHandle_t*  )&DetectTask_Handler);
+    //ÂàõÂª∫Debug_task
+    //    xTaskCreate((TaskFunction_t )Debug_task,
+    //                (const char*    )"Debug_task",
+    //                (uint16_t       )Debug_STK_SIZE,
+    //                (void*          )NULL,
+    //                (UBaseType_t    )Debug_TASK_PRIO,
+    //                (TaskHandle_t*  )&DebugTask_Handler);
+    //ÂàõÂª∫Rc_task
+    //    xTaskCreate((TaskFunction_t )Rc_task,
+    //                (const char*    )"Rc_task",
+    //                (uint16_t       )Rc_STK_SIZE,
+    //                (void*          )NULL,
+    //                (UBaseType_t    )Rc_TASK_PRIO,
+    //                (TaskHandle_t*  )&RcTask_Handler);
+    //    //ÂàõÂª∫VcanGC‰ªªÂä° VCAN ground control Â±±Â§ñ‰∏ä‰ΩçÊú∫
+    //    xTaskCreate((TaskFunction_t )VcanGC_task,
+    //                (const char*    )"VcanGC_task",
+    //                (uint16_t       )VcanGC_STK_SIZE,
+    //                (void*          )NULL,
+    //                (UBaseType_t    )VcanGC_TASK_PRIO,
+    //                (TaskHandle_t*  )&VcanGCTask_Handler);
+    //ÂàõÂª∫Test‰ªªÂä°
+    //    xTaskCreate(  ( TaskFunction_t )Test_task,
+    //                                    ( const char*    )"Test_task",
+    //                                    ( uint16_t       )Test_STK_SIZE,
+    //                                    ( void*          )NULL,
+    //                                    ( UBaseType_t    )Test_TASK_PRIO,
+    //                                    ( TaskHandle_t*  )&TestTask_Handler );
+    //ÂàõÂª∫LogicalFlow‰ªªÂä° ÈÄªËæëÊµÅÊéßÂà∂
+    xTaskCreate((TaskFunction_t)LogicalFlow_task,
+                (const char*)"LogicalFlow_task",
+                (uint16_t)LogicalFlow_STK_SIZE,
+                (void*)NULL,
+                (UBaseType_t)LogicalFlow_TASK_PRIO,
+                (TaskHandle_t*)&LogicalFlowTask_Handler);
 
-    vTaskDelete(StartTask_Handler); //…æ≥˝ø™ º»ŒŒÒ
-    taskEXIT_CRITICAL();            //ÕÀ≥ˆ¡ŸΩÁ«¯
-
+    vTaskDelete(StartTask_Handler);  //Âà†Èô§ÂºÄÂßã‰ªªÂä°
+    taskEXIT_CRITICAL();             //ÈÄÄÂá∫‰∏¥ÁïåÂå∫
 }
 
 void ResetStart(void);
 
-void Test_task(void *pvParameters)
+void Test_task(void* pvParameters)
 {
-
     float kalam;
 
-    for(;;) {
-
-//        IndLED_On(IndColorBlue);
+    for (;;)
+    {
+        //        IndLED_On(IndColorBlue);
 
         vTaskDelay(200);
-			
-			
-			
 
-//        ResetStart();
+        //        ResetStart();
 
-//        CAN_RoboModule_DRV_Position_Mode(0,1,4000,2000*4*15.15);  //2100
-//			
-//			  Servo1_OPEN;//∂Êª˙1∏¥Œª
+        //        CAN_RoboModule_DRV_Position_Mode(0,1,4000,2000*4*15.15);  //2100
+        //
+        //              Servo1_OPEN;//ËàµÊú∫1Â§ç‰Ωç
 
-//        osDelay(3000);
+        //        osDelay(3000);
 
-//        CAN_RoboModule_DRV_Position_Mode(0,1,1000,0);
-//			
-//			  Servo1_CLOSE;//∂Êª˙1∏¥Œª
+        //        CAN_RoboModule_DRV_Position_Mode(0,1,1000,0);
+        //
+        //              Servo1_CLOSE;//ËàµÊú∫1Â§ç‰Ωç
 
-//			  osDelay(3000);
+        //              osDelay(3000);
 
-//        IndLED_Off();
+        //        IndLED_Off();
 
-//        vTaskDelay(1000);
+        //        vTaskDelay(1000);
 
-
-
-//printf("  tick %u\r\n",HAL_GetTick());
-//	printf("  times %llu\r\n",times);
-        //		printf("  step_len_throttle %f  step_len_yaw %f  steplen %f\r\n",step_len_throttle,step_len_yaw,RcDetachedParam.detached_params_0.step_length);
+        //printf("  tick %u\r\n",HAL_GetTick());
+        //    printf("  times %llu\r\n",times);
+        //        printf("  step_len_throttle %f  step_len_yaw %f  steplen %f\r\n",step_len_throttle,step_len_yaw,RcDetachedParam.detached_params_0.step_length);
         //printf("moto_chassis[0].given_current; %f\r\n",(float)moto_chassis[0].given_current/ 819.2);
 
-//				printf("  step_len_rotate_angle %f   \r\n",step_len_rotate_angle);
-//        printf("real_current %f  rev_current %f estimate_moment %f\r\n", moto_chassis[0].real_current, moto_chassis[0].real_current-moto_chassis[0].given_current/ 819.2, moto_chassis[0].real_current*0.3);
-
+        //                printf("  step_len_rotate_angle %f   \r\n",step_len_rotate_angle);
+        //        printf("real_current %f  rev_current %f estimate_moment %f\r\n", moto_chassis[0].real_current, moto_chassis[0].real_current-moto_chassis[0].given_current/ 819.2, moto_chassis[0].real_current*0.3);
 
         //printf("T; %f\r\n",(float)moto_chassis[0].given_current/ 819.2*0.3);
 
-//        if(ppm_rx[0])//≥…π¶≤∂ªÒµΩ¡À“ª¥Œ…œ…˝—ÿ
-//        {
+        //        if(ppm_rx[0])//ÊàêÂäüÊçïËé∑Âà∞‰∫Ü‰∏ÄÊ¨°‰∏äÂçáÊ≤ø
+        //        {
 
+        //           printf("Â∑¶Âè≥:%d ÂâçÂêé:%d Ê≤πÈó®:%d Ëà™Âêë:%d chanel5-SWA:%d chanel6-SWB:%d chanel7-VRA:%d chanel8-SWC:%d  \r\n",ppm_rx[1],ppm_rx[2],ppm_rx[3],ppm_rx[4],ppm_rx[5],ppm_rx[6],ppm_rx[7],ppm_rx[8]);
+        //            vTaskDelay(10);
+        //            ppm_rx[0]=0;
+        //        }
 
+        //        test_speed+=500;
+        //        IsMotoReadyOrNot= IsReady;
+        //        vTaskDelay(1500);
 
-//           printf("◊Û”“:%d «∞∫Û:%d ”Õ√≈:%d ∫ΩœÚ:%d chanel5-SWA:%d chanel6-SWB:%d chanel7-VRA:%d chanel8-SWC:%d  \r\n",ppm_rx[1],ppm_rx[2],ppm_rx[3],ppm_rx[4],ppm_rx[5],ppm_rx[6],ppm_rx[7],ppm_rx[8]);
-//            vTaskDelay(10);
-//            ppm_rx[0]=0;
-//        }
+        //        if(test_speed>=9500)
+        //        {
+        //            test_speed=0;
+        //        }
 
-//        test_speed+=500;
-//        IsMotoReadyOrNot= IsReady;
-//        vTaskDelay(1500);
+        //temp_pid.ref_agle[0]=0;
+        //IsMotoReadyOrNot= IsReady;
+        //        vTaskDelay(2000);
 
-//        if(test_speed>=9500)
-//        {
-//            test_speed=0;
-//        }
+        //temp_pid.ref_agle[0]=100000;
+        //IsMotoReadyOrNot= IsReady;
+        //                vTaskDelay(2000);
 
+        //                                if(temp_pid.ref_agle[0]>=8000)
+        //                {
+        //                    temp_pid.ref_agle[0]=0;
+        //                }
 
-//temp_pid.ref_agle[0]=0;
-//IsMotoReadyOrNot= IsReady;
-//        vTaskDelay(2000);
+        //StartPosToMiddlePos();
 
-//temp_pid.ref_agle[0]=100000;
-//IsMotoReadyOrNot= IsReady;
-//				vTaskDelay(2000);
+        //printf("Pitch %f Roll %f Yaw %f stage %d count %d\r\n",imuinfo.ActVal[1],imuinfo.ActVal[2],imuinfo.ActVal[0],stage,_count_navi);
+        // printf("_Pitch_rev %f  pitch_offset %f qian%d hou %d\r\n",_Pitch_rev,pitch_offset,HAL_GPIO_ReadPin(GPIOI,GPIO_PIN_2),HAL_GPIO_ReadPin(GPIOI,GPIO_PIN_7));
 
-//								if(temp_pid.ref_agle[0]>=8000)
-//				{
-//					temp_pid.ref_agle[0]=0;
-//				}
+        //printf("Roll %f Pitch %f Yaw %f dev_len %f yaw_calibrated %f\r\n",imuinfo.ActVal[2],imuinfo.ActVal[1],imuinfo.ActVal[0],step_len_dev,yaw_calibrated );
 
+        //printf("Roll %f Pitch %f Yaw %f\r\n",imuinfo.ActVal[2],imuinfo.ActVal[1],imuinfo.ActVal[0]);
 
+        //printf("Yaw %f dev_high %f\r\n",imuinfo.ActVal[0],step_high_dev );
 
-//StartPosToMiddlePos();
+        //printf("Yaw %f step_len_dev %f ÂÅèÂøÉÂ∫¶%f  ÁôΩÁ∫øËßí%f  ÂâçËâ≤Âùó%f ÂêéËâ≤Âùó%f\r\n",imuinfo.ActVal[0],step_len_dev,openmvinfo.ActVal[0],openmvinfo.ActVal[1],openmvinfo.ActVal[2],openmv2info.ActVal[2]);
 
-//printf("Pitch %f Roll %f Yaw %f stage %d count %d\r\n",imuinfo.ActVal[1],imuinfo.ActVal[2],imuinfo.ActVal[0],stage,_count_navi);
-// printf("_Pitch_rev %f  pitch_offset %f qian%d hou %d\r\n",_Pitch_rev,pitch_offset,HAL_GPIO_ReadPin(GPIOI,GPIO_PIN_2),HAL_GPIO_ReadPin(GPIOI,GPIO_PIN_7));
+        //        for(int i=0 ; i<8 ; i++)
+        //        printf(" hall   %d",moto_chassis[i].hall);
+        //        printf(" \r\n");
 
-//printf("Roll %f Pitch %f Yaw %f dev_len %f yaw_calibrated %f\r\n",imuinfo.ActVal[2],imuinfo.ActVal[1],imuinfo.ActVal[0],step_len_dev,yaw_calibrated );
+        //                printf(" CCR1 %d  CCR2 %d  CCR3 %d\r\n",(int)TIM4->CCR1,(int)TIM4->CCR2,(int)TIM4->CCR3);
 
-//printf("Roll %f Pitch %f Yaw %f\r\n",imuinfo.ActVal[2],imuinfo.ActVal[1],imuinfo.ActVal[0]);
+        //        printf("restart1U %d restart2V %d restartclimbc %d restart3W %d    startB %d    inf1S %d inf2T %d\r\n",keyRestart1,keyRestart2,keyRestartclimb,keyRestart3,keyStart,keyInf1,keyInf2);
 
-//printf("Yaw %f dev_high %f\r\n",imuinfo.ActVal[0],step_high_dev );
+        //        printf("Ê≠•È´ò %2.1f  ",state_detached_params[state].detached_params_0.stance_height);
+        //        printf("Ê≠•Èïø %2.1f  ",state_detached_params[state].detached_params_0.step_length);
+        //        printf("Êä¨ËÖøÈ´ò %2.1f  ",state_detached_params[state].detached_params_0.up_amp);
+        //        printf("ÂéãËÖøÈ´ò %2.1f  ",state_detached_params[state].detached_params_0.down_amp);
+        //        printf("È£ûË°åÂç†ÊØî %2.2f  ",state_detached_params[state].detached_params_0.flight_percent);
+        //        printf("È¢ëÁéá %2.1f  ",state_detached_params[state].detached_params_0.freq);
+        //        printf("\r\n");
 
+        //printf("1 %d 2 %d 3 %d \r\n",USART6RxBuf[0],USART6RxBuf[1],USART6RxBuf[2]);
+        //kalam=KalmanFilter(imuinfo.ActVal[0],KALMAN_Q,KALMAN_R);
+        //printf("KEY_VALUE %d Yaw %f  Yaw_Calibrated %f step_len_dev %f",ps2info.KEY_VALUE, imuinfo.ActVal[0],Yaw_Calibrated,step_len_dev);
+        //printf("KEY_VALUE=%d Yaw %f",ps2info.KEY_VALUE, imuinfo.ActVal[0]);
 
+        //          printf("yaw_set=%f ",yaw_set);
+        //      printf("\r\n");
+        //            for(int i=0;i<8;i++)
+        //            printf("%x ", usart3_buf[i]);
+        //            printf("\r\n");
 
+        //            for(int i=0;i<28;i++)
+        //            printf("%x ",imu_buf[i]);
+        //            printf("\r\n");
 
+        //            for(int i=0;i<16;i++)
+        //            printf("%x ",openmv_buf[i]);
+        //            printf("\r\n");        //ËßíÂ∫¶  //‰∏≠ÂøÉÂùêÊ†á // 1ÁôΩ 2ÈªÑ 4Á∫¢
 
+        //      printf(" %f  %f  %f\r\n",KalmanFilter(imuinfo.ActVal[2],KALMAN_Q,KALMAN_R),KalmanFilter(imuinfo.ActVal[1],KALMAN_Q,KALMAN_R),KalmanFilter(imuinfo.ActVal[0],KALMAN_Q,KALMAN_R));
+        //      printf("Roll %f Pitch %f Yaw %f \r\n",imuinfo.ActVal[2],imuinfo.ActVal[1],imuinfo.ActVal[0]);
+        //      printf(" %x %x %x  %x %x %x %x %x %x\n",dbus_buf[0],dbus_buf[1],dbus_buf[2],dbus_buf[3],dbus_buf[4],dbus_buf[5],dbus_buf[6],dbus_buf[7],dbus_buf[8]);
 
-//printf("Yaw %f step_len_dev %f ∆´–ƒ∂»%f  ∞◊œﬂΩ«%f  «∞…´øÈ%f ∫Û…´øÈ%f\r\n",imuinfo.ActVal[0],step_len_dev,openmvinfo.ActVal[0],openmvinfo.ActVal[1],openmvinfo.ActVal[2],openmv2info.ActVal[2]);
+        //        mpu_get_data();
+        //        imu_ahrs_update();
+        //        imu_attitude_update();
+        //        HAL_Delay(5);
+        //        printf(" Roll:  \n");
+        //        HAL_UART_Transmit(&huart6, (uint8_t *)buf, (COUNTOF(buf)-1), 55);
+        //        HAL_Delay(5);
 
+        //        Servo_DOWN;
+        //        wave_form_data[1] =count;
+        //        wave_form_data[2] =count;
+        //    temp_pid.ref_agle[0]-=30.0f*ReductionAndAngleRatio;
+        //    temp_pid.ref_agle[1]+=30.0f*ReductionAndAngleRatio;
 
+        //        temp_pid.ref_agle[0]=count*TransData;
+        //        count+=10;
+        //        if(count>=50)
+        //        {count=0;}
 
+        //        printf(" ref_agle[0]  = %f   ref_agle[1]  =%f  \n",temp_pid.ref_agle[0],temp_pid.ref_agle[1]);
+        //        printf(" theat1  = %f   theat2  =%f  \n",theta1,theta2);
 
-
-
-//		for(int i=0 ; i<8 ; i++)
-//		printf(" hall   %d",moto_chassis[i].hall);
-//		printf(" \r\n");
-
-
-//				printf(" CCR1 %d  CCR2 %d  CCR3 %d\r\n",(int)TIM4->CCR1,(int)TIM4->CCR2,(int)TIM4->CCR3);
-
-//        printf("restart1U %d restart2V %d restartclimbc %d restart3W %d	startB %d	inf1S %d inf2T %d\r\n",keyRestart1,keyRestart2,keyRestartclimb,keyRestart3,keyStart,keyInf1,keyInf2);
-
-
-
-
-
-//        printf("≤Ω∏ﬂ %2.1f  ",state_detached_params[state].detached_params_0.stance_height);
-//        printf("≤Ω≥§ %2.1f  ",state_detached_params[state].detached_params_0.step_length);
-//        printf("ÃßÕ»∏ﬂ %2.1f  ",state_detached_params[state].detached_params_0.up_amp);
-//        printf("—πÕ»∏ﬂ %2.1f  ",state_detached_params[state].detached_params_0.down_amp);
-//        printf("∑…––’º±» %2.2f  ",state_detached_params[state].detached_params_0.flight_percent);
-//        printf("∆µ¬  %2.1f  ",state_detached_params[state].detached_params_0.freq);
-//        printf("\r\n");
-
-
-
-
-
-//printf("1 %d 2 %d 3 %d \r\n",USART6RxBuf[0],USART6RxBuf[1],USART6RxBuf[2]);
-//kalam=KalmanFilter(imuinfo.ActVal[0],KALMAN_Q,KALMAN_R);
-//printf("KEY_VALUE %d Yaw %f  Yaw_Calibrated %f step_len_dev %f",ps2info.KEY_VALUE, imuinfo.ActVal[0],Yaw_Calibrated,step_len_dev);
-//printf("KEY_VALUE=%d Yaw %f",ps2info.KEY_VALUE, imuinfo.ActVal[0]);
-
-
-//		  printf("yaw_set=%f ",yaw_set);
-//      printf("\r\n");
-//			for(int i=0;i<8;i++)
-//			printf("%x ", usart3_buf[i]);
-//			printf("\r\n");
-
-//			for(int i=0;i<28;i++)
-//			printf("%x ",imu_buf[i]);
-//			printf("\r\n");
-
-
-//			for(int i=0;i<16;i++)
-//			printf("%x ",openmv_buf[i]);
-//			printf("\r\n");		//Ω«∂»  //÷––ƒ◊¯±Í // 1∞◊ 2ª∆ 4∫Ï
-
-
-
-
-
-//      printf(" %f  %f  %f\r\n",KalmanFilter(imuinfo.ActVal[2],KALMAN_Q,KALMAN_R),KalmanFilter(imuinfo.ActVal[1],KALMAN_Q,KALMAN_R),KalmanFilter(imuinfo.ActVal[0],KALMAN_Q,KALMAN_R));
-//      printf("Roll %f Pitch %f Yaw %f \r\n",imuinfo.ActVal[2],imuinfo.ActVal[1],imuinfo.ActVal[0]);
-//      printf(" %x %x %x  %x %x %x %x %x %x\n",dbus_buf[0],dbus_buf[1],dbus_buf[2],dbus_buf[3],dbus_buf[4],dbus_buf[5],dbus_buf[6],dbus_buf[7],dbus_buf[8]);
-
-//		mpu_get_data();
-//		imu_ahrs_update();
-//		imu_attitude_update();
-//		HAL_Delay(5);
-//		printf(" Roll:  \n");
-//		HAL_UART_Transmit(&huart6, (uint8_t *)buf, (COUNTOF(buf)-1), 55);
-//		HAL_Delay(5);
-
-//		Servo_DOWN;
-//		wave_form_data[1] =count;
-//		wave_form_data[2] =count;
-//    temp_pid.ref_agle[0]-=30.0f*ReductionAndAngleRatio;
-//    temp_pid.ref_agle[1]+=30.0f*ReductionAndAngleRatio;
-
-//		temp_pid.ref_agle[0]=count*TransData;
-//		count+=10;
-//		if(count>=50)
-//		{count=0;}
-
-//		printf(" ref_agle[0]  = %f   ref_agle[1]  =%f  \n",temp_pid.ref_agle[0],temp_pid.ref_agle[1]);
-//		printf(" theat1  = %f   theat2  =%f  \n",theta1,theta2);
-
-//		Servo_PEAK;
-
+        //        Servo_PEAK;
     }
 }
 
-
 void ResetStart(void)
 {
-
-    if(keyRestart3==0) {
-        while(keyRestart3==0)
+    if (keyRestart3 == 0)
+    {
+        while (keyRestart3 == 0)
             vTaskDelay(200);
 
-        CAN_RoboModule_DRV_Position_Mode(0,1,2000,0);
+        CAN_RoboModule_DRV_Position_Mode(0, 1, 2000, 0);
 
         restartflag = 1;
 
-				IndicateLED_Off;
+        IndicateLED_Off;
         IndLED_On(IndColorRed);
-				IndLED_On(IndColorBlue);
+        IndLED_On(IndColorBlue);
         state = STOP;
         vTaskDelay(300);
         vTaskDelete(LogicalFlowTask_Handler);
         vTaskDelay(200);
 
-        taskENTER_CRITICAL();           //Ω¯»Î¡ŸΩÁ«¯
-        xTaskCreate((TaskFunction_t )LogicalFlow_task,
-                    (const char*    )"LogicalFlow_task",
-                    (uint16_t       )LogicalFlow_STK_SIZE,
-                    (void*           )NULL,
-                    (UBaseType_t    )LogicalFlow_TASK_PRIO,
-                    (TaskHandle_t*  )&LogicalFlowTask_Handler);
-        taskEXIT_CRITICAL();            //ÕÀ≥ˆ¡ŸΩÁ«¯
+        taskENTER_CRITICAL();  //ËøõÂÖ•‰∏¥ÁïåÂå∫
+        xTaskCreate((TaskFunction_t)LogicalFlow_task,
+                    (const char*)"LogicalFlow_task",
+                    (uint16_t)LogicalFlow_STK_SIZE,
+                    (void*)NULL,
+                    (UBaseType_t)LogicalFlow_TASK_PRIO,
+                    (TaskHandle_t*)&LogicalFlowTask_Handler);
+        taskEXIT_CRITICAL();  //ÈÄÄÂá∫‰∏¥ÁïåÂå∫
 
-
-       
-          IndicateLED_Off;
+        IndicateLED_Off;
     }
-
-
 }
 
 void SystemClock_Config(void)
 {
-
     RCC_OscInitTypeDef RCC_OscInitStruct;
     RCC_ClkInitTypeDef RCC_ClkInitStruct;
 
@@ -432,13 +382,13 @@ void SystemClock_Config(void)
     __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
     RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-    RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-    RCC_OscInitStruct.PLL.PLLM = 6;
-    RCC_OscInitStruct.PLL.PLLN = 180;
-    RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-    RCC_OscInitStruct.PLL.PLLQ = 4;
+    RCC_OscInitStruct.HSEState       = RCC_HSE_ON;
+    RCC_OscInitStruct.PLL.PLLState   = RCC_PLL_ON;
+    RCC_OscInitStruct.PLL.PLLSource  = RCC_PLLSOURCE_HSE;
+    RCC_OscInitStruct.PLL.PLLM       = 6;
+    RCC_OscInitStruct.PLL.PLLN       = 180;
+    RCC_OscInitStruct.PLL.PLLP       = RCC_PLLP_DIV2;
+    RCC_OscInitStruct.PLL.PLLQ       = 4;
     if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
     {
         Error_Handler();
@@ -449,10 +399,9 @@ void SystemClock_Config(void)
         Error_Handler();
     }
 
-    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                                  |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+    RCC_ClkInitStruct.ClockType      = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+    RCC_ClkInitStruct.SYSCLKSource   = RCC_SYSCLKSOURCE_PLLCLK;
+    RCC_ClkInitStruct.AHBCLKDivider  = RCC_SYSCLK_DIV1;
     RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
     RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
     if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
@@ -460,7 +409,7 @@ void SystemClock_Config(void)
         Error_Handler();
     }
 
-    HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
+    HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000);
 
     HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
@@ -496,13 +445,11 @@ static void MX_NVIC_Init(void)
     /* DMA2_Stream1_IRQn interrupt configuration */
     HAL_NVIC_SetPriority(DMA2_Stream1_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(DMA2_Stream1_IRQn);
-
-
 }
 
 void Error_Handler(void)
 {
-    while(1)
+    while (1)
     {
     }
     /* USER CODE END Error_Handler */
@@ -523,7 +470,6 @@ void assert_failed(uint8_t* file, uint32_t line)
     /* User can add his own implementation to report the file name and line number,
       ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
     /* USER CODE END 6 */
-
 }
 
 #endif

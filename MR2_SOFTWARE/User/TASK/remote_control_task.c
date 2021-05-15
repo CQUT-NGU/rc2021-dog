@@ -1,13 +1,13 @@
 /**
   ****************************(C) COPYRIGHT 2019 DJI****************************
   * @file       remote_control.c/h
-  * @brief      Ò£¿ØÆ÷´¦Àí£¬Ò£¿ØÆ÷ÊÇÍ¨¹ýÀàËÆSBUSµÄÐ­Òé´«Êä£¬ÀûÓÃDMA´«Êä·½Ê½½ÚÔ¼CPU
-  *             ×ÊÔ´£¬ÀûÓÃ´®¿Ú¿ÕÏÐÖÐ¶ÏÀ´À­Æð´¦Àíº¯Êý£¬Í¬Ê±Ìá¹©Ò»Ð©µôÏßÖØÆôDMA£¬´®¿Ú
-  *             µÄ·½Ê½±£Ö¤ÈÈ²å°ÎµÄÎÈ¶¨ÐÔ¡£
-  * @note       ¸ÃÈÎÎñÊÇÍ¨¹ý´®¿ÚÖÐ¶ÏÆô¶¯£¬²»ÊÇfreeRTOSÈÎÎñ
+  * @brief      é¥æŽ§å™¨å¤„ç†ï¼Œé¥æŽ§å™¨æ˜¯é€šè¿‡ç±»ä¼¼SBUSçš„åè®®ä¼ è¾“ï¼Œåˆ©ç”¨DMAä¼ è¾“æ–¹å¼èŠ‚çº¦CPU
+  *             èµ„æºï¼Œåˆ©ç”¨ä¸²å£ç©ºé—²ä¸­æ–­æ¥æ‹‰èµ·å¤„ç†å‡½æ•°ï¼ŒåŒæ—¶æä¾›ä¸€äº›æŽ‰çº¿é‡å¯DMAï¼Œä¸²å£
+  *             çš„æ–¹å¼ä¿è¯çƒ­æ’æ‹”çš„ç¨³å®šæ€§ã€‚
+  * @note       è¯¥ä»»åŠ¡æ˜¯é€šè¿‡ä¸²å£ä¸­æ–­å¯åŠ¨ï¼Œä¸æ˜¯freeRTOSä»»åŠ¡
   * @history
   *  Version    Date            Author          Modification
-  *  V1.0.0     Dec-01-2019     RM              1. Íê³É
+  *  V1.0.0     Dec-01-2019     RM              1. å®Œæˆ
   *
   @verbatim
   ==============================================================================
@@ -22,9 +22,9 @@
 #include "robocon.h"
 
 extern UART_HandleTypeDef huart1;
-extern DMA_HandleTypeDef hdma_usart1_rx;
-int16_t M3508_A[4]={0};//µç»úM3508µÄµçÁ÷
-int16_t C620_A[4]={0};//µçµ÷¿ØÖÆµç»úµÄµçÁ÷
+extern DMA_HandleTypeDef  hdma_usart1_rx;
+int16_t                   M3508_A[4] = {0};  //ç”µæœºM3508çš„ç”µæµ
+int16_t                   C620_A[4]  = {0};  //ç”µè°ƒæŽ§åˆ¶ç”µæœºçš„ç”µæµ
 /**
   * @brief          remote control protocol resolution
   * @param[in]      sbus_buf: raw data point
@@ -32,19 +32,19 @@ int16_t C620_A[4]={0};//µçµ÷¿ØÖÆµç»úµÄµçÁ÷
   * @retval         none
   */
 /**
-  * @brief          Ò£¿ØÆ÷Ð­Òé½âÎö
-  * @param[in]      sbus_buf: Ô­ÉúÊý¾ÝÖ¸Õë
-  * @param[out]     rc_ctrl: Ò£¿ØÆ÷Êý¾ÝÖ¸
+  * @brief          é¥æŽ§å™¨åè®®è§£æž
+  * @param[in]      sbus_buf: åŽŸç”Ÿæ•°æ®æŒ‡é’ˆ
+  * @param[out]     rc_ctrl: é¥æŽ§å™¨æ•°æ®æŒ‡
   * @retval         none
   */
 static void sbus_to_rc(volatile const uint8_t *sbus_buf, RC_ctrl_t *rc_ctrl);
 
-//remote control data 
-//Ò£¿ØÆ÷¿ØÖÆ±äÁ¿
+//remote control data
+//é¥æŽ§å™¨æŽ§åˆ¶å˜é‡
 RC_ctrl_t rc_ctrl;
 
-//receive data, 18 bytes one frame, but set 36 bytes 
-//½ÓÊÕÔ­Ê¼Êý¾Ý£¬Îª18¸ö×Ö½Ú£¬¸øÁË36¸ö×Ö½Ú³¤¶È£¬·ÀÖ¹DMA´«ÊäÔ½½ç
+//receive data, 18 bytes one frame, but set 36 bytes
+//æŽ¥æ”¶åŽŸå§‹æ•°æ®ï¼Œä¸º18ä¸ªå­—èŠ‚ï¼Œç»™äº†36ä¸ªå­—èŠ‚é•¿åº¦ï¼Œé˜²æ­¢DMAä¼ è¾“è¶Šç•Œ
 static uint8_t sbus_rx_buf[2][SBUS_RX_BUF_NUM];
 
 /**
@@ -53,7 +53,7 @@ static uint8_t sbus_rx_buf[2][SBUS_RX_BUF_NUM];
   * @retval         none
   */
 /**
-  * @brief          Ò£¿ØÆ÷³õÊ¼»¯
+  * @brief          é¥æŽ§å™¨åˆå§‹åŒ–
   * @param[in]      none
   * @retval         none
   */
@@ -67,24 +67,23 @@ void remote_control_init(void)
   * @retval         remote control data point
   */
 /**
-  * @brief          »ñÈ¡Ò£¿ØÆ÷Êý¾ÝÖ¸Õë
+  * @brief          èŽ·å–é¥æŽ§å™¨æ•°æ®æŒ‡é’ˆ
   * @param[in]      none
-  * @retval         Ò£¿ØÆ÷Êý¾ÝÖ¸Õë
+  * @retval         é¥æŽ§å™¨æ•°æ®æŒ‡é’ˆ
   */
 const RC_ctrl_t *get_remote_control_point(void)
 {
     return &rc_ctrl;
 }
 
-
-//´®¿ÚÖÐ¶Ï
+//ä¸²å£ä¸­æ–­
 void USART1_IRQHandler(void)
 {
-    if(huart1.Instance->SR & UART_FLAG_RXNE)//½ÓÊÕµ½Êý¾Ý
+    if (huart1.Instance->SR & UART_FLAG_RXNE)  //æŽ¥æ”¶åˆ°æ•°æ®
     {
         __HAL_UART_CLEAR_PEFLAG(&huart1);
     }
-    else if(USART1->SR & UART_FLAG_IDLE)
+    else if (USART1->SR & UART_FLAG_IDLE)
     {
         static uint16_t this_time_rx_len = 0;
 
@@ -93,64 +92,63 @@ void USART1_IRQHandler(void)
         if ((hdma_usart1_rx.Instance->CR & DMA_SxCR_CT) == RESET)
         {
             /* Current memory buffer used is Memory 0 */
-    
+
             //disable DMA
-            //Ê§Ð§DMA
+            //å¤±æ•ˆDMA
             __HAL_DMA_DISABLE(&hdma_usart1_rx);
 
             //get receive data length, length = set_data_length - remain_length
-            //»ñÈ¡½ÓÊÕÊý¾Ý³¤¶È,³¤¶È = Éè¶¨³¤¶È - Ê£Óà³¤¶È
+            //èŽ·å–æŽ¥æ”¶æ•°æ®é•¿åº¦,é•¿åº¦ = è®¾å®šé•¿åº¦ - å‰©ä½™é•¿åº¦
             this_time_rx_len = SBUS_RX_BUF_NUM - hdma_usart1_rx.Instance->NDTR;
 
             //reset set_data_lenght
-            //ÖØÐÂÉè¶¨Êý¾Ý³¤¶È
+            //é‡æ–°è®¾å®šæ•°æ®é•¿åº¦
             hdma_usart1_rx.Instance->NDTR = SBUS_RX_BUF_NUM;
 
             //set memory buffer 1
-            //Éè¶¨»º³åÇø1
+            //è®¾å®šç¼“å†²åŒº1
             hdma_usart1_rx.Instance->CR |= DMA_SxCR_CT;
-            
+
             //enable DMA
-            //Ê¹ÄÜDMA
+            //ä½¿èƒ½DMA
             __HAL_DMA_ENABLE(&hdma_usart1_rx);
 
-            if( this_time_rx_len == RC_FRAME_LENGTH )
+            if (this_time_rx_len == RC_FRAME_LENGTH)
             {
-              sbus_to_rc( sbus_rx_buf[ 0 ], &rc_ctrl );
+                sbus_to_rc(sbus_rx_buf[0], &rc_ctrl);
             }
         }
         else
         {
             /* Current memory buffer used is Memory 1 */
             //disable DMA
-            //Ê§Ð§DMA
-            __HAL_DMA_DISABLE( &hdma_usart1_rx );
+            //å¤±æ•ˆDMA
+            __HAL_DMA_DISABLE(&hdma_usart1_rx);
 
             //get receive data length, length = set_data_length - remain_length
-            //»ñÈ¡½ÓÊÕÊý¾Ý³¤¶È,³¤¶È = Éè¶¨³¤¶È - Ê£Óà³¤¶È
+            //èŽ·å–æŽ¥æ”¶æ•°æ®é•¿åº¦,é•¿åº¦ = è®¾å®šé•¿åº¦ - å‰©ä½™é•¿åº¦
             this_time_rx_len = SBUS_RX_BUF_NUM - hdma_usart1_rx.Instance->NDTR;
 
             //reset set_data_lenght
-            //ÖØÐÂÉè¶¨Êý¾Ý³¤¶È
-            hdma_usart1_rx.Instance -> NDTR = SBUS_RX_BUF_NUM;
+            //é‡æ–°è®¾å®šæ•°æ®é•¿åº¦
+            hdma_usart1_rx.Instance->NDTR = SBUS_RX_BUF_NUM;
 
             //set memory buffer 0
-            //Éè¶¨»º³åÇø0
-            DMA1_Stream1 -> CR &= ~(DMA_SxCR_CT);
-            
+            //è®¾å®šç¼“å†²åŒº0
+            DMA1_Stream1->CR &= ~(DMA_SxCR_CT);
+
             //enable DMA
-            //Ê¹ÄÜDMA
+            //ä½¿èƒ½DMA
             __HAL_DMA_ENABLE(&hdma_usart1_rx);
 
-            if(this_time_rx_len == RC_FRAME_LENGTH)
+            if (this_time_rx_len == RC_FRAME_LENGTH)
             {
-                //´¦ÀíÒ£¿ØÆ÷Êý¾Ý
+                //å¤„ç†é¥æŽ§å™¨æ•°æ®
                 sbus_to_rc(sbus_rx_buf[1], &rc_ctrl);
             }
         }
     }
 }
-
 
 /**
   * @brief          remote control protocol resolution
@@ -159,9 +157,9 @@ void USART1_IRQHandler(void)
   * @retval         none
   */
 /**
-  * @brief          Ò£¿ØÆ÷Ð­Òé½âÎö
-  * @param[in]      sbus_buf: Ô­ÉúÊý¾ÝÖ¸Õë
-  * @param[out]     rc_ctrl: Ò£¿ØÆ÷Êý¾ÝÖ¸Õë
+  * @brief          é¥æŽ§å™¨åè®®è§£æž
+  * @param[in]      sbus_buf: åŽŸç”Ÿæ•°æ®æŒ‡é’ˆ
+  * @param[out]     rc_ctrl: é¥æŽ§å™¨æ•°æ®æŒ‡é’ˆ
   * @retval         none
   */
 static void sbus_to_rc(volatile const uint8_t *sbus_buf, RC_ctrl_t *rc_ctrl)
@@ -171,29 +169,25 @@ static void sbus_to_rc(volatile const uint8_t *sbus_buf, RC_ctrl_t *rc_ctrl)
         return;
     }
 
-    rc_ctrl->rc.ch[0] = (sbus_buf[0] | (sbus_buf[1] << 8)) & 0x07ff;        //!< Channel 0
-    rc_ctrl->rc.ch[1] = ((sbus_buf[1] >> 3) | (sbus_buf[2] << 5)) & 0x07ff; //!< Channel 1
-    rc_ctrl->rc.ch[2] = ((sbus_buf[2] >> 6) | (sbus_buf[3] << 2) |          //!< Channel 2
-                         (sbus_buf[4] << 10)) &0x07ff;
-    rc_ctrl->rc.ch[3] = ((sbus_buf[4] >> 1) | (sbus_buf[5] << 7)) & 0x07ff; //!< Channel 3
-    rc_ctrl->rc.s[0] = ((sbus_buf[5] >> 4) & 0x0003);                  //!< Switch left
-    rc_ctrl->rc.s[1] = ((sbus_buf[5] >> 4) & 0x000C) >> 2;                       //!< Switch right
-    rc_ctrl->mouse.x = sbus_buf[6] | (sbus_buf[7] << 8);                    //!< Mouse X axis
-    rc_ctrl->mouse.y = sbus_buf[8] | (sbus_buf[9] << 8);                    //!< Mouse Y axis
-    rc_ctrl->mouse.z = sbus_buf[10] | (sbus_buf[11] << 8);                  //!< Mouse Z axis
-    rc_ctrl->mouse.press_l = sbus_buf[12];                                  //!< Mouse Left Is Press ?
-    rc_ctrl->mouse.press_r = sbus_buf[13];                                  //!< Mouse Right Is Press ?
-    rc_ctrl->key.v = sbus_buf[14] | (sbus_buf[15] << 8);                    //!< KeyBoard value
-    rc_ctrl->rc.ch[4] = sbus_buf[16] | (sbus_buf[17] << 8);                 //NULL
-		
+    rc_ctrl->rc.ch[0] = (sbus_buf[0] | (sbus_buf[1] << 8)) & 0x07ff;         //!< Channel 0
+    rc_ctrl->rc.ch[1] = ((sbus_buf[1] >> 3) | (sbus_buf[2] << 5)) & 0x07ff;  //!< Channel 1
+    rc_ctrl->rc.ch[2] = ((sbus_buf[2] >> 6) | (sbus_buf[3] << 2) |           //!< Channel 2
+                         (sbus_buf[4] << 10)) &
+                        0x07ff;
+    rc_ctrl->rc.ch[3]      = ((sbus_buf[4] >> 1) | (sbus_buf[5] << 7)) & 0x07ff;  //!< Channel 3
+    rc_ctrl->rc.s[0]       = ((sbus_buf[5] >> 4) & 0x0003);                       //!< Switch left
+    rc_ctrl->rc.s[1]       = ((sbus_buf[5] >> 4) & 0x000C) >> 2;                  //!< Switch right
+    rc_ctrl->mouse.x       = sbus_buf[6] | (sbus_buf[7] << 8);                    //!< Mouse X axis
+    rc_ctrl->mouse.y       = sbus_buf[8] | (sbus_buf[9] << 8);                    //!< Mouse Y axis
+    rc_ctrl->mouse.z       = sbus_buf[10] | (sbus_buf[11] << 8);                  //!< Mouse Z axis
+    rc_ctrl->mouse.press_l = sbus_buf[12];                                        //!< Mouse Left Is Press ?
+    rc_ctrl->mouse.press_r = sbus_buf[13];                                        //!< Mouse Right Is Press ?
+    rc_ctrl->key.v         = sbus_buf[14] | (sbus_buf[15] << 8);                  //!< KeyBoard value
+    rc_ctrl->rc.ch[4]      = sbus_buf[16] | (sbus_buf[17] << 8);                  //NULL
 
     rc_ctrl->rc.ch[0] -= RC_CH_VALUE_OFFSET;
     rc_ctrl->rc.ch[1] -= RC_CH_VALUE_OFFSET;
     rc_ctrl->rc.ch[2] -= RC_CH_VALUE_OFFSET;
     rc_ctrl->rc.ch[3] -= RC_CH_VALUE_OFFSET;
     rc_ctrl->rc.ch[4] -= RC_CH_VALUE_OFFSET;
-
 }
-
-
-

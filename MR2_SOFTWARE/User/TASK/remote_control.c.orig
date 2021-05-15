@@ -1,8 +1,8 @@
 /**
   ****************************(C) COPYRIGHT 2016 DJI****************************
   * @file       remote_control.c/h
-  * @brief      Ò£¿ØÆ÷´¦Àí£¬Ò£¿ØÆ÷Í¨¹ýDMA´®¿Ú½ÓÊÕÊý¾Ý£¬ÀûÓÃ´®¿Ú¿ÕÏÐÖÐ¶ÏÀ´À­Æð´¦
-  *            	Àíº¯Êý
+  * @brief      é¥æŽ§å™¨å¤„ç†ï¼Œé¥æŽ§å™¨é€šè¿‡DMAä¸²å£æŽ¥æ”¶æ•°æ®ï¼Œåˆ©ç”¨ä¸²å£ç©ºé—²ä¸­æ–­æ¥æ‹‰èµ·å¤„
+  *                ç†å‡½æ•°
   ==============================================================================
   **************************** HBUT ROBOCON 2019****************************
   */
@@ -34,7 +34,7 @@ void rc_params_clean(void)
 void Rc_task(void *pvParameters)
 {
 
-    while(!imu_rec_flag)		//µÈ´ýACTION³õÊ¼»¯
+    while(!imu_rec_flag)        //ç­‰å¾…ACTIONåˆå§‹åŒ–
     {
         IndLED_On(IndColorGreen);
         vTaskDelay(50);
@@ -48,8 +48,8 @@ void Rc_task(void *pvParameters)
 
     for(;;)
     {
-        //----------------------Æô¶¯°´¼ü---°åÔØ°´¼ü-------------------//
-        if(keyStart==0&&StartFlag == 0)  //599ÉÏ 1599ÏÂ
+        //----------------------å¯åŠ¨æŒ‰é”®---æ¿è½½æŒ‰é”®-------------------//
+        if(keyStart==0&&StartFlag == 0)  //599ä¸Š 1599ä¸‹
         {
             while(keyStart==0)
                 vTaskDelay(20);
@@ -67,28 +67,28 @@ void Rc_task(void *pvParameters)
             StartFlag=0;
         }
 
-//----------------------Ò£¿ØÇøÓò-------------------------------------------------//
+//----------------------é¥æŽ§åŒºåŸŸ-------------------------------------------------//
 
-//        if(ppm_rx[7]>590&&ppm_rx[7]<1600)  //VRA    Ñ¡ÔñÊÇ·ñ¿ªÆôÒ£¿Ø¿ØÖÆ    600 850 1100 1350 1600
+//        if(ppm_rx[7]>590&&ppm_rx[7]<1600)  //VRA    é€‰æ‹©æ˜¯å¦å¼€å¯é¥æŽ§æŽ§åˆ¶    600 850 1100 1350 1600
 //        {
 //            rc_ctrl_flag = 1;
 
-				
-				
-				if(ppm_rx[5]<1100){
-					
-					
-            //------------------------ÓÍÃÅ--------------------------//
-            if(ppm_rx[3]>590&&ppm_rx[3]<660) { //599ÉÏ 1599ÏÂ  ÓÍÃÅ
+                
+                
+                if(ppm_rx[5]<1100){
+                    
+                    
+            //------------------------æ²¹é—¨--------------------------//
+            if(ppm_rx[3]>590&&ppm_rx[3]<660) { //599ä¸Š 1599ä¸‹  æ²¹é—¨
 
-                if(ppm_rx[4]>600&&ppm_rx[4]<900) {  //×ó´ò
+                if(ppm_rx[4]>600&&ppm_rx[4]<900) {  //å·¦æ‰“
                     step_len_rotate_angle=((float)(-(ppm_rx[4]-1100+200)))/100*4;
                     state=ROTAT_LEFT;
                     state_gait_params[ROTAT_LEFT].step_length=step_len_rotate_angle;
                     vTaskDelay(50);
                 }
 
-                else if(ppm_rx[4]>1300&&ppm_rx[4]<1600) {//ÓÒ´ò
+                else if(ppm_rx[4]>1300&&ppm_rx[4]<1600) {//å³æ‰“
                     step_len_rotate_angle=(float)(ppm_rx[4]-1100-200)/100*4;
                     state=ROTAT_RIGHT;
                     state_gait_params[ROTAT_RIGHT].step_length=step_len_rotate_angle;
@@ -127,14 +127,14 @@ void Rc_task(void *pvParameters)
                 RcDetachedParam.detached_params_1.step_length=rc_params_r;
                 RcDetachedParam.detached_params_3.step_length=rc_params_r;
             }
-						
-					}
-				
-					else if(ppm_rx[5]>1100)
-					{
-						
-            //------------------------ÓÍÃÅ--------------------------//
-            if(ppm_rx[3]>590&&ppm_rx[3]<660) { //599ÉÏ 1599ÏÂ  ÓÍÃÅ
+                        
+                    }
+                
+                    else if(ppm_rx[5]>1100)
+                    {
+                        
+            //------------------------æ²¹é—¨--------------------------//
+            if(ppm_rx[3]>590&&ppm_rx[3]<660) { //599ä¸Š 1599ä¸‹  æ²¹é—¨
                     rc_params_clean();
                     state = REALSE;
                     vTaskDelay(5);
@@ -160,27 +160,27 @@ void Rc_task(void *pvParameters)
                 if(rc_params_l<0) rc_params_l=0;
                 if(rc_params_r<0) rc_params_r=0;
 
-							
-							
+                            
+                            
         state_detached_params[GALLOP].detached_params_0.step_length=rc_params_l;
         state_detached_params[GALLOP].detached_params_2.step_length=rc_params_l;
         state_detached_params[GALLOP].detached_params_1.step_length=rc_params_r;
         state_detached_params[GALLOP].detached_params_3.step_length=rc_params_r;
 
-							
+                            
             }
-						
+                        
 
-					}
-					
-					
-					
+                    }
+                    
+                    
+                    
 //        }
 //        else
 //            rc_ctrl_flag = 0 ;
 
-        //----------------------Ìø----------------------//
-//        if(ppm_rx[6]>1500)  //599ÉÏ 1599ÏÂ
+        //----------------------è·³----------------------//
+//        if(ppm_rx[6]>1500)  //599ä¸Š 1599ä¸‹
 //        {
 //            while(ppm_rx[6]>1500)
 //                vTaskDelay(200);
@@ -189,9 +189,9 @@ void Rc_task(void *pvParameters)
 //            printf("JUMP\r\n");
 //        }
 
-					
-					
-					
+                    
+                    
+                    
         vTaskDelay(200);
 
     }

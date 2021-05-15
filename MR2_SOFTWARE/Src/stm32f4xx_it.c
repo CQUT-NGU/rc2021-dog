@@ -31,10 +31,11 @@
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
-#include "stm32f4xx.h"
 #include "stm32f4xx_it.h"
+
 #include "cmsis_os.h"
+#include "stm32f4xx.h"
+#include "stm32f4xx_hal.h"
 
 /* USER CODE BEGIN 0 */
 #include "bsp_uart.h"
@@ -327,7 +328,6 @@ void DMA2_Stream1_IRQHandler(void)
 
     /* USER CODE END DMA2_Stream1_IRQn 1 */
 }
-
 
 /**
 * @brief This function handles CAN2 TX interrupts.

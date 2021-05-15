@@ -1,20 +1,21 @@
 #include "flash.h"
+
 #include "stm32f4xx.h"
 
 static uint32_t GetSector(unsigned int Address);
 static uint32_t Get_Next_Flash_Address(uint32_t Address);
-static int8_t FLASH_Erase_Muli_Sector(uint32_t start_Address, uint32_t end_Address, uint8_t VoltageRange);
+static int8_t   FLASH_Erase_Muli_Sector(uint32_t start_Address, uint32_t end_Address, uint8_t VoltageRange);
 
 int8_t flash_write_single_address(uint32_t Address, uint32_t *buf, uint32_t len)
 {
     uint32_t uwSector = 0;
 
-    uint32_t uwAddress = 0;
-    uint32_t uwEndAddress = 0;
-    uint32_t uwSectorCounter = 0;
-    uint32_t *data_buf;
-    uint32_t data_len;
-    __IO uint32_t uwData32 = 0;
+    uint32_t      uwAddress       = 0;
+    uint32_t      uwEndAddress    = 0;
+    uint32_t      uwSectorCounter = 0;
+    uint32_t *    data_buf;
+    uint32_t      data_len;
+    __IO uint32_t uwData32              = 0;
     __IO uint32_t uwMemoryProgramStatus = 0;
 
     FLASH_Unlock();
@@ -28,14 +29,13 @@ int8_t flash_write_single_address(uint32_t Address, uint32_t *buf, uint32_t len)
 
     if (FLASH_EraseSector(uwSectorCounter, VoltageRange_3) != FLASH_COMPLETE)
     {
-
         return -1;
     }
 
-    uwAddress = Address;
+    uwAddress    = Address;
     uwEndAddress = Get_Next_Flash_Address(Address);
-    data_buf = buf;
-    data_len = 0;
+    data_buf     = buf;
+    data_len     = 0;
     while (uwAddress <= uwEndAddress)
     {
         if (FLASH_ProgramWord(uwAddress, *data_buf) == FLASH_COMPLETE)
@@ -50,17 +50,16 @@ int8_t flash_write_single_address(uint32_t Address, uint32_t *buf, uint32_t len)
         }
         else
         {
-
             return -1;
         }
     }
 
     FLASH_Lock();
 
-    uwAddress = Address;
+    uwAddress             = Address;
     uwMemoryProgramStatus = 0;
-    data_buf = buf;
-    data_len = 0;
+    data_buf              = buf;
+    data_len              = 0;
 
     while (uwAddress < uwEndAddress)
     {
@@ -92,13 +91,12 @@ int8_t flash_write_single_address(uint32_t Address, uint32_t *buf, uint32_t len)
 
 int8_t flash_write_muli_address(uint32_t start_Address, uint32_t end_Address, uint32_t *buf, uint32_t len)
 {
-
     uint32_t uwAddress = 0;
 
     uint32_t *data_buf;
-    uint32_t data_len;
+    uint32_t  data_len;
 
-    __IO uint32_t uwData32 = 0;
+    __IO uint32_t uwData32              = 0;
     __IO uint32_t uwMemoryProgramStatus = 0;
 
     FLASH_Unlock();
@@ -114,7 +112,6 @@ int8_t flash_write_muli_address(uint32_t start_Address, uint32_t end_Address, ui
     data_len = 0;
     while (uwAddress <= end_Address)
     {
-
         if (FLASH_ProgramWord(uwAddress, *data_buf) == FLASH_COMPLETE)
         {
             uwAddress = uwAddress + 4;
@@ -127,7 +124,6 @@ int8_t flash_write_muli_address(uint32_t start_Address, uint32_t end_Address, ui
         }
         else
         {
-
             return -1;
         }
     }
@@ -136,8 +132,8 @@ int8_t flash_write_muli_address(uint32_t start_Address, uint32_t end_Address, ui
 
     uwAddress = start_Address;
 
-    data_buf = buf;
-    data_len = 0;
+    data_buf              = buf;
+    data_len              = 0;
     uwMemoryProgramStatus = 0;
 
     while (uwAddress < end_Address)
@@ -169,14 +165,14 @@ int8_t flash_write_muli_address(uint32_t start_Address, uint32_t end_Address, ui
 }
 void flash_read(uint32_t Address, uint32_t *buf, uint32_t len)
 {
-    uint32_t i = 0;
+    uint32_t      i = 0;
     __IO uint32_t uwData32;
-    uint32_t uwAddress = 0;
-    uwAddress = Address;
+    uint32_t      uwAddress = 0;
+    uwAddress               = Address;
     for (i = 0; i < len; i++)
     {
-        uwData32 = *(__IO uint32_t *)uwAddress;
-        *buf = uwData32;
+        uwData32  = *(__IO uint32_t *)uwAddress;
+        *buf      = uwData32;
         uwAddress = uwAddress + 4;
         buf++;
     }
@@ -184,22 +180,19 @@ void flash_read(uint32_t Address, uint32_t *buf, uint32_t len)
 
 static int8_t FLASH_Erase_Muli_Sector(uint32_t start_Address, uint32_t end_Address, uint8_t VoltageRange)
 {
-
     uint32_t uwStartSector = 0;
-    uint32_t uwEndSector = 0;
+    uint32_t uwEndSector   = 0;
 
     uint32_t uwSectorCounter = 0;
 
     uwStartSector = GetSector(start_Address);
-    uwEndSector = GetSector(end_Address);
+    uwEndSector   = GetSector(end_Address);
 
     uwSectorCounter = uwStartSector;
     while (uwSectorCounter <= uwEndSector)
     {
-
         if (FLASH_EraseSector(uwSectorCounter, VoltageRange) != FLASH_COMPLETE)
         {
-
             return -1;
         }
 
@@ -230,7 +223,6 @@ void write_protect(void)
     }
     else
     {
-
         FLASH_OB_Unlock();
 
         FLASH_OB_WRPConfig(FLASH_WRP_SECTORS, ENABLE);
@@ -254,7 +246,6 @@ void write_relieve_protect(void)
 
     if (SectorsWRPStatus == 0x00)
     {
-
         FLASH_OB_Unlock();
 
         FLASH_OB_WRPConfig(FLASH_WRP_SECTORS, DISABLE);

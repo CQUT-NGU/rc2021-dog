@@ -1,40 +1,38 @@
 
 #include "servo.h"
 
-TIM_HandleTypeDef TIM4_Handler;
+TIM_HandleTypeDef  TIM4_Handler;
 TIM_OC_InitTypeDef TIM4_CH1Handler;
 TIM_OC_InitTypeDef TIM4_CH2Handler;
 TIM_OC_InitTypeDef TIM4_CH3Handler;
 
 void Servo_Init(uint16_t arr, uint16_t psc)
 {
+    TIM4_Handler.Instance           = TIM4;                //å®šæ—¶å™¨
+    TIM4_Handler.Init.Prescaler     = psc;                 //å®šæ—¶å™¨åˆ†é¢‘
+    TIM4_Handler.Init.CounterMode   = TIM_COUNTERMODE_UP;  //å‘ä¸Šè®¡æ•°æ¨¡å¼
+    TIM4_Handler.Init.Period        = arr;                 //è‡ªåŠ¨é‡è£…è½½å€¼
+    TIM4_Handler.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+    HAL_TIM_PWM_Init(&TIM4_Handler);  //åˆå§‹åŒ–PWM
 
-    TIM4_Handler.Instance=TIM4;            //¶¨Ê±Æ÷
-    TIM4_Handler.Init.Prescaler=psc;       //¶¨Ê±Æ÷·ÖÆµ
-    TIM4_Handler.Init.CounterMode=TIM_COUNTERMODE_UP;//ÏòÉÏ¼ÆÊıÄ£Ê½
-    TIM4_Handler.Init.Period=arr;          //×Ô¶¯ÖØ×°ÔØÖµ
-    TIM4_Handler.Init.ClockDivision=TIM_CLOCKDIVISION_DIV1;
-    HAL_TIM_PWM_Init(&TIM4_Handler);       //³õÊ¼»¯PWM
+    TIM4_CH1Handler.OCMode     = TIM_OCMODE_PWM1;      //æ¨¡å¼é€‰æ‹©PWM1
+    TIM4_CH1Handler.Pulse      = arr / 2;              //è®¾ç½®æ¯”è¾ƒå€¼,æ­¤å€¼ç”¨æ¥ç¡®å®šå ç©ºæ¯”ï¼Œé»˜è®¤æ¯”è¾ƒå€¼ä¸ºè‡ªåŠ¨é‡è£…è½½å€¼çš„ä¸€åŠ,å³å ç©ºæ¯”ä¸º50%
+    TIM4_CH1Handler.OCPolarity = TIM_OCPOLARITY_HIGH;  //è¾“å‡ºæ¯”è¾ƒææ€§ä¸ºä½
+    HAL_TIM_PWM_ConfigChannel(&TIM4_Handler, &TIM4_CH1Handler, TIM_CHANNEL_1);
 
-    TIM4_CH1Handler.OCMode=TIM_OCMODE_PWM1; //Ä£Ê½Ñ¡ÔñPWM1
-    TIM4_CH1Handler.Pulse=arr/2;            //ÉèÖÃ±È½ÏÖµ,´ËÖµÓÃÀ´È·¶¨Õ¼¿Õ±È£¬Ä¬ÈÏ±È½ÏÖµÎª×Ô¶¯ÖØ×°ÔØÖµµÄÒ»°ë,¼´Õ¼¿Õ±ÈÎª50%
-    TIM4_CH1Handler.OCPolarity=TIM_OCPOLARITY_HIGH; //Êä³ö±È½Ï¼«ĞÔÎªµÍ
-    HAL_TIM_PWM_ConfigChannel(&TIM4_Handler,&TIM4_CH1Handler,TIM_CHANNEL_1);
+    HAL_TIM_PWM_Start(&TIM4_Handler, TIM_CHANNEL_1);  //å¼€å¯PWMé€šé“1
 
-    HAL_TIM_PWM_Start(&TIM4_Handler,TIM_CHANNEL_1);//¿ªÆôPWMÍ¨µÀ1
+    TIM4_CH2Handler.OCMode     = TIM_OCMODE_PWM1;      //æ¨¡å¼é€‰æ‹©PWM1
+    TIM4_CH2Handler.Pulse      = arr / 2;              //è®¾ç½®æ¯”è¾ƒå€¼,æ­¤å€¼ç”¨æ¥ç¡®å®šå ç©ºæ¯”ï¼Œé»˜è®¤æ¯”è¾ƒå€¼ä¸ºè‡ªåŠ¨é‡è£…è½½å€¼çš„ä¸€åŠ,å³å ç©ºæ¯”ä¸º50%
+    TIM4_CH2Handler.OCPolarity = TIM_OCPOLARITY_HIGH;  //è¾“å‡ºæ¯”è¾ƒææ€§ä¸ºä½
+    HAL_TIM_PWM_ConfigChannel(&TIM4_Handler, &TIM4_CH2Handler, TIM_CHANNEL_2);
 
-    TIM4_CH2Handler.OCMode=TIM_OCMODE_PWM1; //Ä£Ê½Ñ¡ÔñPWM1
-    TIM4_CH2Handler.Pulse=arr/2;            //ÉèÖÃ±È½ÏÖµ,´ËÖµÓÃÀ´È·¶¨Õ¼¿Õ±È£¬Ä¬ÈÏ±È½ÏÖµÎª×Ô¶¯ÖØ×°ÔØÖµµÄÒ»°ë,¼´Õ¼¿Õ±ÈÎª50%
-    TIM4_CH2Handler.OCPolarity=TIM_OCPOLARITY_HIGH; //Êä³ö±È½Ï¼«ĞÔÎªµÍ
-    HAL_TIM_PWM_ConfigChannel(&TIM4_Handler,&TIM4_CH2Handler,TIM_CHANNEL_2);
+    HAL_TIM_PWM_Start(&TIM4_Handler, TIM_CHANNEL_2);  //å¼€å¯PWMé€šé“2
 
-    HAL_TIM_PWM_Start(&TIM4_Handler,TIM_CHANNEL_2);//¿ªÆôPWMÍ¨µÀ2
+    TIM4_CH3Handler.OCMode     = TIM_OCMODE_PWM1;      //æ¨¡å¼é€‰æ‹©PWM1
+    TIM4_CH3Handler.Pulse      = arr / 2;              //è®¾ç½®æ¯”è¾ƒå€¼,æ­¤å€¼ç”¨æ¥ç¡®å®šå ç©ºæ¯”ï¼Œé»˜è®¤æ¯”è¾ƒå€¼ä¸ºè‡ªåŠ¨é‡è£…è½½å€¼çš„ä¸€åŠ,å³å ç©ºæ¯”ä¸º50%
+    TIM4_CH3Handler.OCPolarity = TIM_OCPOLARITY_HIGH;  //è¾“å‡ºæ¯”è¾ƒææ€§ä¸ºä½
+    HAL_TIM_PWM_ConfigChannel(&TIM4_Handler, &TIM4_CH3Handler, TIM_CHANNEL_3);
 
-    TIM4_CH3Handler.OCMode=TIM_OCMODE_PWM1; //Ä£Ê½Ñ¡ÔñPWM1
-    TIM4_CH3Handler.Pulse=arr/2;            //ÉèÖÃ±È½ÏÖµ,´ËÖµÓÃÀ´È·¶¨Õ¼¿Õ±È£¬Ä¬ÈÏ±È½ÏÖµÎª×Ô¶¯ÖØ×°ÔØÖµµÄÒ»°ë,¼´Õ¼¿Õ±ÈÎª50%
-    TIM4_CH3Handler.OCPolarity=TIM_OCPOLARITY_HIGH; //Êä³ö±È½Ï¼«ĞÔÎªµÍ
-    HAL_TIM_PWM_ConfigChannel(&TIM4_Handler,&TIM4_CH3Handler,TIM_CHANNEL_3);
-
-    HAL_TIM_PWM_Start(&TIM4_Handler,TIM_CHANNEL_3);//¿ªÆôPWMÍ¨µÀ3
-
+    HAL_TIM_PWM_Start(&TIM4_Handler, TIM_CHANNEL_3);  //å¼€å¯PWMé€šé“3
 }

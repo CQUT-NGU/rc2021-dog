@@ -6,14 +6,14 @@ void led_configuration(void)
 {
 
     GPIO_InitTypeDef GPIO_Initure;
-    __HAL_RCC_GPIOF_CLK_ENABLE();           //ø™∆ÙGPIOB ±÷”
-    __HAL_RCC_GPIOE_CLK_ENABLE();           //ø™∆ÙGPIOB ±÷”
-    __HAL_RCC_GPIOG_CLK_ENABLE();           //ø™∆ÙGPIOB ±÷”
+    __HAL_RCC_GPIOF_CLK_ENABLE();           //ÂºÄÂêØGPIOBÊó∂Èíü
+    __HAL_RCC_GPIOE_CLK_ENABLE();           //ÂºÄÂêØGPIOBÊó∂Èíü
+    __HAL_RCC_GPIOG_CLK_ENABLE();           //ÂºÄÂêØGPIOBÊó∂Èíü
 
     GPIO_Initure.Pin=GPIO_PIN_14;
-    GPIO_Initure.Mode=GPIO_MODE_OUTPUT_PP;  //Õ∆ÕÏ ‰≥ˆ
-    GPIO_Initure.Pull=GPIO_PULLUP;          //…œ¿≠
-    GPIO_Initure.Speed=GPIO_SPEED_HIGH;     //∏ﬂÀŸ
+    GPIO_Initure.Mode=GPIO_MODE_OUTPUT_PP;  //Êé®ÊåΩËæìÂá∫
+    GPIO_Initure.Pull=GPIO_PULLUP;          //‰∏äÊãâ
+    GPIO_Initure.Speed=GPIO_SPEED_HIGH;     //È´òÈÄü
     HAL_GPIO_Init(GPIOF,&GPIO_Initure);
 
     GPIO_Initure.Pin=GPIO_PIN_11;
@@ -32,21 +32,21 @@ void led_configuration(void)
 
 void IndLED_On(int color)
 {
-	if(color == IndColorRed)
-		HAL_GPIO_WritePin(GPIOI,GPIO_PIN_2,GPIO_PIN_SET);
-	
-	else if(color == IndColorBlue)
-		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_4,GPIO_PIN_SET);
-	
-	else if(color == IndColorGreen)
-		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,GPIO_PIN_SET);
-	
+    if(color == IndColorRed)
+        HAL_GPIO_WritePin(GPIOI,GPIO_PIN_2,GPIO_PIN_SET);
+    
+    else if(color == IndColorBlue)
+        HAL_GPIO_WritePin(GPIOA,GPIO_PIN_4,GPIO_PIN_SET);
+    
+    else if(color == IndColorGreen)
+        HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,GPIO_PIN_SET);
+    
 }
 void IndLED_Off(void)
 {
-	HAL_GPIO_WritePin(GPIOI,GPIO_PIN_2,GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_4,GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,GPIO_PIN_RESET);	
+    HAL_GPIO_WritePin(GPIOI,GPIO_PIN_2,GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOA,GPIO_PIN_4,GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,GPIO_PIN_RESET);    
 }
 
 

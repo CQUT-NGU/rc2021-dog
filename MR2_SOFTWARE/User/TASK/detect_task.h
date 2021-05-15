@@ -2,7 +2,7 @@
 #ifndef DETECT_Task_H
 #define DETECT_Task_H
 #include "robocon.h"
-//´íÎóÂëÒÔ¼°¶ÔÓ¦Éè±¸Ë³Ğò
+//é”™è¯¯ç ä»¥åŠå¯¹åº”è®¾å¤‡é¡ºåº
 enum errorList
 {
     DBUSTOE = 0,
@@ -24,12 +24,12 @@ typedef __packed struct
     uint32_t Losttime;
     uint32_t worktime;
     uint16_t setOfflineTime : 12;
-    uint16_t setOnlineTime : 12;
-    uint8_t enable : 1;
-    uint8_t Priority : 4;
-    uint8_t errorExist : 1;
-    uint8_t isLost : 1;
-    uint8_t dataIsError : 1;
+    uint16_t setOnlineTime  : 12;
+    uint8_t  enable         : 1;
+    uint8_t  Priority       : 4;
+    uint8_t  errorExist     : 1;
+    uint8_t  isLost         : 1;
+    uint8_t  dataIsError    : 1;
 
     fp32 frequency;
     bool_t (*dataIsErrorFun)(void);
@@ -37,9 +37,9 @@ typedef __packed struct
     void (*solveDataErrorFun)(void);
 } error_t;
 
-extern bool_t toe_is_error(uint8_t err);
-extern void Detect_task(void *pvParameters);
-void DetectHook(uint8_t toe);
+extern bool_t         toe_is_error(uint8_t err);
+extern void           Detect_task(void *pvParameters);
+void                  DetectHook(uint8_t toe);
 extern const error_t *getErrorListPoint(void);
-extern void DetectHook(uint8_t toe);
+extern void           DetectHook(uint8_t toe);
 #endif

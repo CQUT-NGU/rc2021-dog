@@ -66,19 +66,19 @@ enum States {
     TEST11=11,
     TEST12=12,
     CLIMBING = 13,
-	
-	
+    
+    
     WALK=14,
     WALK_BACK=15,
     ROTAT_LEFT=16,
     ROTAT_RIGHT=17,
 
-		
-    BOUND=18,	// ÌøÅÜ
-    GALLOP=19, // Ï®²½
-		
-		
-		
+        
+    BOUND=18,    // è·³è·‘
+    GALLOP=19, // è¢­æ­¥
+        
+        
+        
     STOP = 20,
     REALSE=21,
     JUMP=22,
@@ -89,24 +89,24 @@ enum States {
 extern enum States state;
 
 
-typedef struct  {		// ÍÈ²¿PIDÔöÒæ½á¹¹Ìå
+typedef struct  {        // è…¿éƒ¨PIDå¢ç›Šç»“æ„ä½“
 
-    float kp_pos;		//Î»ÖÃ»·
+    float kp_pos;        //ä½ç½®ç¯
     float kd_pos;
 
-    float kp_spd;		//ËÙ¶È»·
+    float kp_spd;        //é€Ÿåº¦ç¯
     float kd_spd;
 
 } LegGain;
 extern LegGain test_gait_gains;
 
-typedef struct  {		// ÍÈ²¿²ÎÊı½á¹¹Ìå
-    float stance_height ; // ¹·Éíµ½µØÃæµÄ¾àÀë (cm)
-    float step_length ; // Ò»²½µÄ¾àÀë (cm)
-    float up_amp ; // ÉÏ²¿Õñ·ùy (cm)
-    float down_amp ; // ÏÂ²¿Õñ·ù (cm)
-    float flight_percent ; // °Ú¶¯Ïà°Ù·Ö±È (cm)
-    float freq ; // Ò»²½µÄÆµÂÊ (Hz)
+typedef struct  {        // è…¿éƒ¨å‚æ•°ç»“æ„ä½“
+    float stance_height ; // ç‹—èº«åˆ°åœ°é¢çš„è·ç¦» (cm)
+    float step_length ; // ä¸€æ­¥çš„è·ç¦» (cm)
+    float up_amp ; // ä¸Šéƒ¨æŒ¯å¹…y (cm)
+    float down_amp ; // ä¸‹éƒ¨æŒ¯å¹… (cm)
+    float flight_percent ; // æ‘†åŠ¨ç›¸ç™¾åˆ†æ¯” (cm)
+    float freq ; // ä¸€æ­¥çš„é¢‘ç‡ (Hz)
 } GaitParams;
 extern GaitParams gait_params;
 extern GaitParams state_gait_params[];
@@ -125,10 +125,10 @@ extern DetachedParam state_detached_params[];
 
 extern DetachedParam  RcDetachedParam;
 
-void gait(	GaitParams params,LegGain gait_gains,
+void gait(    GaitParams params,LegGain gait_gains,
             float leg0_offset, float leg1_offset,float leg2_offset, float leg3_offset,
             float leg0_direction, float leg1_direction,float leg2_direction, float leg3_direction);
-void gait_detached(	DetachedParam d_params,
+void gait_detached(    DetachedParam d_params,
                     float leg0_offset, float leg1_offset,float leg2_offset, float leg3_offset,
                     float leg0_direction, float leg1_direction,float leg2_direction, float leg3_direction);
 void CoupledMoveLeg(float t, GaitParams params,float gait_offset, float leg_direction, int LegId);

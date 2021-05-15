@@ -3,97 +3,89 @@
 //bool optoelec_switch[2];
 
 /**
-*×éºÏ¶¯×÷ ·ÅÔÚÕâÀïĞ´ÁË
-*ÓĞ£º		JUMP		¿ªÊ¼¶¯×÷		½áÊø¶¯×÷		Ô½ÕÏ		¹ı³ÌÂß¼­
+*ç»„åˆåŠ¨ä½œ æ”¾åœ¨è¿™é‡Œå†™äº†
+*æœ‰ï¼š        JUMP        å¼€å§‹åŠ¨ä½œ        ç»“æŸåŠ¨ä½œ        è¶Šéšœ        è¿‡ç¨‹é€»è¾‘
 */
 
 void StepOver(void)
 {
-
-    state=REALSE;				//ÊÍ·Å
+    state = REALSE;  //é‡Šæ”¾
     vTaskDelay(500);
 
-    StepOver_one_leg(0);  //¿ç0
+    StepOver_one_leg(0);  //è·¨0
     vTaskDelay(100);
 
-    StepOver_one_leg(1);	//¿ç1
+    StepOver_one_leg(1);  //è·¨1
     vTaskDelay(100);
 
-
-
-    state=REALSE;				//ÊÍ·Å
+    state = REALSE;  //é‡Šæ”¾
     vTaskDelay(150);
 
-//    x = 18*sin(40*PI/180);		//Ç°Á½¸öÍÈ±£³ÖÒ»ÖÂĞ¡Ğ¡µÄÕ¾ÆğÀ´ ºóÒ»µã
-//    y = 18*cos(40*PI/180);
-//    CartesianToTheta(1.0);
-//    SetCoupledPosition(0);
-//    SetCoupledPosition(1);
-//    vTaskDelay(100);
+    //    x = 18*sin(40*PI/180);        //å‰ä¸¤ä¸ªè…¿ä¿æŒä¸€è‡´å°å°çš„ç«™èµ·æ¥ åä¸€ç‚¹
+    //    y = 18*cos(40*PI/180);
+    //    CartesianToTheta(1.0);
+    //    SetCoupledPosition(0);
+    //    SetCoupledPosition(1);
+    //    vTaskDelay(100);
 
-    _leg_active[0]=NO;		//¹Ø±ÕÇ°Á½¸öÍÈ
-    _leg_active[1]=NO;
-    state=TEST4;				//Ç°ÃæµÍÏÂÀ´×ß
+    _leg_active[0] = NO;  //å…³é—­å‰ä¸¤ä¸ªè…¿
+    _leg_active[1] = NO;
+    state          = TEST4;  //å‰é¢ä½ä¸‹æ¥èµ°
     vTaskDelay(500);
-    _leg_active[0]=YES;		//´ò¿ªÇ°Á½¸öÍÈ
-    _leg_active[1]=YES;
+    _leg_active[0] = YES;  //æ‰“å¼€å‰ä¸¤ä¸ªè…¿
+    _leg_active[1] = YES;
     vTaskDelay(1500);
 
-    state=TEST6;				//Ğ¡Ëé²½
+    state = TEST6;  //å°ç¢æ­¥
     vTaskDelay(1000);
 
-    state=REALSE; 			//ÊÍ·Å
+    state = REALSE;  //é‡Šæ”¾
 
     // pid_spd_out_limit=  2500;
 
-    StepOver_one_leg(2);	//¿ç2
+    StepOver_one_leg(2);  //è·¨2
 
     vTaskDelay(400);
 
-    StepOver_one_leg(3);	//¿ç3
+    StepOver_one_leg(3);  //è·¨3
     vTaskDelay(400);
 
     // pid_spd_out_limit=  6720;
 
-    state=REALSE;		//ÊÍ·Å
+    state = REALSE;  //é‡Šæ”¾
     vTaskDelay(500);
 
-    x = 18.6*sin(28*PI/180);		//ºóÁ½¸öÍÈ Ğ¡Õ¾ ÏòÇ°×ß
-    y = 18.6*cos(28*PI/180);
+    x = 18.6 * sin(28 * PI / 180);  //åä¸¤ä¸ªè…¿ å°ç«™ å‘å‰èµ°
+    y = 18.6 * cos(28 * PI / 180);
     CartesianToTheta(1.0);
     SetCoupledPosition(2);
     SetCoupledPosition(3);
     vTaskDelay(100);
 
-    _leg_active[2]=NO;		//¹Ø±ÕºóÁ½¸öÍÈ
-    _leg_active[3]=NO;
-    state=TEST5; //Ç°ÃæÕı³£ ºóÃæµÍÏÂÀ´×ß
+    _leg_active[2] = NO;  //å…³é—­åä¸¤ä¸ªè…¿
+    _leg_active[3] = NO;
+    state          = TEST5;  //å‰é¢æ­£å¸¸ åé¢ä½ä¸‹æ¥èµ°
     vTaskDelay(500);
 
-    _leg_active[2]=YES;		//´ò¿ªºóÁ½¸öÍÈ
-    _leg_active[3]=YES;
+    _leg_active[2] = YES;  //æ‰“å¼€åä¸¤ä¸ªè…¿
+    _leg_active[3] = YES;
     vTaskDelay(1000);
 
-    state=REALSE;		//ÊÍ·Å
+    state = REALSE;  //é‡Šæ”¾
     vTaskDelay(250);
 
-    state=TROT;		    //Ğ¡ÅÜÅÜÏÂÉ³Çğ
+    state = TROT;  //å°è·‘è·‘ä¸‹æ²™ä¸˜
 
     vTaskDelay(3000);
 
-
     // pid_spd_out_limit=  6700;
-
-
 }
-
 
 void StepOver_one_leg(int LegId)
 {
+    //------å››ä¸ªè…¿å­å…¨éƒ¨æŠ¬åˆ°æœ€é«˜-----//
 
-    //------ËÄ¸öÍÈ×ÓÈ«²¿Ì§µ½×î¸ß-----//
-
-    if(LegId==0||LegId==2)
+    if (LegId == 0 || LegId == 2)
     {
         x = 0;
         y = 28;
@@ -101,182 +93,179 @@ void StepOver_one_leg(int LegId)
         CommandAllLegs_v();
         vTaskDelay(500);
     }
-    else if(LegId==1||LegId==3)
+    else if (LegId == 1 || LegId == 3)
     {
         vTaskDelay(200);
     }
 
-    //--------¶Ô½ÇÍÈËõ×î¶Ì--------//
+    //--------å¯¹è§’è…¿ç¼©æœ€çŸ­--------//
     int rev_legid, rev_legid1;
-    if(LegId==0) {
-        rev_legid=3 ;
-        y = 25;
+    if (LegId == 0)
+    {
+        rev_legid = 3;
+        y         = 25;
     }
-    else if(LegId==1) {
+    else if (LegId == 1)
+    {
         x = 0;
         y = 28;
         CartesianToTheta(1.0);
         SetCoupledPosition(3);
         vTaskDelay(300);
 
-        rev_legid=2 ;
-        y = 25 ;
+        rev_legid = 2;
+        y         = 25;
     }
 
-    else if(LegId==2) {
-        rev_legid=1 ;
-        y = 25;
+    else if (LegId == 2)
+    {
+        rev_legid = 1;
+        y         = 25;
     }
-    else if(LegId==3) {
-        rev_legid=0 ;
-        y = 16;
+    else if (LegId == 3)
+    {
+        rev_legid = 0;
+        y         = 16;
     }
     x = 0;
     CartesianToTheta(1.0);
     SetCoupledPosition(rev_legid);
     vTaskDelay(400);
 
-    //----Ö»ÓĞleg3µÄÊ±ºòÔËĞĞ----Ç°Èı¸öÍÈ½øÈëÆ½ºâ×´Ì¬---//
+    //----åªæœ‰leg3çš„æ—¶å€™è¿è¡Œ----å‰ä¸‰ä¸ªè…¿è¿›å…¥å¹³è¡¡çŠ¶æ€---//
 
-    if(LegId==3)
+    if (LegId == 3)
     {
+        if (GROUND_SELECT == RED_GROUNG)
+        {  //çº¢è“åœºåˆ¤æ–­ çº¢åœº
 
-        if(GROUND_SELECT==RED_GROUNG) {  //ºìÀ¶³¡ÅĞ¶Ï ºì³¡
-
-            x = -18*sin(17.2*PI/180);
-            y = 18*cos(17.2*PI/180);
+            x = -18 * sin(17.2 * PI / 180);
+            y = 18 * cos(17.2 * PI / 180);
             CartesianToTheta(1.0);
             SetCoupledPosition(0);
 
-            x = -21*sin(15*PI/180);
-            y = 21*cos(15*PI/180);
+            x = -21 * sin(15 * PI / 180);
+            y = 21 * cos(15 * PI / 180);
             CartesianToTheta(1.0);
             SetCoupledPosition(1);
 
-            x = 22*sin(10*PI/180);
-            y = 22*cos(40*PI/180)-4;		//¸ß¶È±£³Ö
+            x = 22 * sin(10 * PI / 180);
+            y = 22 * cos(40 * PI / 180) - 4;  //é«˜åº¦ä¿æŒ
             CartesianToTheta(1.0);
             SetCoupledPosition(2);
 
             vTaskDelay(1500);
         }
-        else if(GROUND_SELECT==BLUE_GROUNG) {
-
-            x = -18*sin(17.2*PI/180);
-            y = 18*cos(17.2*PI/180);
+        else if (GROUND_SELECT == BLUE_GROUNG)
+        {
+            x = -18 * sin(17.2 * PI / 180);
+            y = 18 * cos(17.2 * PI / 180);
             CartesianToTheta(1.0);
             SetCoupledPosition(0);
 
-            x = -21*sin(15*PI/180);
-            y = 21*cos(15*PI/180);
+            x = -21 * sin(15 * PI / 180);
+            y = 21 * cos(15 * PI / 180);
             CartesianToTheta(1.0);
             SetCoupledPosition(1);
 
-            x = 22*sin(10*PI/180);
-            y = 22*cos(40*PI/180)-4;		//¸ß¶È±£³Ö
+            x = 22 * sin(10 * PI / 180);
+            y = 22 * cos(40 * PI / 180) - 4;  //é«˜åº¦ä¿æŒ
             CartesianToTheta(1.0);
             SetCoupledPosition(2);
 
             vTaskDelay(1300);
         }
-
     }
 
-    //--------ÍÈ×î¶ÌÏòºó--------//
-    if(LegId==3)
+    //--------è…¿æœ€çŸ­å‘å--------//
+    if (LegId == 3)
     {
-        x = -10*sin(80*PI/180);
-        y = 10*cos(80*PI/180);
+        x = -10 * sin(80 * PI / 180);
+        y = 10 * cos(80 * PI / 180);
         CartesianToTheta(1.0);
         SetCoupledPosition(LegId);
         vTaskDelay(200);
     }
     else
     {
-
-//        x = -10*sin(60*PI/180);
-//        y = 10*cos(60*PI/180);
-//        CartesianToTheta(1.0);
-//        SetCoupledPosition(LegId);
-//        vTaskDelay(600);
-
+        //        x = -10*sin(60*PI/180);
+        //        y = 10*cos(60*PI/180);
+        //        CartesianToTheta(1.0);
+        //        SetCoupledPosition(LegId);
+        //        vTaskDelay(600);
     }
 
-    //-------ÍÈ×î¶ÌÏòÇ°----------//
-    x = 10*sin(60*PI/180);
-    y = 10*cos(60*PI/180);
+    //-------è…¿æœ€çŸ­å‘å‰----------//
+    x = 10 * sin(60 * PI / 180);
+    y = 10 * cos(60 * PI / 180);
     CartesianToTheta(1.0);
     SetCoupledPosition(LegId);
     vTaskDelay(260);
 
-    //--------ÍÈ×î³¤×´Ì¬ÏòÇ°--------//
-    x = 26*sin(80*PI/180);
-    y = 26*cos(80*PI/180);
+    //--------è…¿æœ€é•¿çŠ¶æ€å‘å‰--------//
+    x = 26 * sin(80 * PI / 180);
+    y = 26 * cos(80 * PI / 180);
     CartesianToTheta(1.0);
     SetCoupledPosition(LegId);
     vTaskDelay(180);
 
-    //--------ÍÈ×î³¤×´Ì¬ÏòÏÂ´¥µØ--------//
-    if(LegId==0||LegId==1)
+    //--------è…¿æœ€é•¿çŠ¶æ€å‘ä¸‹è§¦åœ°--------//
+    if (LegId == 0 || LegId == 1)
     {
-        x = 29*sin(34*PI/180);
-        y = 29*cos(34*PI/180);
+        x = 29 * sin(34 * PI / 180);
+        y = 29 * cos(34 * PI / 180);
     }
-    else if(LegId==2)
+    else if (LegId == 2)
     {
-        x = 22*sin(40*PI/180);
-        y = 22*cos(40*PI/180);
+        x = 22 * sin(40 * PI / 180);
+        y = 22 * cos(40 * PI / 180);
     }
-    else if(LegId==3)
+    else if (LegId == 3)
     {
-        x = 20*sin(50*PI/180);
-        y = 20*cos(50*PI/180);
+        x = 20 * sin(50 * PI / 180);
+        y = 20 * cos(50 * PI / 180);
     }
     CartesianToTheta(1.0);
     SetCoupledPosition(LegId);
     vTaskDelay(180);
-
 }
-
-
 
 void CrossTheLine(void)
 {
+    pid_spd_out_limit = 3000;
 
-    pid_spd_out_limit=  3000;
+    state = REALSE;
 
-    state=REALSE;
-
-    CrossTheLine_one_leg(0); //¿ç0
+    CrossTheLine_one_leg(0);  //è·¨0
     vTaskDelay(50);
 
-    CrossTheLine_one_leg(1);	//¿ç1
+    CrossTheLine_one_leg(1);  //è·¨1
     vTaskDelay(50);
 
     // now_time=HAL_GetTick();
-    LinearCorrection=test1_correction;		//´ò¿ª¿çÉş×ÓÊ±ºòµÄ²½Ì¬¾ÀÆ«
-    state=TEST1;  //------------ÏòÇ°×ßÈÃºóÍÈ½Ó´¥Éş×Ó
+    LinearCorrection = test1_correction;  //æ‰“å¼€è·¨ç»³å­æ—¶å€™çš„æ­¥æ€çº å
+    state            = TEST1;             //------------å‘å‰èµ°è®©åè…¿æ¥è§¦ç»³å­
     vTaskDelay(1600);
-    state=REALSE;
+    state = REALSE;
 
-    CrossTheLine_one_leg(2);		//¿ç2
+    CrossTheLine_one_leg(2);  //è·¨2
     vTaskDelay(50);
 
-    CrossTheLine_one_leg(3);		//¿ç3
+    CrossTheLine_one_leg(3);  //è·¨3
     vTaskDelay(50);
 
-    //**********ÖĞ¼äĞĞ×ß**********//
+    //**********ä¸­é—´è¡Œèµ°**********//
     // now_time=HAL_GetTick();
-    state=TEST1;
+    state = TEST1;
 
     vTaskDelay(1600);
 
-    //OpenMvInspect(openmv_Red);  //¼ì²âµ½ºìÉ«Ö®ºó¿ªÊ¼ÂõµÚ¶ş¸ùÉş×Ó
+    //OpenMvInspect(openmv_Red);  //æ£€æµ‹åˆ°çº¢è‰²ä¹‹åå¼€å§‹è¿ˆç¬¬äºŒæ ¹ç»³å­
 
     IndicateLED_On;
 
-    state=STOP;
-    state=REALSE;
+    state = STOP;
+    state = REALSE;
 
     //**********END**********//
 
@@ -289,193 +278,176 @@ void CrossTheLine(void)
     vTaskDelay(50);
 
     // now_time=HAL_GetTick();
-    state=TEST1;  //¿çÉş×Ó²½Ì¬
+    state = TEST1;  //è·¨ç»³å­æ­¥æ€
     vTaskDelay(1600);
-    state=REALSE;
+    state = REALSE;
 
     CrossTheLine_one_leg(2);
     vTaskDelay(50);
 
     CrossTheLine_one_leg(3);
     vTaskDelay(50);
-
-
-
 }
 
 void CrossTheLine_one_leg(int LegId)
 {
-
-    //------ËÄ¸öÍÈ×ÓÈ«²¿Ì§µ½×î¸ß-----//
+    //------å››ä¸ªè…¿å­å…¨éƒ¨æŠ¬åˆ°æœ€é«˜-----//
     x = 0;
     y = 28;
     CartesianToTheta(1.0);
     CommandAllLegs_v();
     vTaskDelay(150);
 
-    //--------¶Ô½ÇÍÈËõ×î¶Ì--------//
+    //--------å¯¹è§’è…¿ç¼©æœ€çŸ­--------//
     int rev_legid;
-    if(LegId==0) rev_legid=3;
-    else if(LegId==1) rev_legid=2;
-    else if(LegId==2) rev_legid=1;
-    else if(LegId==3) rev_legid=0;
+    if (LegId == 0)
+        rev_legid = 3;
+    else if (LegId == 1)
+        rev_legid = 2;
+    else if (LegId == 2)
+        rev_legid = 1;
+    else if (LegId == 3)
+        rev_legid = 0;
     x = 0;
     y = 24;
     CartesianToTheta(1.0);
     SetCoupledPosition(rev_legid);
     vTaskDelay(150);
 
-    //µ±Ç°ÍÈÏÈÏòÏÂµÅÒ»ÏÂ±£³ÖÆ½ºâ//
+    //å½“å‰è…¿å…ˆå‘ä¸‹è¹¬ä¸€ä¸‹ä¿æŒå¹³è¡¡//
     x = 0;
     y = 29.9;
     CartesianToTheta(1.0);
     SetCoupledPosition(LegId);
     vTaskDelay(800);
 
-    //--------ÍÈ×î³¤µ½ºóÃæ--------//
-    x = -24*sin(60*PI/180);
-    y = 24*cos(60*PI/180);
+    //--------è…¿æœ€é•¿åˆ°åé¢--------//
+    x = -24 * sin(60 * PI / 180);
+    y = 24 * cos(60 * PI / 180);
     CartesianToTheta(1.0);
     SetCoupledPosition(LegId);
     vTaskDelay(140);
 
-    //--------ÍÈËõ×î¶ÌÔÚºóÃæ--------//
-    x = -12*sin(80*PI/180);
-    y = 12*cos(80*PI/180);
+    //--------è…¿ç¼©æœ€çŸ­åœ¨åé¢--------//
+    x = -12 * sin(80 * PI / 180);
+    y = 12 * cos(80 * PI / 180);
     CartesianToTheta(1.0);
     SetCoupledPosition(LegId);
     vTaskDelay(220);
 
-    //--------ÍÈ×î¶Ì×´Ì¬ÏòÇ°--------//
-    x = 12*sin(60*PI/180);
-    y = 12*cos(60*PI/180);
+    //--------è…¿æœ€çŸ­çŠ¶æ€å‘å‰--------//
+    x = 12 * sin(60 * PI / 180);
+    y = 12 * cos(60 * PI / 180);
     CartesianToTheta(1.0);
     SetCoupledPosition(LegId);
     vTaskDelay(150);
 
-    //--------ÍÈÉì³¤ÏòÇ°--------//
-    x = 22*sin(55*PI/180);
-    y = 22*cos(55*PI/180);
+    //--------è…¿ä¼¸é•¿å‘å‰--------//
+    x = 22 * sin(55 * PI / 180);
+    y = 22 * cos(55 * PI / 180);
     CartesianToTheta(1.0);
     SetCoupledPosition(LegId);
     vTaskDelay(140);
 
-    //--------ÍÈ×î³¤ÏòÏÂ´¥µØ--------//
-    x = 29*sin(1*PI/180); //1¡ã
-    y = 29*cos(1*PI/180);
+    //--------è…¿æœ€é•¿å‘ä¸‹è§¦åœ°--------//
+    x = 29 * sin(1 * PI / 180);  //1Â°
+    y = 29 * cos(1 * PI / 180);
     CartesianToTheta(1.0);
     SetCoupledPosition(LegId);
     vTaskDelay(140);
 
-    //------ËÄ¸öÍÈ»Ö¸´³õÊ¼Î»ÖÃ-----//
+    //------å››ä¸ªè…¿æ¢å¤åˆå§‹ä½ç½®-----//
     x = 0;
     y = 28;
     CartesianToTheta(1.0);
     CommandAllLegs_v();
     vTaskDelay(100);
-
 }
 
 void OpenMvInspect(int color)
 {
-
-    u8 _rel_time = 10;
+    u8  _rel_time = 10;
     u16 time_flag = 0;
-    while(1)
+    while (1)
     {
-        time_flag+=10;
+        time_flag += 10;
 
-        if(time_flag==10000)
+        if (time_flag == 10000)
             break;
 
         vTaskDelay(_rel_time);
-        if(openmv2info.ActVal[2]==color)
+        if (openmv2info.ActVal[2] == color)
         {
             vTaskDelay(_rel_time);
-            if(openmv2info.ActVal[2]==color)
+            if (openmv2info.ActVal[2] == color)
             {
                 vTaskDelay(_rel_time);
-                if(openmv2info.ActVal[2]==color)
+                if (openmv2info.ActVal[2] == color)
                 {
                     vTaskDelay(_rel_time);
-                    if(openmv2info.ActVal[2]==color)
+                    if (openmv2info.ActVal[2] == color)
                     {
                         vTaskDelay(_rel_time);
-                        if(openmv2info.ActVal[2]==color)
+                        if (openmv2info.ActVal[2] == color)
                             break;
                     }
                 }
-
             }
         }
     }
-
 }
 
 float OpenMv_Line_Dec(void)
 {
-
-//	float dev_calc_ang;
-//
-//	dev_calc_ang = pid_calc(&pid_openmv_dev,openmvinfo.ActVal[0],);
-//
-//
-//	return
+    //    float dev_calc_ang;
+    //
+    //    dev_calc_ang = pid_calc(&pid_openmv_dev,openmvinfo.ActVal[0],);
+    //
+    //
+    //    return
 }
 
 void Climbing_Comb(void)
 {
-
     IndicateLED_On;
-    //...ÉÏÆÂ------------
-    while(keyInf1!=0) //µÚÒ»¶ÎÍê³É-------µÈ´ı¹âµç¿ª¹Ø--½øÈëÅÀÆÂ³ÌĞò-----
+    //...ä¸Šå¡------------
+    while (keyInf1 != 0)  //ç¬¬ä¸€æ®µå®Œæˆ-------ç­‰å¾…å…‰ç”µå¼€å…³--è¿›å…¥çˆ¬å¡ç¨‹åº-----
         vTaskDelay(500);
 
     IndicateLED_Off;
 
-    LinearCorrection=Deny;
+    LinearCorrection = Deny;
 
-    LinearCorrection=climbing_correction;
+    LinearCorrection = climbing_correction;
     //LinearCorrection=normal_correction;
 
-    yaw_set=imuinfo.ActVal[0];//Éè¶¨µ±Ç°½Ç¶ÈÎªÇ°½ø·½Ïò
+    yaw_set = imuinfo.ActVal[0];  //è®¾å®šå½“å‰è§’åº¦ä¸ºå‰è¿›æ–¹å‘
 
     // now_time=HAL_GetTick();
-    climbing_offset_flag=YES;
-    _climbing_offset_angle=15.0;
+    climbing_offset_flag   = YES;
+    _climbing_offset_angle = 15.0;
 
-    state= CLIMBING;
+    state = CLIMBING;
 
+    while (1)  //åœ
+        vTaskDelay(500);
 
-
-		 while(1)		//Í£
-            vTaskDelay(500);
-
-
-
-    vTaskDelay(3000);  //ÑÓÊ±3000
-
-
-
+    vTaskDelay(3000);  //å»¶æ—¶3000
 
     u16 time_flag = 0;
 
-    while(1)
+    while (1)
     {
-        time_flag+=10;
+        time_flag += 10;
 
-        if(time_flag==10000)
+        if (time_flag == 10000)
             break;
 
         vTaskDelay(10);
-        if(openmv2info.ActVal[2]==openmv_Red)
+        if (openmv2info.ActVal[2] == openmv_Red)
             break;
-
     }
-    //OpenMvInspect(openmv_Red);  //µÈ´ı¼ì²âµ½ºìÉ« É«¿é ÉãÏñÍ·ÒÑ¾­¼ì²âµ½ÁËÅÀµ½ÁËÆÂ¶¥
-
-
-
+    //OpenMvInspect(openmv_Red);  //ç­‰å¾…æ£€æµ‹åˆ°çº¢è‰² è‰²å— æ‘„åƒå¤´å·²ç»æ£€æµ‹åˆ°äº†çˆ¬åˆ°äº†å¡é¡¶
 
     IndicateLED_On;
 
@@ -483,141 +455,133 @@ void Climbing_Comb(void)
 
     IndicateLED_Off;
 
-//    state_detached_params[CLIMBING].detached_params_0.stance_height+=2;
-//    state_detached_params[CLIMBING].detached_params_1.stance_height+=2;
-//    vTaskDelay(150);
+    //    state_detached_params[CLIMBING].detached_params_0.stance_height+=2;
+    //    state_detached_params[CLIMBING].detached_params_1.stance_height+=2;
+    //    vTaskDelay(150);
 
-//    state_detached_params[CLIMBING].detached_params_0.stance_height+=2;
-//    state_detached_params[CLIMBING].detached_params_1.stance_height+=2;
-//    vTaskDelay(150);
+    //    state_detached_params[CLIMBING].detached_params_0.stance_height+=2;
+    //    state_detached_params[CLIMBING].detached_params_1.stance_height+=2;
+    //    vTaskDelay(150);
 
-//    state_detached_params[CLIMBING].detached_params_0.stance_height+=2;
-//    state_detached_params[CLIMBING].detached_params_1.stance_height+=2;
-//    vTaskDelay(150);
+    //    state_detached_params[CLIMBING].detached_params_0.stance_height+=2;
+    //    state_detached_params[CLIMBING].detached_params_1.stance_height+=2;
+    //    vTaskDelay(150);
 
-//    state_detached_params[CLIMBING].detached_params_0.stance_height+=2;
-//    state_detached_params[CLIMBING].detached_params_1.stance_height+=2;
-//    vTaskDelay(150);
+    //    state_detached_params[CLIMBING].detached_params_0.stance_height+=2;
+    //    state_detached_params[CLIMBING].detached_params_1.stance_height+=2;
+    //    vTaskDelay(150);
 
-//    state_detached_params[CLIMBING].detached_params_0.stance_height+=2;
-//    state_detached_params[CLIMBING].detached_params_1.stance_height+=2;
-//    vTaskDelay(150);
+    //    state_detached_params[CLIMBING].detached_params_0.stance_height+=2;
+    //    state_detached_params[CLIMBING].detached_params_1.stance_height+=2;
+    //    vTaskDelay(150);
 
-    state= REALSE;
+    state = REALSE;
     vTaskDelay(300);
 
-    x=0;
+    x = 0;
     y = 24;
     CartesianToTheta(1.0);
     CommandAllLegs_v();
 
     vTaskDelay(800);
 
-    CAN_RoboModule_DRV_Position_Mode(0,1,4700,2200*4*15.15);		//¸Ë×ÓÉıÆğÀ´  2100
+    CAN_RoboModule_DRV_Position_Mode(0, 1, 4700, 2200 * 4 * 15.15);  //æ†å­å‡èµ·æ¥  2100
 
-vTaskDelay(600);
-    x=0;
+    vTaskDelay(600);
+    x = 0;
     y = 26;
     CartesianToTheta(1.0);
     CommandAllLegs_v();
-		
-		
-		vTaskDelay(900);
-    x=0;
+
+    vTaskDelay(900);
+    x = 0;
     y = 26;
     CartesianToTheta(1.0);
     CommandAllLegs_v();
-		
-		
-    state= REALSE;
+
+    state = REALSE;
 
     vTaskDelay(5000);
 
-    CAN_RoboModule_DRV_Position_Mode(0,1,2500,0);
-
+    CAN_RoboModule_DRV_Position_Mode(0, 1, 2500, 0);
 }
 
 float temp_theta;
-u8 start_ready_flag[8] = {0};
-void StartPosToMiddlePos (void)
+u8    start_ready_flag[8] = {0};
+void  StartPosToMiddlePos(void)
 {
     state = REALSE;
 
-    pid_spd_out_limit=600;
+    pid_spd_out_limit = 600;
 
-    temp_theta=60.0;
+    temp_theta = 60.0;
 
-    temp_pid.ref_agle[0]+=temp_theta*ReductionAndAngleRatio;
-    temp_pid.ref_agle[1]+=temp_theta*ReductionAndAngleRatio;
-    temp_pid.ref_agle[2]-=temp_theta*ReductionAndAngleRatio;
-    temp_pid.ref_agle[3]-=temp_theta*ReductionAndAngleRatio;
+    temp_pid.ref_agle[0] += temp_theta * ReductionAndAngleRatio;
+    temp_pid.ref_agle[1] += temp_theta * ReductionAndAngleRatio;
+    temp_pid.ref_agle[2] -= temp_theta * ReductionAndAngleRatio;
+    temp_pid.ref_agle[3] -= temp_theta * ReductionAndAngleRatio;
 
-    temp_pid.ref_agle[4]+=temp_theta*ReductionAndAngleRatio;
-    temp_pid.ref_agle[5]+=temp_theta*ReductionAndAngleRatio;
-    temp_pid.ref_agle[6]-=temp_theta*ReductionAndAngleRatio;
-    temp_pid.ref_agle[7]-=temp_theta*ReductionAndAngleRatio;
+    temp_pid.ref_agle[4] += temp_theta * ReductionAndAngleRatio;
+    temp_pid.ref_agle[5] += temp_theta * ReductionAndAngleRatio;
+    temp_pid.ref_agle[6] -= temp_theta * ReductionAndAngleRatio;
+    temp_pid.ref_agle[7] -= temp_theta * ReductionAndAngleRatio;
 
-    IsMotoReadyOrNot= IsReady;		//Êı¾İÌî³äÍê±Ï
+    IsMotoReadyOrNot = IsReady;  //æ•°æ®å¡«å……å®Œæ¯•
 
     vTaskDelay(1500);
-//----------------------------ÉèÖÃµ±Ç°µãÎªÁãµã--------------------------//
-    memset(&moto_chassis,0,sizeof(moto_measure_t)*8);
+    //----------------------------è®¾ç½®å½“å‰ç‚¹ä¸ºé›¶ç‚¹--------------------------//
+    memset(&moto_chassis, 0, sizeof(moto_measure_t) * 8);
 
-    for(int i=0; i<8; i++)
-        temp_pid.ref_agle[i]=ref_agle[i]=0;
+    for (int i = 0; i < 8; i++)
+        temp_pid.ref_agle[i] = ref_agle[i] = 0;
 
     state = REALSE;
 
     vTaskDelay(500);
-    //----------------------------¶×ÏÂÀ´--------------------------//
-//    x=0;
-//    y = 11;
-//    CartesianToTheta(1.0);
+    //----------------------------è¹²ä¸‹æ¥--------------------------//
+    //    x=0;
+    //    y = 11;
+    //    CartesianToTheta(1.0);
 
-//    CommandAllLegs_v();
+    //    CommandAllLegs_v();
 
-//    vTaskDelay(1000);
+    //    vTaskDelay(1000);
 
-
-    pid_spd_out_limit=  6720;
-
+    pid_spd_out_limit = 6720;
 }
 
-void MiddlePosToEndPos (void)
+void MiddlePosToEndPos(void)
 {
-
-    pid_spd_out_limit=  2500;
+    pid_spd_out_limit = 2500;
 
     state = REALSE;
-    x=0;
-    y = 17.3205081;
+    x     = 0;
+    y     = 17.3205081;
 
     CartesianToTheta(1.0);
     CommandAllLegs_v();
 
     vTaskDelay(1200);
 
-    pid_spd_out_limit=  600;
+    pid_spd_out_limit = 600;
 
-    temp_theta=-60.0;
+    temp_theta = -60.0;
 
-    temp_pid.ref_agle[0]+=temp_theta*ReductionAndAngleRatio;
-    temp_pid.ref_agle[1]+=temp_theta*ReductionAndAngleRatio;
-    temp_pid.ref_agle[2]-=temp_theta*ReductionAndAngleRatio;
-    temp_pid.ref_agle[3]-=temp_theta*ReductionAndAngleRatio;
+    temp_pid.ref_agle[0] += temp_theta * ReductionAndAngleRatio;
+    temp_pid.ref_agle[1] += temp_theta * ReductionAndAngleRatio;
+    temp_pid.ref_agle[2] -= temp_theta * ReductionAndAngleRatio;
+    temp_pid.ref_agle[3] -= temp_theta * ReductionAndAngleRatio;
 
-    temp_pid.ref_agle[4]+=temp_theta*ReductionAndAngleRatio;
-    temp_pid.ref_agle[5]+=temp_theta*ReductionAndAngleRatio;
-    temp_pid.ref_agle[6]-=temp_theta*ReductionAndAngleRatio;
-    temp_pid.ref_agle[7]-=temp_theta*ReductionAndAngleRatio;
+    temp_pid.ref_agle[4] += temp_theta * ReductionAndAngleRatio;
+    temp_pid.ref_agle[5] += temp_theta * ReductionAndAngleRatio;
+    temp_pid.ref_agle[6] -= temp_theta * ReductionAndAngleRatio;
+    temp_pid.ref_agle[7] -= temp_theta * ReductionAndAngleRatio;
 
-    IsMotoReadyOrNot= IsReady;		//Êı¾İÌî³äÍê±Ï
+    IsMotoReadyOrNot = IsReady;  //æ•°æ®å¡«å……å®Œæ¯•
 
     vTaskDelay(2000);
 
-    pid_spd_out_limit=  6720;
-
-
+    pid_spd_out_limit = 6720;
 
     state = REALSE;
 }

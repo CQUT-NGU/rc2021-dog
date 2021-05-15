@@ -4,81 +4,82 @@
 void send_chassis_cur1_4(int16_t motor1, int16_t motor2, int16_t motor3, int16_t motor4);
 void send_chassis_cur5_8(int16_t motor5, int16_t motor6, int16_t motor7, int16_t motor8);
 
-bool IsMotoReadyOrNot = NotReady;
-float ref_agle[8]= {0};
-float temp_angle;
-temp_data temp_pid= {0};     //pidÖĞ¼äÊı¾İ
+bool      IsMotoReadyOrNot = NotReady;
+float     ref_agle[8]      = {0};
+float     temp_angle;
+temp_data temp_pid = {0};  //pidä¸­é—´æ•°æ®
 
-float test_speed=0;
-u16 pid_spd_out_limit = 6720;
+float test_speed        = 0;
+u16   pid_spd_out_limit = 6720;
 /*******************************************************************************************
-	*@ º¯ÊıÃû³Æ£ºvoid MotorControl_task(void *pvParameters)
-	*@ ¹¦ÄÜ£º ½ÓÊÜµç»ú·´À¡Êı¾İ²¢ÇÒ½øĞĞPID¼ÆËã Êä³öµçÁ÷´óĞ¡¿ØÖÆµç»úÎ»ÖÃ
-	*@ ±¸×¢£º FREERTOSÈÎÎñº¯Êı
+    *@ å‡½æ•°åç§°ï¼švoid MotorControl_task(void *pvParameters)
+    *@ åŠŸèƒ½ï¼š æ¥å—ç”µæœºåé¦ˆæ•°æ®å¹¶ä¸”è¿›è¡ŒPIDè®¡ç®— è¾“å‡ºç”µæµå¤§å°æ§åˆ¶ç”µæœºä½ç½®
+    *@ å¤‡æ³¨ï¼š FREERTOSä»»åŠ¡å‡½æ•°
  *******************************************************************************************/
 void MotorControl_task(void *pvParameters)
 {
-    for(;;) {
+    for (;;)
+    {
         moto_behaviour();
     }
-
 }
 
 void moto_behaviour(void)
 {
-    if(IsMotoReadyOrNot== IsReady) {
-        for(int i=0; i<8; i++)
-            ref_agle[i]=temp_pid.ref_agle[i];
-        IsMotoReadyOrNot= NotReady;
+    if (IsMotoReadyOrNot == IsReady)
+    {
+        for (int i = 0; i < 8; i++)
+            ref_agle[i] = temp_pid.ref_agle[i];
+        IsMotoReadyOrNot = NotReady;
     }
 
-    for(int i=0; i<8; i++) {
+    for (int i = 0; i < 8; i++)
+    {
+        pid_calc(&pid_pos[i], moto_chassis[i].total_angle / 100, ref_agle[i] / 100);  //ä½ç½®ç¯ è§’åº¦æ§åˆ¶
+                                                                                      //        pid_calc(&pid_pos[i],moto_chassis[i].total_angle*360/8191,ref_agle[i]*360/8191);  //ä½ç½®ç¯ è§’åº¦æ§åˆ¶
 
-        pid_calc(&pid_pos[i],moto_chassis[i].total_angle/100,ref_agle[i]/100);  //Î»ÖÃ»· ½Ç¶È¿ØÖÆ
-//        pid_calc(&pid_pos[i],moto_chassis[i].total_angle*360/8191,ref_agle[i]*360/8191);  //Î»ÖÃ»· ½Ç¶È¿ØÖÆ
+        if (pid_pos[i].pos_out > pid_spd_out_limit)
+            pid_pos[i].pos_out = pid_spd_out_limit;  //æœ€é«˜é€Ÿåº¦é™åˆ¶
+        else if (pid_pos[i].pos_out < -pid_spd_out_limit)
+            pid_pos[i].pos_out = -pid_spd_out_limit;  //æœ€é«˜é€Ÿåº¦é™åˆ¶
 
-        if(pid_pos[i].pos_out>pid_spd_out_limit)pid_pos[i].pos_out=pid_spd_out_limit;	//×î¸ßËÙ¶ÈÏŞÖÆ
-        else if(pid_pos[i].pos_out<-pid_spd_out_limit)pid_pos[i].pos_out=-pid_spd_out_limit; //×î¸ßËÙ¶ÈÏŞÖÆ
-
-        //temp_pid.out[i] = pid_calc(&pid_spd[i],moto_chassis[i].speed_rpm,test_speed);  //ËÙ¶È»· ²âÊÔ
-        //temp_pid.out[i] = pid_calc(&pid_spd[i],moto_chassis[i].speed_rpm,pid_pos[i].pos_out);  //ËÙ¶È»· ËÙ¶È¿ØÖÆ
-        moto_chassis[i].given_current = pid_calc(&pid_spd[i],moto_chassis[i].speed_rpm,pid_pos[i].pos_out);  //ËÙ¶È»· ËÙ¶È¿ØÖÆ
+        //temp_pid.out[i] = pid_calc(&pid_spd[i],moto_chassis[i].speed_rpm,test_speed);  //é€Ÿåº¦ç¯ æµ‹è¯•
+        //temp_pid.out[i] = pid_calc(&pid_spd[i],moto_chassis[i].speed_rpm,pid_pos[i].pos_out);  //é€Ÿåº¦ç¯ é€Ÿåº¦æ§åˆ¶
+        moto_chassis[i].given_current = pid_calc(&pid_spd[i], moto_chassis[i].speed_rpm, pid_pos[i].pos_out);  //é€Ÿåº¦ç¯ é€Ÿåº¦æ§åˆ¶
     }
-    send_chassis_cur5_8(moto_chassis[4].given_current,moto_chassis[5].given_current,moto_chassis[6].given_current,moto_chassis[7].given_current);		//´«µİ5-8Êı¾İ¸øcanÊÕ·¢Æ÷
-    send_chassis_cur1_4(moto_chassis[0].given_current,moto_chassis[1].given_current,moto_chassis[2].given_current,moto_chassis[3].given_current);		//´«µİ1-4Êı¾İ¸øcanÊÕ·¢Æ÷
+    send_chassis_cur5_8(moto_chassis[4].given_current, moto_chassis[5].given_current, moto_chassis[6].given_current, moto_chassis[7].given_current);  //ä¼ é€’5-8æ•°æ®ç»™canæ”¶å‘å™¨
+    send_chassis_cur1_4(moto_chassis[0].given_current, moto_chassis[1].given_current, moto_chassis[2].given_current, moto_chassis[3].given_current);  //ä¼ é€’1-4æ•°æ®ç»™canæ”¶å‘å™¨
 
-    osDelay(10);		//¿ØÖÆÆµÂÊ  ¸ø	1	7ºÅºÍ8ºÅµç»ú»áÊ§¿Ø
-
+    osDelay(10);  //æ§åˆ¶é¢‘ç‡  ç»™    1    7å·å’Œ8å·ç”µæœºä¼šå¤±æ§
 }
 
 /**
 * NAME: void pid_param_init(void)
-* FUNCTION : pid²ÎÊıÌî³ä³õÊ¼»¯
+* FUNCTION : pidå‚æ•°å¡«å……åˆå§‹åŒ–
 */
 void pid_param_init(void)
 {
+    for (int i = 0; i < 8; i++)                                                               //                          20,0.01,0  37,0.008   8.0f, 0.000f   16
+        PID_struct_init(&pid_pos[i], POSITION_PID, 100000.0f, 2000.0f, 8.0f, 0.0008f, 0.0f);  //ä½ç½®ç¯PIDå‚æ•°è®¾ç½®ï¼ˆpidç»“æ„ä½“ï¼ŒPIDç±»å‹ï¼Œæœ€å¤§è¾“å‡ºï¼Œæ¯”ä¾‹é™åˆ¶ï¼ŒP , I , D ï¼‰
 
-    for (int i = 0; i < 8; i++)//  						20,0.01,0  37,0.008   8.0f, 0.000f   16
-        PID_struct_init(&pid_pos[i], POSITION_PID, 100000.0f, 2000.0f, 8.0f, 0.0008f, 0.0f);  //Î»ÖÃ»·PID²ÎÊıÉèÖÃ£¨pid½á¹¹Ìå£¬PIDÀàĞÍ£¬×î´óÊä³ö£¬±ÈÀıÏŞÖÆ£¬P , I , D £©
-
-    for (int i = 0; i < 8; i++)  //									16384.0f¶ÔÓ¦20A					15.5f,0,0 // 16.0f, 0.001f   20.0f, 0.004297f   22.0f, 0.01399f
-        PID_struct_init(&pid_spd[i], POSITION_PID, 16000.0f, 2000.0f, 15.5f, 0.000100, 0.0f);		//ËÙ¶È»·PID£¨pid½á¹¹Ìå£¬PIDÀàĞÍ£¬×î´óÊä³ö£¬±ÈÀıÏŞÖÆ£¬P , I , D £©
+    for (int i = 0; i < 8; i++)                                                                //                                    16384.0få¯¹åº”20A                    15.5f,0,0 // 16.0f, 0.001f   20.0f, 0.004297f   22.0f, 0.01399f
+        PID_struct_init(&pid_spd[i], POSITION_PID, 16000.0f, 2000.0f, 15.5f, 0.000100, 0.0f);  //é€Ÿåº¦ç¯PIDï¼ˆpidç»“æ„ä½“ï¼ŒPIDç±»å‹ï¼Œæœ€å¤§è¾“å‡ºï¼Œæ¯”ä¾‹é™åˆ¶ï¼ŒP , I , D ï¼‰
     //20.0f, 0.004297f, 0.0f     22.0f, 0.001
 
-    PID_struct_init( &pid_imu[0], POSITION_PID, 10000, 0, 1.5f, 0.01, 0);		//roll
+    PID_struct_init(&pid_imu[0], POSITION_PID, 10000, 0, 1.5f, 0.01, 0);  //roll
 
-    PID_struct_init( &pid_imu[1], POSITION_PID, 10000, 0, 1.5f, 0.01, 0);		//pitch
+    PID_struct_init(&pid_imu[1], POSITION_PID, 10000, 0, 1.5f, 0.01, 0);  //pitch
 
-    PID_struct_init( &pid_imu[2], POSITION_PID, 10000, 0, 1.30f, 0, 0);		//yaw
+    PID_struct_init(&pid_imu[2], POSITION_PID, 10000, 0, 1.30f, 0, 0);  //yaw
 
-    PID_struct_init( &pid_climbing, POSITION_PID, 10000, 10000, 3.5f, 0, 0);		//yaw 1.8
+    PID_struct_init(&pid_climbing, POSITION_PID, 10000, 10000, 3.5f, 0, 0);  //yaw 1.8
 
-    PID_struct_init( &pid_test1, POSITION_PID, 10000, 0, 1.5f, 0, 0);		//yaw
+    PID_struct_init(&pid_test1, POSITION_PID, 10000, 0, 1.5f, 0, 0);  //yaw
 
-    PID_struct_init( &pid_openmv_dev, POSITION_PID, 10000, 0, 1.5f, 0, 0);		//yaw
+    PID_struct_init(&pid_openmv_dev, POSITION_PID, 10000, 0, 1.5f, 0, 0);  //yaw
 }
 
-//·¢ËÍµ×ÅÌµç»ú¿ØÖÆÃüÁî
+//å‘é€åº•ç›˜ç”µæœºæ§åˆ¶å‘½ä»¤
 void send_chassis_cur1_4(int16_t motor1, int16_t motor2, int16_t motor3, int16_t motor4)
 {
     hcan2.pTxMsg->StdId   = 0x200;
@@ -96,7 +97,7 @@ void send_chassis_cur1_4(int16_t motor1, int16_t motor2, int16_t motor3, int16_t
     HAL_CAN_Transmit(&hcan2, 10);
 }
 
-//·¢ËÍµ×ÅÌµç»ú¿ØÖÆÃüÁî
+//å‘é€åº•ç›˜ç”µæœºæ§åˆ¶å‘½ä»¤
 void send_chassis_cur5_8(int16_t motor5, int16_t motor6, int16_t motor7, int16_t motor8)
 {
     hcan1.pTxMsg->StdId   = 0x1ff;
@@ -116,36 +117,29 @@ void send_chassis_cur5_8(int16_t motor5, int16_t motor6, int16_t motor7, int16_t
 
 void Lm298n_pin_init(void)
 {
-
     GPIO_InitTypeDef GPIO_InitStruct;
-    GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Pin   = GPIO_PIN_0 | GPIO_PIN_1;
+    GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull  = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
-
 }
 
-
-void Lm298n_ctrl( int  mode )
+void Lm298n_ctrl(int mode)
 {
-
-    if(mode==Lm298n_break)
+    if (mode == Lm298n_break)
     {
-        HAL_GPIO_WritePin(GPIOF,GPIO_PIN_1,GPIO_PIN_SET);
-        HAL_GPIO_WritePin(GPIOF,GPIO_PIN_0,GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOF, GPIO_PIN_1, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOF, GPIO_PIN_0, GPIO_PIN_SET);
     }
-    else if(mode==Lm298n_forward)
+    else if (mode == Lm298n_forward)
     {
-        HAL_GPIO_WritePin(GPIOF,GPIO_PIN_1,GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(GPIOF,GPIO_PIN_0,GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOF, GPIO_PIN_1, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(GPIOF, GPIO_PIN_0, GPIO_PIN_SET);
     }
-    else if(mode==Lm298n_backward)
+    else if (mode == Lm298n_backward)
     {
-        HAL_GPIO_WritePin(GPIOF,GPIO_PIN_1,GPIO_PIN_SET);
-        HAL_GPIO_WritePin(GPIOF,GPIO_PIN_0,GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(GPIOF, GPIO_PIN_1, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOF, GPIO_PIN_0, GPIO_PIN_RESET);
     }
-
-
 }
-

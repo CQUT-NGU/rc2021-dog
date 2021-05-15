@@ -8,25 +8,24 @@
  ***************************************(C) COPYRIGHT 2018 DJI***************************************
  */
 
-
 /*
-*****ÒÆÖ²ÁËDJIµÄÖĞ¶ÏÂß¼­´¦Àíº¯Êı
-*****Ê¹ÓÃ´®¿Ú¿ÕÏĞÖĞ¶ÏÀ´½ÓÊÕÊı¾İ±È½ÏºÏÀí
+*****ç§»æ¤äº†DJIçš„ä¸­æ–­é€»è¾‘å¤„ç†å‡½æ•°
+*****ä½¿ç”¨ä¸²å£ç©ºé—²ä¸­æ–­æ¥æ¥æ”¶æ•°æ®æ¯”è¾ƒåˆç†
 */
 
-#define ABS(x)		((x>0)? (x): (-x))
+#define ABS(x) ((x > 0) ? (x) : (-x))
 
 #include "bsp_uart.h"
 
-uint8_t   imu_buf[IMU_BUFLEN];
+uint8_t imu_buf[IMU_BUFLEN];
 
 bool imu_rec_flag;
 
-uint8_t   openmv_buf[ OPENMV_BUFLEN ];
+uint8_t openmv_buf[OPENMV_BUFLEN];
 
-uint8_t   usart3_buf[ USART3_BUFLEN ];
+uint8_t usart3_buf[USART3_BUFLEN];
 
-uint8_t   usart2_buf[ USART2_BUFLEN ];
+uint8_t usart2_buf[USART2_BUFLEN];
 
 imudata imuinfo;
 
@@ -34,12 +33,11 @@ float imu_filter_data[10];
 
 float yaw_calibrated;
 
-uint8_t _count_imu=0;
+uint8_t _count_imu = 0;
 
 openmvdata openmvinfo;
 
 openmvdata openmv2info;
-
 
 ps2data ps2info;
 
@@ -52,7 +50,7 @@ float _Pitch_initial, _Roll_initial, _Pitch_rev, _Roll_rev;
   * @param[in]  Size:  buff size
   * @retval     set success or fail
   */
-static int uart_receive_dma_no_it(UART_HandleTypeDef* huart, uint8_t* pData, uint32_t Size)
+static int uart_receive_dma_no_it(UART_HandleTypeDef *huart, uint8_t *pData, uint32_t Size)
 {
     uint32_t tmp1 = 0;
 
@@ -92,102 +90,92 @@ static int uart_receive_dma_no_it(UART_HandleTypeDef* huart, uint8_t* pData, uin
   *             to 7 to select the DMA Stream.
   * @retval     The number of remaining data units in the current DMAy Streamx transfer.
   */
-uint16_t dma_current_data_counter( DMA_Stream_TypeDef *dma_stream )
+uint16_t dma_current_data_counter(DMA_Stream_TypeDef *dma_stream)
 {
     /* Return the number of remaining data units for DMAy Streamx */
     return ((uint16_t)(dma_stream->NDTR));
 }
 
-/************************************¿ÕÏĞÖĞ¶Ï»Øµ÷º¯Êı¹¦ÄÜº¯ÊıÇø************************************/
-void usart2_callback_handler( openmvdata *openmvdata, uint8_t *buff)
+/************************************ç©ºé—²ä¸­æ–­å›è°ƒå‡½æ•°åŠŸèƒ½å‡½æ•°åŒº************************************/
+void usart2_callback_handler(openmvdata *openmvdata, uint8_t *buff)
 {
-
 }
 
-void usart3_callback_handler( openmvdata *openmv2data, uint8_t *buff)
+void usart3_callback_handler(openmvdata *openmv2data, uint8_t *buff)
 {
+    //    uint8_t datasum=0;
+    //    for(int i=2; i<8; i++)        //è®¡ç®—åäºŒä½æ•°æ®ä½å’Œä¸€ä½æ ¡éªŒä½çš„å’Œ
+    //        datasum+=buff[i];
 
-//    uint8_t datasum=0;
-//    for(int i=2; i<8; i++)		//¼ÆËãÊ®¶şÎ»Êı¾İÎ»ºÍÒ»Î»Ğ£ÑéÎ»µÄºÍ
-//        datasum+=buff[i];
+    //    if(datasum==0xff)         //æ ¡éªŒå’Œç®—æ³• ï¼šå–æœ€åä¸€ä¸ªå­—èŠ‚å¦‚æœä¸ºff æ£€éªŒé€šè¿‡
+    //    {
+    //        ps2data->KEY_VALUE = buff[2];
+    //        ps2data->PSS_LX_VALUE = buff[3];
+    //        ps2data->PSS_LY_VALUE = buff[4];
+    //        ps2data->PSS_RX_VALUE = buff[5];
+    //        ps2data->PSS_RY_VALUE = buff[6];
 
-//    if(datasum==0xff) 		//Ğ£ÑéºÍËã·¨ £ºÈ¡×îºóÒ»¸ö×Ö½ÚÈç¹ûÎªff ¼ìÑéÍ¨¹ı
-//    {
-//        ps2data->KEY_VALUE = buff[2];
-//        ps2data->PSS_LX_VALUE = buff[3];
-//        ps2data->PSS_LY_VALUE = buff[4];
-//        ps2data->PSS_RX_VALUE = buff[5];
-//        ps2data->PSS_RY_VALUE = buff[6];
+    //    }
 
-//    }
-	
-	if(buff[0]==0xff&&buff[1]==0xfa)
+    if (buff[0] == 0xff && buff[1] == 0xfa)
     {
-        for(int i = 0; i<12; i++)
-            openmv2data->data[i] = buff[i+2];
+        for (int i = 0; i < 12; i++)
+            openmv2data->data[i] = buff[i + 2];
     }
-		
-
 }
 
-void imu_callback_handler( imudata *imudata, uint8_t *buff)
+void imu_callback_handler(imudata *imudata, uint8_t *buff)
 {
+    //    if(buff[0]==0xfa&&buff[1]==0xff  mti30çš„æ•°æ®è§£æéƒ¨åˆ†
+    //    {
+    //        uint8_t datasum=0;
+    //        for(int i=7; i<20; i++)        //è®¡ç®—åäºŒä½æ•°æ®ä½å’Œä¸€ä½æ ¡éªŒä½çš„å’Œ
+    //            datasum+=buff[i];
 
+    //        if((datasum&0x00f)==0x000)         //å–æœ€åä¸€ä¸ªå­—èŠ‚å¦‚æœä¸º00 æ£€éªŒé€šè¿‡
+    //        {
+    //            for(int i = 0; i<12; i++)
+    //                imudata->data[i] = buff[18-i];  //mti30çš„æ•°æ®é«˜å­—èŠ‚åœ¨ä½åœ°å€ æ‰€ä»¥åå‘å­˜å‚¨ ActVal 0 1 2åˆ†åˆ«ä¸º YAW PITCH ROll
+    //        }
+    //    }
 
-//    if(buff[0]==0xfa&&buff[1]==0xff  mti30µÄÊı¾İ½âÎö²¿·Ö
-//    {
-//        uint8_t datasum=0;
-//        for(int i=7; i<20; i++)		//¼ÆËãÊ®¶şÎ»Êı¾İÎ»ºÍÒ»Î»Ğ£ÑéÎ»µÄºÍ
-//            datasum+=buff[i];
-
-//        if((datasum&0x00f)==0x000) 		//È¡×îºóÒ»¸ö×Ö½ÚÈç¹ûÎª00 ¼ìÑéÍ¨¹ı
-//        {
-//            for(int i = 0; i<12; i++)
-//                imudata->data[i] = buff[18-i];  //mti30µÄÊı¾İ¸ß×Ö½ÚÔÚµÍµØÖ· ËùÒÔ·´Ïò´æ´¢ ActVal 0 1 2·Ö±ğÎª YAW PITCH ROll
-//        }
-//    }
-
-    if(buff[0]==0x0D&&buff[1]==0x0A)
+    if (buff[0] == 0x0D && buff[1] == 0x0A)
     {
-        imu_rec_flag=1;
-        for(int i = 0; i<12; i++)
-            imudata->data[i] = buff[i+2];
+        imu_rec_flag = 1;
+        for (int i = 0; i < 12; i++)
+            imudata->data[i] = buff[i + 2];
     }
 
     _count_imu++;
-    imu_filter_data[_count_imu]=imudata->ActVal[0];
+    imu_filter_data[_count_imu] = imudata->ActVal[0];
 
-    if(_count_imu==9) {
-        _count_imu=0;
+    if (_count_imu == 9)
+    {
+        _count_imu = 0;
 
-        for( int i=0; i<10 ; i++)
-            yaw_calibrated+=imu_filter_data[i];
+        for (int i = 0; i < 10; i++)
+            yaw_calibrated += imu_filter_data[i];
 
-        yaw_calibrated/=10;
-
+        yaw_calibrated /= 10;
     }
-
-
 }
 
-void openmv_callback_handler( openmvdata *openmvdata, uint8_t *buff)
+void openmv_callback_handler(openmvdata *openmvdata, uint8_t *buff)
 {
-    if(buff[0]==0xff&&buff[1]==0xfa)
+    if (buff[0] == 0xff && buff[1] == 0xfa)
     {
-        for(int i = 0; i<12; i++)
-            openmvdata->data[i] = buff[i+2];
+        for (int i = 0; i < 12; i++)
+            openmvdata->data[i] = buff[i + 2];
     }
 }
 /************************************END************************************/
-
-
 
 /**
   * @brief      clear idle it flag after uart receive a frame data
   * @param[in]  huart: uart IRQHandler id
   * @retval
   */
-static void uart_rx_idle_callback(UART_HandleTypeDef* huart)
+static void uart_rx_idle_callback(UART_HandleTypeDef *huart)
 {
     /* clear idle it flag avoid idle interrupt all the time */
     __HAL_UART_CLEAR_IDLEFLAG(huart);
@@ -202,7 +190,6 @@ static void uart_rx_idle_callback(UART_HandleTypeDef* huart)
         /* restart dma transmission */
         __HAL_DMA_SET_COUNTER(huart->hdmarx, IMU_MAX_LEN);
         __HAL_DMA_ENABLE(huart->hdmarx);
-
     }
     else if (huart == &USART3_HUART)
     {
@@ -214,7 +201,6 @@ static void uart_rx_idle_callback(UART_HandleTypeDef* huart)
         /* restart dma transmission */
         __HAL_DMA_SET_COUNTER(huart->hdmarx, IMU_MAX_LEN);
         __HAL_DMA_ENABLE(huart->hdmarx);
-
     }
     /* handle received data in idle interrupt */
     else if (huart == &IMU_HUART)
@@ -228,7 +214,6 @@ static void uart_rx_idle_callback(UART_HandleTypeDef* huart)
         /* restart dma transmission */
         __HAL_DMA_SET_COUNTER(huart->hdmarx, IMU_MAX_LEN);
         __HAL_DMA_ENABLE(huart->hdmarx);
-
     }
     else if (huart == &OPENMV_HUART)
     {
@@ -240,29 +225,25 @@ static void uart_rx_idle_callback(UART_HandleTypeDef* huart)
         /* restart dma transmission */
         __HAL_DMA_SET_COUNTER(huart->hdmarx, IMU_MAX_LEN);
         __HAL_DMA_ENABLE(huart->hdmarx);
-
     }
-	
 }
-
 
 /**
   * @brief      callback this function when uart interrupt
   * @param[in]  huart: uart IRQHandler id
   * @retval
   */
-void uart_receive_handler( UART_HandleTypeDef *huart )
+void uart_receive_handler(UART_HandleTypeDef *huart)
 {
-    if (__HAL_UART_GET_FLAG( huart, UART_FLAG_IDLE) &&
-            __HAL_UART_GET_IT_SOURCE( huart, UART_IT_IDLE))
+    if (__HAL_UART_GET_FLAG(huart, UART_FLAG_IDLE) &&
+        __HAL_UART_GET_IT_SOURCE(huart, UART_IT_IDLE))
     {
-        uart_rx_idle_callback( huart );
+        uart_rx_idle_callback(huart);
     }
-
 }
 
 /**
-**¿ÕÏĞÖĞ¶Ï³õÊ¼»¯º¯Êı£¬mainÀïÃæµ÷ÓÃ£¬Ñ¡Ôñ´®¿Ú¼´¿É³õÊ¼»¯
+**ç©ºé—²ä¸­æ–­åˆå§‹åŒ–å‡½æ•°ï¼Œmainé‡Œé¢è°ƒç”¨ï¼Œé€‰æ‹©ä¸²å£å³å¯åˆå§‹åŒ–
 **/
 void uart_receive_init(UART_HandleTypeDef *huart)
 {
@@ -290,16 +271,13 @@ void uart_receive_init(UART_HandleTypeDef *huart)
         __HAL_UART_ENABLE_IT(&OPENMV_HUART, UART_IT_IDLE);
         uart_receive_dma_no_it(&OPENMV_HUART, openmv_buf, OPENMV_MAX_LEN);
     }
-
-		
 }
-
 
 //void ps2_mix( moto *ps2_value ,ps2data *data,float SPEED_MAX , float W_MAX)
 //{
 //    int LX,LY,RX,RY;
-//		float CALC_LX,CALC_LY,CALC_RX,CALC_RY;
-//		float value,angle,angle_w;
+//        float CALC_LX,CALC_LY,CALC_RX,CALC_RY;
+//        float value,angle,angle_w;
 //
 //    LX=data->PSS_LX_VALUE-128;
 //    LY=data->PSS_LY_VALUE-128;
@@ -315,20 +293,19 @@ void uart_receive_init(UART_HandleTypeDef *huart)
 //    angle=(float)atan(ABS(CALC_LY)/ABS(CALC_LX));
 //    angle_w=(float)CALC_RX;
 
-
 //    if(LX>0&&LY<0)//1
-//			;
-//		else if(LX<0&&LY<0)//2
-//				angle=180-angle;
-//		else if(LX<0&&LY>0)//3
-//				angle=-(180-angle);
-//		else if(LX>0&&LY>0)//4
-//				angle=-angle;
+//            ;
+//        else if(LX<0&&LY<0)//2
+//                angle=180-angle;
+//        else if(LX<0&&LY>0)//3
+//                angle=-(180-angle);
+//        else if(LX>0&&LY>0)//4
+//                angle=-angle;
 
 //    if(CALC_RX>0)//
-//			;
-//		else if(CALC_RX<0)//
-//				angle_w=-angle;
+//            ;
+//        else if(CALC_RX<0)//
+//                angle_w=-angle;
 
 //ps2_t->value=value;
 //ps2_t->angle=angle;

@@ -7,20 +7,20 @@ TIM_OC_InitTypeDef TIM12_CH1Handler;
 
 void ProcessBuzzer(void)
 {
-	
-	    int sound[]=
+    
+        int sound[]=
     {
         M7,150,Z0,
        
     };
 
-    int length = sizeof(sound)/sizeof(sound[0]);//¼ÆËãÊý×é³¤¶È
-    for(int i=0; i<(length/2); i++)//È¡Êý×éÊý¾Ý
+    int length = sizeof(sound)/sizeof(sound[0]);//è®¡ç®—æ•°ç»„é•¿åº¦
+    for(int i=0; i<(length/2); i++)//å–æ•°ç»„æ•°æ®
     {
         buzzer_on(sound[2*i], 200);
-        vTaskDelay(4*sound[2*i+1]);//Òô³¤µÄÊ±¼ä¶¼³ËÒÔ5¼´Ò»ÅÄÎª500Î¢Ãë£¬´ËÖµ"5"¿Éµ÷Õû£¬Ö»ÊÇ²¥·ÅµÄÕû¸ö¿ìÂý¶øÒÑ£¬ÓÐµãÀàËÆÓÚÊÓÆµ¿ì½øºÍºóÍË
+        vTaskDelay(4*sound[2*i+1]);//éŸ³é•¿çš„æ—¶é—´éƒ½ä¹˜ä»¥5å³ä¸€æ‹ä¸º500å¾®ç§’ï¼Œæ­¤å€¼"5"å¯è°ƒæ•´ï¼Œåªæ˜¯æ’­æ”¾çš„æ•´ä¸ªå¿«æ…¢è€Œå·²ï¼Œæœ‰ç‚¹ç±»ä¼¼äºŽè§†é¢‘å¿«è¿›å’ŒåŽé€€
     }
-		buzzer_off();
+        buzzer_off();
 
 }
 
@@ -28,27 +28,27 @@ void ProcessBuzzer(void)
 
 void ActionDoneBuzzer(void)
 {
-	
-	    int sound[]=
+    
+        int sound[]=
     {
         M7,50,Z0,10,M7,50,Z0,10,M7,100,Z0,10,
        
     };
 
-    int length = sizeof(sound)/sizeof(sound[0]);//¼ÆËãÊý×é³¤¶È
-    for(int i=0; i<(length/2); i++)//È¡Êý×éÊý¾Ý
+    int length = sizeof(sound)/sizeof(sound[0]);//è®¡ç®—æ•°ç»„é•¿åº¦
+    for(int i=0; i<(length/2); i++)//å–æ•°ç»„æ•°æ®
     {
         buzzer_on(sound[2*i], 200);
-        vTaskDelay(4*sound[2*i+1]);//Òô³¤µÄÊ±¼ä¶¼³ËÒÔ5¼´Ò»ÅÄÎª500Î¢Ãë£¬´ËÖµ"5"¿Éµ÷Õû£¬Ö»ÊÇ²¥·ÅµÄÕû¸ö¿ìÂý¶øÒÑ£¬ÓÐµãÀàËÆÓÚÊÓÆµ¿ì½øºÍºóÍË
+        vTaskDelay(4*sound[2*i+1]);//éŸ³é•¿çš„æ—¶é—´éƒ½ä¹˜ä»¥5å³ä¸€æ‹ä¸º500å¾®ç§’ï¼Œæ­¤å€¼"5"å¯è°ƒæ•´ï¼Œåªæ˜¯æ’­æ”¾çš„æ•´ä¸ªå¿«æ…¢è€Œå·²ï¼Œæœ‰ç‚¹ç±»ä¼¼äºŽè§†é¢‘å¿«è¿›å’ŒåŽé€€
     }
-		buzzer_off();
+        buzzer_off();
 
 }
 
 
 /**
 * NAME: void BeginWarnBuzzer(void)
-* FUNCTION : ¿ª»úÌáÐÑÒô do mi xi
+* FUNCTION : å¼€æœºæé†’éŸ³ do mi xi
 */
 void BeginWarnBuzzer(void)
 {
@@ -58,18 +58,18 @@ void BeginWarnBuzzer(void)
         // H3,25,Z0,25, H3,25,Z0,25, H3,25,Z0,25, H3,25,Z0,100, H3,150,Z0,25,
     };
 
-    int length = sizeof(sound)/sizeof(sound[0]);//¼ÆËãÊý×é³¤¶È
-    for(int i=0; i<(length/2); i++)//È¡Êý×éÊý¾Ý
+    int length = sizeof(sound)/sizeof(sound[0]);//è®¡ç®—æ•°ç»„é•¿åº¦
+    for(int i=0; i<(length/2); i++)//å–æ•°ç»„æ•°æ®
     {
         buzzer_on(sound[2*i], 200);
-        vTaskDelay(4*sound[2*i+1]);//Òô³¤µÄÊ±¼ä¶¼³ËÒÔ5¼´Ò»ÅÄÎª500Î¢Ãë£¬´ËÖµ"5"¿Éµ÷Õû£¬Ö»ÊÇ²¥·ÅµÄÕû¸ö¿ìÂý¶øÒÑ£¬ÓÐµãÀàËÆÓÚÊÓÆµ¿ì½øºÍºóÍË
+        vTaskDelay(4*sound[2*i+1]);//éŸ³é•¿çš„æ—¶é—´éƒ½ä¹˜ä»¥5å³ä¸€æ‹ä¸º500å¾®ç§’ï¼Œæ­¤å€¼"5"å¯è°ƒæ•´ï¼Œåªæ˜¯æ’­æ”¾çš„æ•´ä¸ªå¿«æ…¢è€Œå·²ï¼Œæœ‰ç‚¹ç±»ä¼¼äºŽè§†é¢‘å¿«è¿›å’ŒåŽé€€
     }
 
 }
 
 /**
 * NAME: void IMUWarnBuzzer(void)
-* FUNCTION : IMUÐ£×¼ÌáÊ¾Òô
+* FUNCTION : IMUæ ¡å‡†æç¤ºéŸ³
 */
 void IMUWarnBuzzer(void)
 {
@@ -79,11 +79,11 @@ void IMUWarnBuzzer(void)
         H3,25,Z0,25, H3,25,Z0,25, H3,25,Z0,25, H3,25,Z0,100, H3,150,Z0,25,
     };
 
-    int length = sizeof(sound)/sizeof(sound[0]);//¼ÆËãÊý×é³¤¶È
-    for(int i=0; i<(length/2); i++)//È¡Êý×éÊý¾Ý
+    int length = sizeof(sound)/sizeof(sound[0]);//è®¡ç®—æ•°ç»„é•¿åº¦
+    for(int i=0; i<(length/2); i++)//å–æ•°ç»„æ•°æ®
     {
         buzzer_on(sound[2*i], 200);
-        vTaskDelay(4*sound[2*i+1]);//Òô³¤µÄÊ±¼ä¶¼³ËÒÔ5¼´Ò»ÅÄÎª500Î¢Ãë£¬´ËÖµ"5"¿Éµ÷Õû£¬Ö»ÊÇ²¥·ÅµÄÕû¸ö¿ìÂý¶øÒÑ£¬ÓÐµãÀàËÆÓÚÊÓÆµ¿ì½øºÍºóÍË
+        vTaskDelay(4*sound[2*i+1]);//éŸ³é•¿çš„æ—¶é—´éƒ½ä¹˜ä»¥5å³ä¸€æ‹ä¸º500å¾®ç§’ï¼Œæ­¤å€¼"5"å¯è°ƒæ•´ï¼Œåªæ˜¯æ’­æ”¾çš„æ•´ä¸ªå¿«æ…¢è€Œå·²ï¼Œæœ‰ç‚¹ç±»ä¼¼äºŽè§†é¢‘å¿«è¿›å’ŒåŽé€€
     }
 
 }
@@ -106,11 +106,11 @@ void happy_time(void)
         H3,100,H1,100,H2,100,H1,100,H1,100
     };
 
-    int length = sizeof(happy_birthday)/sizeof(happy_birthday[0]);//¼ÆËãÊý×é³¤¶È
-    for(int i=0; i<(length/2); i++)//È¡Êý×éÊý¾Ý
+    int length = sizeof(happy_birthday)/sizeof(happy_birthday[0]);//è®¡ç®—æ•°ç»„é•¿åº¦
+    for(int i=0; i<(length/2); i++)//å–æ•°ç»„æ•°æ®
     {
         buzzer_on(happy_birthday[2*i], 200);
-        vTaskDelay(5*happy_birthday[2*i+1]);//Òô³¤µÄÊ±¼ä¶¼³ËÒÔ5¼´Ò»ÅÄÎª500Î¢Ãë£¬´ËÖµ"5"¿Éµ÷Õû£¬Ö»ÊÇ²¥·ÅµÄÕû¸ö¿ìÂý¶øÒÑ£¬ÓÐµãÀàËÆÓÚÊÓÆµ¿ì½øºÍºóÍË
+        vTaskDelay(5*happy_birthday[2*i+1]);//éŸ³é•¿çš„æ—¶é—´éƒ½ä¹˜ä»¥5å³ä¸€æ‹ä¸º500å¾®ç§’ï¼Œæ­¤å€¼"5"å¯è°ƒæ•´ï¼Œåªæ˜¯æ’­æ”¾çš„æ•´ä¸ªå¿«æ…¢è€Œå·²ï¼Œæœ‰ç‚¹ç±»ä¼¼äºŽè§†é¢‘å¿«è¿›å’ŒåŽé€€
     }
 }
 
@@ -127,32 +127,32 @@ void promising_young(void)
 
     };
 
-    int length = sizeof(promising_young)/sizeof(promising_young[0]);//¼ÆËãÊý×é³¤¶È
-    for(int i=0; i<(length/2); i++)//È¡Êý×éÊý¾Ý
+    int length = sizeof(promising_young)/sizeof(promising_young[0]);//è®¡ç®—æ•°ç»„é•¿åº¦
+    for(int i=0; i<(length/2); i++)//å–æ•°ç»„æ•°æ®
     {
         buzzer_on(promising_young[2*i], 200);
-        vTaskDelay(5*promising_young[2*i+1]);//Òô³¤µÄÊ±¼ä¶¼³ËÒÔ5¼´Ò»ÅÄÎª500Î¢Ãë£¬´ËÖµ"5"¿Éµ÷Õû£¬Ö»ÊÇ²¥·ÅµÄÕû¸ö¿ìÂý¶øÒÑ£¬ÓÐµãÀàËÆÓÚÊÓÆµ¿ì½øºÍºóÍË
+        vTaskDelay(5*promising_young[2*i+1]);//éŸ³é•¿çš„æ—¶é—´éƒ½ä¹˜ä»¥5å³ä¸€æ‹ä¸º500å¾®ç§’ï¼Œæ­¤å€¼"5"å¯è°ƒæ•´ï¼Œåªæ˜¯æ’­æ”¾çš„æ•´ä¸ªå¿«æ…¢è€Œå·²ï¼Œæœ‰ç‚¹ç±»ä¼¼äºŽè§†é¢‘å¿«è¿›å’ŒåŽé€€
     }
 }
 
 void buzzer_init(uint16_t arr, uint16_t psc)
 {
 
-    TIM12_Handler.Instance=TIM12;            //¶¨Ê±Æ÷
-    TIM12_Handler.Init.Prescaler=psc;       //¶¨Ê±Æ÷·ÖÆµ
-    TIM12_Handler.Init.CounterMode=TIM_COUNTERMODE_UP;//ÏòÉÏ¼ÆÊýÄ£Ê½
-    TIM12_Handler.Init.Period=arr;          //×Ô¶¯ÖØ×°ÔØÖµ
+    TIM12_Handler.Instance=TIM12;            //å®šæ—¶å™¨
+    TIM12_Handler.Init.Prescaler=psc;       //å®šæ—¶å™¨åˆ†é¢‘
+    TIM12_Handler.Init.CounterMode=TIM_COUNTERMODE_UP;//å‘ä¸Šè®¡æ•°æ¨¡å¼
+    TIM12_Handler.Init.Period=arr;          //è‡ªåŠ¨é‡è£…è½½å€¼
     TIM12_Handler.Init.ClockDivision=TIM_CLOCKDIVISION_DIV1;
-    HAL_TIM_PWM_Init(&TIM12_Handler);       //³õÊ¼»¯PWM
+    HAL_TIM_PWM_Init(&TIM12_Handler);       //åˆå§‹åŒ–PWM
 
-    TIM12_CH1Handler.OCMode=TIM_OCMODE_PWM1; //Ä£Ê½Ñ¡ÔñPWM1
-    TIM12_CH1Handler.Pulse=arr/2;            //ÉèÖÃ±È½ÏÖµ,´ËÖµÓÃÀ´È·¶¨Õ¼¿Õ±È£¬Ä¬ÈÏ±È½ÏÖµÎª×Ô¶¯ÖØ×°ÔØÖµµÄÒ»°ë,¼´Õ¼¿Õ±ÈÎª50%
-    TIM12_CH1Handler.OCPolarity=TIM_OCPOLARITY_LOW; //Êä³ö±È½Ï¼«ÐÔÎªµÍ
-    HAL_TIM_PWM_ConfigChannel(&TIM12_Handler,&TIM12_CH1Handler,TIM_CHANNEL_1);//ÅäÖÃTIM12Í¨µÀ1
+    TIM12_CH1Handler.OCMode=TIM_OCMODE_PWM1; //æ¨¡å¼é€‰æ‹©PWM1
+    TIM12_CH1Handler.Pulse=arr/2;            //è®¾ç½®æ¯”è¾ƒå€¼,æ­¤å€¼ç”¨æ¥ç¡®å®šå ç©ºæ¯”ï¼Œé»˜è®¤æ¯”è¾ƒå€¼ä¸ºè‡ªåŠ¨é‡è£…è½½å€¼çš„ä¸€åŠ,å³å ç©ºæ¯”ä¸º50%
+    TIM12_CH1Handler.OCPolarity=TIM_OCPOLARITY_LOW; //è¾“å‡ºæ¯”è¾ƒæžæ€§ä¸ºä½Ž
+    HAL_TIM_PWM_ConfigChannel(&TIM12_Handler,&TIM12_CH1Handler,TIM_CHANNEL_1);//é…ç½®TIM12é€šé“1
 
-    HAL_TIM_PWM_Start(&TIM12_Handler,TIM_CHANNEL_1);//¿ªÆôPWMÍ¨µÀ1
-	
-		buzzer_off();
+    HAL_TIM_PWM_Start(&TIM12_Handler,TIM_CHANNEL_1);//å¼€å¯PWMé€šé“1
+    
+        buzzer_off();
 
 }
 

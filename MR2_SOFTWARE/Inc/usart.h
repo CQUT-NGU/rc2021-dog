@@ -6,57 +6,58 @@
 #ifndef __usart_H
 #define __usart_H
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 /* Includes ------------------------------------------------------------------*/
 #include "robocon.h"
-/* USER CODE BEGIN Includes */
+    /* USER CODE BEGIN Includes */
 
-#define EN_USART_RX 1
-#define USART_REC_LEN  			2000 	//¶¨Òå×î´ó½ÓÊÕ×Ö½ÚÊı 2000
-#define RXBUFFERSIZE   1 //»º´æ´óĞ¡
-extern uint16_t  USART_RX_BUF[USART_REC_LEN]; //½ÓÊÕ»º³å,×î´óUSART_REC_LEN¸ö×Ö½Ú.Ä©×Ö½ÚÎª»»ĞĞ·û
-extern uint16_t USART_RX_STA;         		//½ÓÊÕ×´Ì¬±ê¼Ç
-extern uint16_t aRxBuffer[RXBUFFERSIZE];//HAL¿âUSART½ÓÊÕBuffer
+#define EN_USART_RX   1
+#define USART_REC_LEN 2000  //å®šä¹‰æœ€å¤§æ¥æ”¶å­—èŠ‚æ•° 2000
+#define RXBUFFERSIZE  1  //ç¼“å­˜å¤§å°
+    extern uint16_t USART_RX_BUF[USART_REC_LEN];  //æ¥æ”¶ç¼“å†²,æœ€å¤§USART_REC_LENä¸ªå­—èŠ‚.æœ«å­—èŠ‚ä¸ºæ¢è¡Œç¬¦
+    extern uint16_t USART_RX_STA;                 //æ¥æ”¶çŠ¶æ€æ ‡è®°
+    extern uint16_t aRxBuffer[RXBUFFERSIZE];      //HALåº“USARTæ¥æ”¶Buffer
 
-#define EN_USART2_RX 			1		//Ê¹ÄÜ£¨1£©/½ûÖ¹£¨0£©´®¿Ú1½ÓÊÕ
-#define USART2TXBUFSIZE   20 //»º´æ´óĞ¡
-#define USART2RXBUFSIZE   1 //»º´æ´óĞ¡
-extern uint8_t USART2TxBuf[USART2TXBUFSIZE];
-extern uint8_t USART2RxBuf[USART2RXBUFSIZE];
-extern uint16_t USART2_RX_STA;       //½ÓÊÕ×´Ì¬±ê¼Ç
+#define EN_USART2_RX    1  //ä½¿èƒ½ï¼ˆ1ï¼‰/ç¦æ­¢ï¼ˆ0ï¼‰ä¸²å£1æ¥æ”¶
+#define USART2TXBUFSIZE 20  //ç¼“å­˜å¤§å°
+#define USART2RXBUFSIZE 1  //ç¼“å­˜å¤§å°
+    extern uint8_t  USART2TxBuf[USART2TXBUFSIZE];
+    extern uint8_t  USART2RxBuf[USART2RXBUFSIZE];
+    extern uint16_t USART2_RX_STA;  //æ¥æ”¶çŠ¶æ€æ ‡è®°
 
-#define EN_USART6_RX 			1		//Ê¹ÄÜ£¨1£©/½ûÖ¹£¨0£©´®¿Ú1½ÓÊÕ
-#define USART6TXBUFSIZE   8 //»º´æ´óĞ¡
-#define USART6RXBUFSIZE   40 //»º´æ´óĞ¡
-extern uint8_t USART6TxBuf[USART6TXBUFSIZE];
-extern uint8_t USART6RxBuf[USART6RXBUFSIZE];
-extern uint16_t USART6_RX_STA;       //½ÓÊÕ×´Ì¬±ê¼Ç
+#define EN_USART6_RX    1  //ä½¿èƒ½ï¼ˆ1ï¼‰/ç¦æ­¢ï¼ˆ0ï¼‰ä¸²å£1æ¥æ”¶
+#define USART6TXBUFSIZE 8  //ç¼“å­˜å¤§å°
+#define USART6RXBUFSIZE 40  //ç¼“å­˜å¤§å°
+    extern uint8_t  USART6TxBuf[USART6TXBUFSIZE];
+    extern uint8_t  USART6RxBuf[USART6RXBUFSIZE];
+    extern uint16_t USART6_RX_STA;  //æ¥æ”¶çŠ¶æ€æ ‡è®°
 
-/* USER CODE END Includes */
+    /* USER CODE END Includes */
 
-extern UART_HandleTypeDef huart1;
-extern UART_HandleTypeDef huart2;
-extern UART_HandleTypeDef huart3;
-extern UART_HandleTypeDef huart6;
-extern UART_HandleTypeDef huart7;
-extern UART_HandleTypeDef huart8;
-/* USER CODE BEGIN Private defines */
+    extern UART_HandleTypeDef huart1;
+    extern UART_HandleTypeDef huart2;
+    extern UART_HandleTypeDef huart3;
+    extern UART_HandleTypeDef huart6;
+    extern UART_HandleTypeDef huart7;
+    extern UART_HandleTypeDef huart8;
+    /* USER CODE BEGIN Private defines */
 
-/* USER CODE END Private defines */
+    /* USER CODE END Private defines */
 
-extern void Error_Handler(void);
+    extern void Error_Handler(void);
 
-void MX_USART1_UART_Init(void);
-void MX_USART2_UART_Init(void);
-void MX_USART3_UART_Init(void);
-void MX_USART6_UART_Init(void);
-void MX_UART7_Init(void);
-void MX_UART8_Init(void);
-/* USER CODE BEGIN Prototypes */
+    void MX_USART1_UART_Init(void);
+    void MX_USART2_UART_Init(void);
+    void MX_USART3_UART_Init(void);
+    void MX_USART6_UART_Init(void);
+    void MX_UART7_Init(void);
+    void MX_UART8_Init(void);
+    /* USER CODE BEGIN Prototypes */
 
-/* USER CODE END Prototypes */
+    /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
 }

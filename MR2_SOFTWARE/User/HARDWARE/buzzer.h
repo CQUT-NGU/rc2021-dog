@@ -12,36 +12,36 @@ void happy_time(void);
 void ActionDoneBuzzer(void);
 void ProcessBuzzer(void);
 
-extern TIM_HandleTypeDef TIM12_Handler;
+extern TIM_HandleTypeDef  TIM12_Handler;
 extern TIM_OC_InitTypeDef TIM12_CH1Handler;
 
-#define  proport          100000 //Tclk/(psc+1)=180000000/(89+1)
-#define  L1       ((proport/131)-1)//µÍµ÷¡¡do µÄÖÜÆÚ¸ù¾İTout= ((arr+1)*(psc+1))/TclkÍÆ³öarrÖµ¾ÍÊÇ±¾¾ädefine¶¨ÒåµÄÖµ£¬ToutÎªÒôµ÷ÆµÂÊ131HzµÄµ¹Êı£¬Tclk=72MHz
-#define  L2       ((proport/147)-1)//µÍµ÷¡¡re µÄÖÜÆÚ
-#define  L3       ((proport/165)-1)//µÍµ÷¡¡mi µÄÖÜÆÚ
-#define  L4       ((proport/176)-1)//µÍµ÷¡¡fa µÄÖÜÆÚ
-#define  L5       ((proport/196)-1)//µÍµ÷¡¡solµÄÖÜÆÚ
-#define  L6       ((proport/220)-1)//µÍµ÷¡¡la µÄÖÜÆÚ
-#define  L7       ((proport/247)-1)//µÍµ÷¡¡si µÄÖÜÆÚ
+#define proport 100000  //Tclk/(psc+1)=180000000/(89+1)
+#define L1      ((proport / 131) - 1)  //ä½è°ƒã€€do çš„å‘¨æœŸæ ¹æ®Tout= ((arr+1)*(psc+1))/Tclkæ¨å‡ºarrå€¼å°±æ˜¯æœ¬å¥defineå®šä¹‰çš„å€¼ï¼ŒToutä¸ºéŸ³è°ƒé¢‘ç‡131Hzçš„å€’æ•°ï¼ŒTclk=72MHz
+#define L2      ((proport / 147) - 1)  //ä½è°ƒã€€re çš„å‘¨æœŸ
+#define L3      ((proport / 165) - 1)  //ä½è°ƒã€€mi çš„å‘¨æœŸ
+#define L4      ((proport / 176) - 1)  //ä½è°ƒã€€fa çš„å‘¨æœŸ
+#define L5      ((proport / 196) - 1)  //ä½è°ƒã€€solçš„å‘¨æœŸ
+#define L6      ((proport / 220) - 1)  //ä½è°ƒã€€la çš„å‘¨æœŸ
+#define L7      ((proport / 247) - 1)  //ä½è°ƒã€€si çš„å‘¨æœŸ
 
-#define  M1       ((proport/262)-1)//ÖĞµ÷¡¡do µÄÖÜÆÚ
-#define  M2       ((proport/296)-1)//ÖĞµ÷¡¡re µÄÖÜÆÚ
-#define  M3       ((proport/330)-1)//ÖĞµ÷¡¡mi µÄÖÜÆÚ 
-#define  M4       ((proport/349)-1)//ÖĞµ÷¡¡fa µÄÖÜÆÚ
-#define  M5       ((proport/392)-1)//ÖĞµ÷¡¡solµÄÖÜÆÚ
-#define  M6       ((proport/440)-1)//ÖĞµ÷¡¡la µÄÖÜÆÚ
-#define  M7       ((proport/494)-1)//ÖĞµ÷¡¡si µÄÖÜÆÚ
+#define M1 ((proport / 262) - 1)  //ä¸­è°ƒã€€do çš„å‘¨æœŸ
+#define M2 ((proport / 296) - 1)  //ä¸­è°ƒã€€re çš„å‘¨æœŸ
+#define M3 ((proport / 330) - 1)  //ä¸­è°ƒã€€mi çš„å‘¨æœŸ
+#define M4 ((proport / 349) - 1)  //ä¸­è°ƒã€€fa çš„å‘¨æœŸ
+#define M5 ((proport / 392) - 1)  //ä¸­è°ƒã€€solçš„å‘¨æœŸ
+#define M6 ((proport / 440) - 1)  //ä¸­è°ƒã€€la çš„å‘¨æœŸ
+#define M7 ((proport / 494) - 1)  //ä¸­è°ƒã€€si çš„å‘¨æœŸ
 
-#define  H1       ((proport/523)-1)//¸ßµ÷¡¡do µÄÖÜÆÚ
-#define  H2       ((proport/587)-1)//¸ßµ÷¡¡re µÄÖÜÆÚ
-#define  H3       ((proport/659)-1)//¸ßµ÷¡¡mi µÄÖÜÆÚ
-#define  H4       ((proport/699)-1)//¸ßµ÷¡¡fa µÄÖÜÆÚ
-#define  H5       ((proport/784)-1)//¸ßµ÷¡¡solµÄÖÜÆÚ
-#define  H6       ((proport/880)-1)//¸ßµ÷¡¡la µÄÖÜÆÚ
-#define  H7       ((proport/988)-1)//¸ßµ÷¡¡si µÄÖÜÆÚ
+#define H1 ((proport / 523) - 1)  //é«˜è°ƒã€€do çš„å‘¨æœŸ
+#define H2 ((proport / 587) - 1)  //é«˜è°ƒã€€re çš„å‘¨æœŸ
+#define H3 ((proport / 659) - 1)  //é«˜è°ƒã€€mi çš„å‘¨æœŸ
+#define H4 ((proport / 699) - 1)  //é«˜è°ƒã€€fa çš„å‘¨æœŸ
+#define H5 ((proport / 784) - 1)  //é«˜è°ƒã€€solçš„å‘¨æœŸ
+#define H6 ((proport / 880) - 1)  //é«˜è°ƒã€€la çš„å‘¨æœŸ
+#define H7 ((proport / 988) - 1)  //é«˜è°ƒã€€si çš„å‘¨æœŸ
 
-#define  Z0       0//
+#define Z0 0  //
 
-//int length = sizeof(music)/sizeof(music[0]);//¼ÆËãÊı×é³¤¶È
+//int length = sizeof(music)/sizeof(music[0]);//è®¡ç®—æ•°ç»„é•¿åº¦
 
 #endif

@@ -1,12 +1,12 @@
 /**
   ******************************************************************************
-  * @file			vcan.c
-  * @version		V1.0.0
-  * @date			4.17 ylt
-  * @brief	¿ªÆôÁË8¸öÍ¨µÀ Ê¹ÓÃÉ½Íâ´®¿Úµ÷ÊÔÖúÊÖ´òÓ¡²¨ĞÎ ¿ÉÒÔ×Ô¼ºÌí¼ÓÍ¨µÀ ·½±ãµ÷ÊÔ
+  * @file            vcan.c
+  * @version        V1.0.0
+  * @date            4.17 ylt
+  * @brief    å¼€å¯äº†8ä¸ªé€šé“ ä½¿ç”¨å±±å¤–ä¸²å£è°ƒè¯•åŠ©æ‰‹æ‰“å°æ³¢å½¢ å¯ä»¥è‡ªå·±æ·»åŠ é€šé“ æ–¹ä¾¿è°ƒè¯•
   *******************************************************************************/
 
-//*É½ÍâµØÃæÕ¾   vcan ground control
+//*å±±å¤–åœ°é¢ç«™   vcan ground control
 #include "vcan.h"
 
 uint8_t VcanTxBuff[20]= {0};
@@ -30,7 +30,7 @@ void shanwai_send_wave_form(void)
     send_data(0xfc);
     for(i = 0; i<6; i++)
     {
-        send_data((wave_form_data[i]&0xff)); //ÏÖ·¢ËÍµÍÎ»ÔÚ·¢ËÍ¸ßÎ»
+        send_data((wave_form_data[i]&0xff)); //ç°å‘é€ä½ä½åœ¨å‘é€é«˜ä½
         send_data((wave_form_data[i]>>8));
 
     }
@@ -43,16 +43,16 @@ void VcanGC_task(void *pvParameters)
 
     for(;;)
     {
-			
-        wave_form_data[0] =test_speed;			
+            
+        wave_form_data[0] =test_speed;            
         wave_form_data[1] =moto_chassis[0].speed_rpm;
-			
+            
         wave_form_data[2] =temp_pid.ref_agle[0];
         wave_form_data[3] =moto_chassis[0].total_angle;
-			
-				wave_form_data[4] =temp_pid.out[0];
+            
+                wave_form_data[4] =temp_pid.out[0];
         wave_form_data[5] =moto_chassis[0].given_current;///16384.0f*20.0f*10;  //65447
-			
+            
         wave_form_data[6] =moto_chassis[0].hall;
 
         wave_form_data[7] =7;//moto_chassis[0].given_current;
@@ -96,13 +96,13 @@ void Vcan_Send_Wave_Data(void)
     send_data(0xfc);
     for(int i = 0; i<=7; i++)
     {
-        send_data((wave_form_data[i]&0xff)); //ÏÖ·¢ËÍµÍÎ»ÔÚ·¢ËÍ¸ßÎ»
+        send_data((wave_form_data[i]&0xff)); //ç°å‘é€ä½ä½åœ¨å‘é€é«˜ä½
         send_data((wave_form_data[i]>>8));
     }
     send_data(0xfc);
     send_data(0x03);
 
-    //HAL_UART_Transmit(&huart2,(uint8_t*)&VcanTxBuff, sizeof(VcanTxBuff),1000);//·¢ËÍ´®¿Ú
+    //HAL_UART_Transmit(&huart2,(uint8_t*)&VcanTxBuff, sizeof(VcanTxBuff),1000);//å‘é€ä¸²å£
     // HAL_UART_Transmit_DMA(&huart8, (uint8_t*)&VcanTxBuff, sizeof(VcanTxBuff));
 
 }

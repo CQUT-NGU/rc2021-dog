@@ -2,14 +2,12 @@
 #define JUMP_H
 #include "robocon.h"
 
-
 void StartJump(float start_time_s);
-void TrajectoryJump(float t, float launchTime, float stanceHeight, float downAMP) ;
+void TrajectoryJump(float t, float launchTime, float stanceHeight, float downAMP);
 void ExecuteJump();
 
 extern float jump_angle;
 
-extern float jump_extension; // ×î´óÉìÍÈ³¤¶È [cm]
-
+extern float jump_extension;  // æœ€å¤§ä¼¸è…¿é•¿åº¦ [cm]
 
 #endif

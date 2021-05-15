@@ -9,7 +9,7 @@ void ExecuteJump();
 
 extern float jump_angle;
 
-extern float jump_extension; // ×î´óÉìÍÈ³¤¶È [cm]
+extern float jump_extension; // æœ€å¤§ä¼¸è…¿é•¿åº¦ [cm]
  
  
 #endif

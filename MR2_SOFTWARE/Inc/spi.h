@@ -35,29 +35,30 @@
 #ifndef __spi_H
 #define __spi_H
 #ifdef __cplusplus
- extern "C" {
+extern "C"
+{
 #endif
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 
-/* USER CODE BEGIN Includes */
+    /* USER CODE BEGIN Includes */
 
-/* USER CODE END Includes */
+    /* USER CODE END Includes */
 
-extern SPI_HandleTypeDef hspi5;
+    extern SPI_HandleTypeDef hspi5;
 
-/* USER CODE BEGIN Private defines */
+    /* USER CODE BEGIN Private defines */
 
-/* USER CODE END Private defines */
+    /* USER CODE END Private defines */
 
-extern void Error_Handler(void);
+    extern void Error_Handler(void);
 
-void MX_SPI5_Init(void);
+    void MX_SPI5_Init(void);
 
-/* USER CODE BEGIN Prototypes */
+    /* USER CODE BEGIN Prototypes */
 
-/* USER CODE END Prototypes */
+    /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
 }

@@ -1,66 +1,63 @@
 
- 
+
 #ifndef _IMU_H
 #define _IMU_H
-#define M_PI  (float)3.1415926535
-	
+#define M_PI (float)3.1415926535
+
 #include "main.h"
 
-#define MPU6500     PFout(6)
-#define MPU6500_NSS_Low() HAL_GPIO_WritePin(GPIOF, GPIO_PIN_6, GPIO_PIN_RESET)
+#define MPU6500            PFout(6)
+#define MPU6500_NSS_Low()  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_6, GPIO_PIN_RESET)
 #define MPU6500_NSS_High() HAL_GPIO_WritePin(GPIOF, GPIO_PIN_6, GPIO_PIN_SET)
 
-//volatile float yaw_angle,pitch_angle,roll_angle,gg_x,gg_z,gg_y,ga_x,ga_y,ga_z,angle1, angle_dot,ga_y1,kg,angle2, angle_dot2,ga_y2,kg2,angle3, angle_dot3,ga_y3,kg3,ga_y22,ga_y33; //Ê¹ÓÃµ½µÄ½Ç¶ÈÖµ
+//volatile float yaw_angle,pitch_angle,roll_angle,gg_x,gg_z,gg_y,ga_x,ga_y,ga_z,angle1, angle_dot,ga_y1,kg,angle2, angle_dot2,ga_y2,kg2,angle3, angle_dot3,ga_y3,kg3,ga_y22,ga_y33; //ä½¿ç”¨åˆ°çš„è§’åº¦å€¼
 
 typedef struct
 {
-  int16_t ax;
-  int16_t ay;
-  int16_t az;
-  
-  int16_t temp;
-  
-  int16_t gx;
-  int16_t gy;
-  int16_t gz;
-  
-  int16_t mx;
-  int16_t my;
-  int16_t mz;
-}IMUDataTypedef;
+    int16_t ax;
+    int16_t ay;
+    int16_t az;
+
+    int16_t temp;
+
+    int16_t gx;
+    int16_t gy;
+    int16_t gz;
+
+    int16_t mx;
+    int16_t my;
+    int16_t mz;
+} IMUDataTypedef;
 
 extern volatile float angle[3];
-extern uint8_t MPU_id;
-extern int16_t test;
-uint8_t MPU6500_Init(void);
-uint8_t MPU6500_Write_Reg(uint8_t const reg, uint8_t const data);
-uint8_t MPU6500_Read_Reg(uint8_t const reg);
-void IMU_getValues(volatile float * values);
-uint8_t IST8310_Init(void);
-
+extern uint8_t        MPU_id;
+extern int16_t        test;
+uint8_t               MPU6500_Init(void);
+uint8_t               MPU6500_Write_Reg(uint8_t const reg, uint8_t const data);
+uint8_t               MPU6500_Read_Reg(uint8_t const reg);
+void                  IMU_getValues(volatile float* values);
+uint8_t               IST8310_Init(void);
 
 void IMU_Get_Data();
-	
 
 extern volatile float angle[3];
-extern volatile float yaw_angle,pitch_angle,roll_angle,gg_x,gg_y,gg_z,ga_x,ga_y,ga_z,ga_y1,kg,ga_y3,kg3,ga_y22,ga_y33; //Ê¹ÓÃµ½µÄ½Ç¶ÈÖµ
+extern volatile float yaw_angle, pitch_angle, roll_angle, gg_x, gg_y, gg_z, ga_x, ga_y, ga_z, ga_y1, kg, ga_y3, kg3, ga_y22, ga_y33;  //ä½¿ç”¨åˆ°çš„è§’åº¦å€¼
 
 typedef struct __MPU6050_REAL_Data__
 {
-    float Accel_X;  //×ª»»³ÉÊµ¼ÊµÄXÖá¼ÓËÙ¶È£¬
-    float Accel_Y;  //×ª»»³ÉÊµ¼ÊµÄYÖá¼ÓËÙ¶È£¬
-    float Accel_Z;  //×ª»»³ÉÊµ¼ÊµÄZÖá¼ÓËÙ¶È£¬
-    float Temp;     //×ª»»³ÉÊµ¼ÊµÄÎÂ¶È£¬µ¥Î»ÎªÉãÊÏ¶È
-    float Gyro_X;   //×ª»»³ÉÊµ¼ÊµÄXÖá½Ç¼ÓËÙ¶È£¬
-    float Gyro_Y;   //×ª»»³ÉÊµ¼ÊµÄYÖá½Ç¼ÓËÙ¶È£¬
-    float Gyro_Z;   //×ª»»³ÉÊµ¼ÊµÄZÖá½Ç¼ÓËÙ¶È
-		int16_t GyroRawData_Z;
-		int16_t GyroRawData_Y;
-}MPU6050_REAL_DATA;
+    float   Accel_X;  //è½¬æ¢æˆå®é™…çš„Xè½´åŠ é€Ÿåº¦ï¼Œ
+    float   Accel_Y;  //è½¬æ¢æˆå®é™…çš„Yè½´åŠ é€Ÿåº¦ï¼Œ
+    float   Accel_Z;  //è½¬æ¢æˆå®é™…çš„Zè½´åŠ é€Ÿåº¦ï¼Œ
+    float   Temp;     //è½¬æ¢æˆå®é™…çš„æ¸©åº¦ï¼Œå•ä½ä¸ºæ‘„æ°åº¦
+    float   Gyro_X;   //è½¬æ¢æˆå®é™…çš„Xè½´è§’åŠ é€Ÿåº¦ï¼Œ
+    float   Gyro_Y;   //è½¬æ¢æˆå®é™…çš„Yè½´è§’åŠ é€Ÿåº¦ï¼Œ
+    float   Gyro_Z;   //è½¬æ¢æˆå®é™…çš„Zè½´è§’åŠ é€Ÿåº¦
+    int16_t GyroRawData_Z;
+    int16_t GyroRawData_Y;
+} MPU6050_REAL_DATA;
 extern MPU6050_REAL_DATA MPU6050_read_data;
-void IMU_getYawPitchRoll(volatile float * ypr); //¸üĞÂ×ËÌ¬
-void GetPitchYawGxGyGz(void);
-float Get_Yaw_Angle(int16_t Gyro_Z);
+void                     IMU_getYawPitchRoll(volatile float* ypr);  //æ›´æ–°å§¿æ€
+void                     GetPitchYawGxGyGz(void);
+float                    Get_Yaw_Angle(int16_t Gyro_Z);
 
 #endif
-

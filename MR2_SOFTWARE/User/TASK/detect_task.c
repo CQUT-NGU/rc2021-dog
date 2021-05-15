@@ -1,25 +1,25 @@
 
 /**
-*ÒÆÖ²DJIµØÅÌ¼ì²â³ÌĞò³ÌĞò ±£Áô´ó²¿·Ö¹¦ÄÜ ²âÊÔÊ±¼ä2019.4.17 ylt
-*±£Ö¤Éè±¸ÎÈ¶¨ ¼ì²â´íÎó
-*¼ÓÈë²¿·Ö×¢ÊÍ
+*ç§»æ¤DJIåœ°ç›˜æ£€æµ‹ç¨‹åºç¨‹åº ä¿ç•™å¤§éƒ¨åˆ†åŠŸèƒ½ æµ‹è¯•æ—¶é—´2019.4.17 ylt
+*ä¿è¯è®¾å¤‡ç¨³å®š æ£€æµ‹é”™è¯¯
+*åŠ å…¥éƒ¨åˆ†æ³¨é‡Š
 */
 
 #include "detect_task.h"
 
-//ºìµÆÉÁ£¬Ãğº¯Êı£¬ÇĞ»»ÉÁÃğ
+//çº¢ç¯é—ªï¼Œç­å‡½æ•°ï¼Œåˆ‡æ¢é—ªç­
 #define DETECT_LED_R_TOGGLE() led_red_toggle()
-#define DETECT_LED_R_ON() led_red_on()
-#define DETECT_LED_R_OFF() led_red_off()
-//Á÷Ë®µÆÉÁÃğº¯Êı
-#define DETECT_FLOW_LED_ON(i) flow_led_on(i)
+#define DETECT_LED_R_ON()     led_red_on()
+#define DETECT_LED_R_OFF()    led_red_off()
+//æµæ°´ç¯é—ªç­å‡½æ•°
+#define DETECT_FLOW_LED_ON(i)  flow_led_on(i)
 #define DETECT_FLOW_LED_OFF(i) flow_led_off(i)
 
 #define DETECT_TASK_INIT_TIME 57
-#define DETECT_CONTROL_TIME 10
-//³õÊ¼»¯´íÎóÁĞ±í
+#define DETECT_CONTROL_TIME   10
+//åˆå§‹åŒ–é”™è¯¯åˆ—è¡¨
 static void DetectInit(uint32_t time);
-//ÏÔÊ¾ÓÅÏÈ¼¶×î¸ßµÄ´íÎó£¬´«ÈëµÄ²ÎÊıÎª ÏÔÊ¾µÄ´íÎóµÄ´íÎóÂë
+//æ˜¾ç¤ºä¼˜å…ˆçº§æœ€é«˜çš„é”™è¯¯ï¼Œä¼ å…¥çš„å‚æ•°ä¸º æ˜¾ç¤ºçš„é”™è¯¯çš„é”™è¯¯ç 
 static void DetectDisplay(uint8_t num);
 
 static error_t errorList[errorListLength + 1];
@@ -28,40 +28,37 @@ static error_t errorList[errorListLength + 1];
 uint32_t DetectTaskStack;
 #endif
 
-
 bool High_Temp_Warning = 0;
 void Detect_task(void *pvParameters)
 {
-
-    for(;;)
+    for (;;)
     {
-
-        for(int i=0 ; i<8 ; i++)
+        for (int i = 0; i < 8; i++)
         {
-            if(moto_chassis[i].hall>=100)  //¸ßÎÂ¾¯¸æ
+            if (moto_chassis[i].hall >= 100)  //é«˜æ¸©è­¦å‘Š
                 High_Temp_Warning = 1;
         }
 
         osDelay(1000);
 
-        if(High_Temp_Warning == 1) {
+        if (High_Temp_Warning == 1)
+        {
             IndLED_On(IndColorRed);
             vTaskDelay(50);
             IndLED_Off();
             vTaskDelay(50);
         }
     }
-
 }
 
-////µôÏßÅĞ¶ÏÈÎÎñ
+////æ‰çº¿åˆ¤æ–­ä»»åŠ¡
 //void Detect_task(void *pvParameters)
 //{
 //    static uint32_t systemTime;
 //    systemTime = xTaskGetTickCount();
-//    //³õÊ¼»¯
+//    //åˆå§‹åŒ–
 //    DetectInit(systemTime);
-//    //¿ÕÏĞÒ»¶ÎÊ±¼ä
+//    //ç©ºé—²ä¸€æ®µæ—¶é—´
 //    vTaskDelay(DETECT_TASK_INIT_TIME);
 
 //    for(;;)
@@ -75,31 +72,31 @@ void Detect_task(void *pvParameters)
 
 //        for (int i = 0; i < errorListLength; i++)
 //        {
-//            //Î´Ê¹ÄÜ£¬Ìø¹ı
+//            //æœªä½¿èƒ½ï¼Œè·³è¿‡
 //            if (errorList[i].enable == 0)
 //            {
 //                continue;
 //            }
 
-//            //ÅĞ¶ÏµôÏß
+//            //åˆ¤æ–­æ‰çº¿
 //            if (systemTime - errorList[i].newTime > errorList[i].setOfflineTime)
 //            {
 //                if (errorList[i].errorExist == 0)
 //                {
-//                    //¼ÇÂ¼´íÎóÒÔ¼°µôÏßÊ±¼ä
+//                    //è®°å½•é”™è¯¯ä»¥åŠæ‰çº¿æ—¶é—´
 //                    errorList[i].isLost = 1;
 //                    errorList[i].errorExist = 1;
 //                    errorList[i].Losttime = systemTime;
 //                }
-//                //ÅĞ¶Ï´íÎóÓÅÏÈ¼¶£¬ ±£´æÓÅÏÈ¼¶×î¸ßµÄ´íÎóÂë
+//                //åˆ¤æ–­é”™è¯¯ä¼˜å…ˆçº§ï¼Œ ä¿å­˜ä¼˜å…ˆçº§æœ€é«˜çš„é”™è¯¯ç 
 //                if (errorList[i].Priority > errorList[error_num_display].Priority)
 //                {
 //                    error_num_display = i;
 //                }
-//                //¼ÇÂ¼ÁĞ±íµÄ´æÔÚ´íÎó£¬
+//                //è®°å½•åˆ—è¡¨çš„å­˜åœ¨é”™è¯¯ï¼Œ
 //                errorList[errorListLength].isLost = 1;
 //                errorList[errorListLength].errorExist = 1;
-//                //Èç¹ûÌá¹©½â¾öº¯Êı£¬ÔËĞĞ½â¾öº¯Êı
+//                //å¦‚æœæä¾›è§£å†³å‡½æ•°ï¼Œè¿è¡Œè§£å†³å‡½æ•°
 //                if (errorList[i].solveLostFun != NULL)
 //                {
 //                    errorList[i].solveLostFun();
@@ -107,14 +104,14 @@ void Detect_task(void *pvParameters)
 //            }
 //            else if (systemTime - errorList[i].worktime < errorList[i].setOnlineTime)
 //            {
-//                //¸Õ¸ÕÉÏÏß£¬¿ÉÄÜ´æÔÚÊı¾İ²»ÎÈ¶¨£¬Ö»¼ÇÂ¼²»¶ªÊ§£¬
+//                //åˆšåˆšä¸Šçº¿ï¼Œå¯èƒ½å­˜åœ¨æ•°æ®ä¸ç¨³å®šï¼Œåªè®°å½•ä¸ä¸¢å¤±ï¼Œ
 //                errorList[i].isLost = 0;
 //                errorList[i].errorExist = 1;
 //            }
 //            else
 //            {
 //                errorList[i].isLost = 0;
-//                //ÅĞ¶ÏÊÇ·ñ´æÔÚÊı¾İ´íÎó
+//                //åˆ¤æ–­æ˜¯å¦å­˜åœ¨æ•°æ®é”™è¯¯
 //                if (errorList[i].dataIsError)
 //                {
 //                    errorList[i].errorExist = 1;
@@ -123,7 +120,7 @@ void Detect_task(void *pvParameters)
 //                {
 //                    errorList[i].errorExist = 0;
 //                }
-//                //¼ÆËãÆµÂÊ
+//                //è®¡ç®—é¢‘ç‡
 //                if (errorList[i].newTime > errorList[i].lastTime)
 //                {
 //                    errorList[i].frequency = configTICK_RATE_HZ / (fp32)(errorList[i].newTime - errorList[i].lastTime);
@@ -141,29 +138,29 @@ void Detect_task(void *pvParameters)
 //    }
 //}
 
-//·µ»Ø¶ÔÓ¦µÄÉè±¸ÊÇ·ñ´æÔÚ´íÎó
+//è¿”å›å¯¹åº”çš„è®¾å¤‡æ˜¯å¦å­˜åœ¨é”™è¯¯
 bool_t toe_is_error(uint8_t err)
 {
     return (errorList[err].errorExist == 1);
 }
 
-//Éè±¸½ÓÊÕÊı¾İ¹³×Óº¯Êı
+//è®¾å¤‡æ¥æ”¶æ•°æ®é’©å­å‡½æ•°
 void DetectHook(uint8_t toe)
 {
     errorList[toe].lastTime = errorList[toe].newTime;
-    errorList[toe].newTime = xTaskGetTickCount();
-    //¸üĞÂ¶ªÊ§Çé¿ö
+    errorList[toe].newTime  = xTaskGetTickCount();
+    //æ›´æ–°ä¸¢å¤±æƒ…å†µ
     if (errorList[toe].isLost)
     {
-        errorList[toe].isLost = 0;
+        errorList[toe].isLost   = 0;
         errorList[toe].worktime = errorList[toe].newTime;
     }
-    //ÅĞ¶ÏÊı¾İÊÇ·ñ´íÎó
+    //åˆ¤æ–­æ•°æ®æ˜¯å¦é”™è¯¯
     if (errorList[toe].dataIsErrorFun != NULL)
     {
         if (errorList[toe].dataIsErrorFun())
         {
-            errorList[toe].errorExist = 1;
+            errorList[toe].errorExist  = 1;
             errorList[toe].dataIsError = 1;
 
             if (errorList[toe].solveDataErrorFun != NULL)
@@ -188,9 +185,9 @@ const error_t *getErrorListPoint(void)
 static void DetectDisplay(uint8_t num)
 {
     static uint8_t last_num = errorListLength + 1;
-    uint8_t i = 0;
+    uint8_t        i        = 0;
 
-    //8¸öÁ÷Ë®ÏÔÊ¾Ç°°ËµÄ´íÎóÂëµÄÇé¿ö£¬°üÀ¨SBUSÒ£¿ØÆ÷£¬yaw.pitch,trigerÔÆÌ¨£¬4¸öµ×ÅÌµç»ú
+    //8ä¸ªæµæ°´æ˜¾ç¤ºå‰å…«çš„é”™è¯¯ç çš„æƒ…å†µï¼ŒåŒ…æ‹¬SBUSé¥æ§å™¨ï¼Œyaw.pitch,trigeräº‘å°ï¼Œ4ä¸ªåº•ç›˜ç”µæœº
     for (i = 0; i <= ChassisMotor4TOE; i++)
     {
         if (errorList[i].errorExist)
@@ -203,7 +200,7 @@ static void DetectDisplay(uint8_t num)
         }
     }
 
-    //´íÎóÂë Í¨¹ıºìµÆÉÁË¸´ÎÊıÀ´ÅĞ¶Ï
+    //é”™è¯¯ç  é€šè¿‡çº¢ç¯é—ªçƒæ¬¡æ•°æ¥åˆ¤æ–­
     if (num == errorListLength + 1)
     {
         DETECT_LED_R_OFF();
@@ -212,7 +209,7 @@ static void DetectDisplay(uint8_t num)
     else
     {
         static uint8_t i = 0, led_flag = 0, cnt_num = 0, time = 0;
-        //¼ÇÂ¼×îĞÂµÄ×î¸ßÓÅÏÈ¼¶µÄ´íÎóÂë£¬µÈÏÂÒ»ÂÖÉÁË¸
+        //è®°å½•æœ€æ–°çš„æœ€é«˜ä¼˜å…ˆçº§çš„é”™è¯¯ç ï¼Œç­‰ä¸‹ä¸€è½®é—ªçƒ
         if (last_num != num)
         {
             last_num = num;
@@ -220,11 +217,11 @@ static void DetectDisplay(uint8_t num)
 
         if (cnt_num == 0)
         {
-            //cnt_num ¼ÇÂ¼»¹ÓĞ¼¸´ÎÉÁË¸£¬µ½0ºó£¬ÃğÒ»¶ÎÊ±¼ä²Å¿ªÊ¼ÏÂÒ»ÂÖ
+            //cnt_num è®°å½•è¿˜æœ‰å‡ æ¬¡é—ªçƒï¼Œåˆ°0åï¼Œç­ä¸€æ®µæ—¶é—´æ‰å¼€å§‹ä¸‹ä¸€è½®
             time++;
             if (time > 50)
             {
-                time = 0;
+                time    = 0;
                 cnt_num = last_num;
             }
             return;
@@ -232,11 +229,10 @@ static void DetectDisplay(uint8_t num)
 
         if (i == 0)
         {
-
             DETECT_LED_R_TOGGLE();
             if (led_flag)
             {
-                //ºìµÆÉÁÃğ¸÷Ò»´Î£¬½«ÒªÊ£Óà´ÎÊı¼õÒ»
+                //çº¢ç¯é—ªç­å„ä¸€æ¬¡ï¼Œå°†è¦å‰©ä½™æ¬¡æ•°å‡ä¸€
                 led_flag = 0;
                 cnt_num--;
             }
@@ -246,7 +242,7 @@ static void DetectDisplay(uint8_t num)
             }
         }
 
-        //iÎª¼ÆÊ±´ÎÊı£¬20Îª°ë¸öÖÜÆÚ£¬ÇĞ»»Ò»´ÎºìµÆÉÁÃğ
+        //iä¸ºè®¡æ—¶æ¬¡æ•°ï¼Œ20ä¸ºåŠä¸ªå‘¨æœŸï¼Œåˆ‡æ¢ä¸€æ¬¡çº¢ç¯é—ªç­
         i++;
 
         if (i > 20)
@@ -258,46 +254,46 @@ static void DetectDisplay(uint8_t num)
 
 static void DetectInit(uint32_t time)
 {
-    //ÉèÖÃÀëÏßÊ±¼ä£¬ÉÏÏßÎÈ¶¨¹¤×÷Ê±¼ä£¬ÓÅÏÈ¼¶ offlineTime onlinetime priority
+    //è®¾ç½®ç¦»çº¿æ—¶é—´ï¼Œä¸Šçº¿ç¨³å®šå·¥ä½œæ—¶é—´ï¼Œä¼˜å…ˆçº§ offlineTime onlinetime priority
     uint16_t setItem[errorListLength][3] =
-    {
-        {30, 40, 15}, //SBUS
-        {2, 3, 14},   //yaw
-        {2, 3, 13},   //pitch
-        {10, 10, 12}, //trigger
-        {10, 10, 11}, //motor1
-        {10, 10, 10}, //motor2
-        {10, 10, 9},  //motor3
-        {10, 10, 8},  //motor4
+        {
+            {30, 40, 15},  //SBUS
+            {2, 3, 14},    //yaw
+            {2, 3, 13},    //pitch
+            {10, 10, 12},  //trigger
+            {10, 10, 11},  //motor1
+            {10, 10, 10},  //motor2
+            {10, 10, 9},   //motor3
+            {10, 10, 8},   //motor4
 
-    };
+        };
 
     for (uint8_t i = 0; i < errorListLength; i++)
     {
-        errorList[i].setOfflineTime = setItem[i][0];
-        errorList[i].setOnlineTime = setItem[i][1];
-        errorList[i].Priority = setItem[i][2];
-        errorList[i].dataIsErrorFun = NULL;
-        errorList[i].solveLostFun = NULL;
+        errorList[i].setOfflineTime    = setItem[i][0];
+        errorList[i].setOnlineTime     = setItem[i][1];
+        errorList[i].Priority          = setItem[i][2];
+        errorList[i].dataIsErrorFun    = NULL;
+        errorList[i].solveLostFun      = NULL;
         errorList[i].solveDataErrorFun = NULL;
 
-        errorList[i].enable = 1;
-        errorList[i].errorExist = 1;
-        errorList[i].isLost = 1;
+        errorList[i].enable      = 1;
+        errorList[i].errorExist  = 1;
+        errorList[i].isLost      = 1;
         errorList[i].dataIsError = 1;
-        errorList[i].frequency = 0.0f;
-        errorList[i].newTime = time;
-        errorList[i].lastTime = time;
-        errorList[i].Losttime = time;
-        errorList[i].worktime = time;
+        errorList[i].frequency   = 0.0f;
+        errorList[i].newTime     = time;
+        errorList[i].lastTime    = time;
+        errorList[i].Losttime    = time;
+        errorList[i].worktime    = time;
     }
 
-//    errorList[DBUSTOE].dataIsErrorFun = RC_data_is_error;
-//    errorList[DBUSTOE].solveLostFun = slove_RC_lost;
-//    errorList[DBUSTOE].solveDataErrorFun = slove_data_error;
+    //    errorList[DBUSTOE].dataIsErrorFun = RC_data_is_error;
+    //    errorList[DBUSTOE].solveLostFun = slove_RC_lost;
+    //    errorList[DBUSTOE].solveDataErrorFun = slove_data_error;
 
 #if GIMBAL_MOTOR_6020_CAN_LOSE_SLOVE
-    errorList[YawGimbalMotorTOE].solveLostFun = GIMBAL_lose_slove;
+    errorList[YawGimbalMotorTOE].solveLostFun   = GIMBAL_lose_slove;
     errorList[PitchGimbalMotorTOE].solveLostFun = GIMBAL_lose_slove;
 #endif
 }

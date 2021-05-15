@@ -1,55 +1,51 @@
 /**
-*	½ÓÊÜmti30µÄº¯Êı ²ÉÓÃÒ»¸öÈÎÎñ DMA½ÓÊÕ
-* ×¢Òâmti30Êı¾İ ¸ßµÍÎ»ÊÇ·´µÄ ĞèÒªÏÈ·­×ª¹ıÀ´ £¨¸Ã¹ı³ÌÔÚbsp_canÀïÃæÒÑ¾­Íê³É£©
+*    æ¥å—mti30çš„å‡½æ•° é‡‡ç”¨ä¸€ä¸ªä»»åŠ¡ DMAæ¥æ”¶
+* æ³¨æ„mti30æ•°æ® é«˜ä½ä½æ˜¯åçš„ éœ€è¦å…ˆç¿»è½¬è¿‡æ¥ ï¼ˆè¯¥è¿‡ç¨‹åœ¨bsp_cané‡Œé¢å·²ç»å®Œæˆï¼‰
   */
-
 
 #include "mti30.h"
 
-//Ô¤Áô ******
-/*Ä¿Ç°µÄ´úÂëÔÚbsp_canÀïÃæ 
-*Èç¹û´úÂë¶àµÄ»°
-*¿¼ÂÇÒÆÖ²ÎÊÌâ 
-*Òò¸Ã½«Ö®·Åµ½ÕâÀïĞ´
+//é¢„ç•™ ******
+/*ç›®å‰çš„ä»£ç åœ¨bsp_cané‡Œé¢ 
+*å¦‚æœä»£ç å¤šçš„è¯
+*è€ƒè™‘ç§»æ¤é—®é¢˜ 
+*å› è¯¥å°†ä¹‹æ”¾åˆ°è¿™é‡Œå†™
 */
 
-/**************************************Ò»Î¬¿¨¶ûÂüÂË²¨Æ÷**************************************/
+/**************************************ä¸€ç»´å¡å°”æ›¼æ»¤æ³¢å™¨**************************************/
 /*       
-        Q:¹ı³ÌÔëÉù£¬QÔö´ó£¬¶¯Ì¬ÏìÓ¦±ä¿ì£¬ÊÕÁ²ÎÈ¶¨ĞÔ±ä»µ
-        R:²âÁ¿ÔëÉù£¬RÔö´ó£¬¶¯Ì¬ÏìÓ¦±äÂı£¬ÊÕÁ²ÎÈ¶¨ĞÔ±äºÃ       
+        Q:è¿‡ç¨‹å™ªå£°ï¼ŒQå¢å¤§ï¼ŒåŠ¨æ€å“åº”å˜å¿«ï¼Œæ”¶æ•›ç¨³å®šæ€§å˜å
+        R:æµ‹é‡å™ªå£°ï¼ŒRå¢å¤§ï¼ŒåŠ¨æ€å“åº”å˜æ…¢ï¼Œæ”¶æ•›ç¨³å®šæ€§å˜å¥½       
 */
 
-/* ¿¨¶ûÂüÂË²¨´¦Àí */
+/* å¡å°”æ›¼æ»¤æ³¢å¤„ç† */
 
-float KalmanFilter( float ResrcData,float ProcessNiose_Q,float MeasureNoise_R)
+float KalmanFilter(float ResrcData, float ProcessNiose_Q, float MeasureNoise_R)
 {
-
     float R = MeasureNoise_R;
     float Q = ProcessNiose_Q;
 
     static float x_last;
-    float x_mid = x_last;
-    float x_now;
+    float        x_mid = x_last;
+    float        x_now;
 
     static float p_last;
-    float p_mid ;
-    float p_now;
+    float        p_mid;
+    float        p_now;
 
     float kg;
 
-    x_mid=x_last;                       //x_last=x(k-1|k-1),x_mid=x(k|k-1)
-    p_mid=p_last+Q;                     //p_mid=p(k|k-1),p_last=p(k-1|k-1),Q=ÔëÉù
+    x_mid = x_last;      //x_last=x(k-1|k-1),x_mid=x(k|k-1)
+    p_mid = p_last + Q;  //p_mid=p(k|k-1),p_last=p(k-1|k-1),Q=å™ªå£°
 
     /*
-     *  ¿¨¶ûÂüÂË²¨µÄÎå¸öÖØÒª¹«Ê½
+     *  å¡å°”æ›¼æ»¤æ³¢çš„äº”ä¸ªé‡è¦å…¬å¼
      */
-    kg=p_mid/(p_mid+R);                 //kgÎªkalman filter£¬R ÎªÔëÉù
-    x_now=x_mid+kg*(ResrcData-x_mid);   //¹À¼Æ³öµÄ×îÓÅÖµ
-    p_now=(1-kg)*p_mid;                 //×îÓÅÖµ¶ÔÓ¦µÄcovariance
-    p_last = p_now;                     //¸üĞÂcovariance Öµ
-    x_last = x_now;                     //¸üĞÂÏµÍ³×´Ì¬Öµ
+    kg     = p_mid / (p_mid + R);               //kgä¸ºkalman filterï¼ŒR ä¸ºå™ªå£°
+    x_now  = x_mid + kg * (ResrcData - x_mid);  //ä¼°è®¡å‡ºçš„æœ€ä¼˜å€¼
+    p_now  = (1 - kg) * p_mid;                  //æœ€ä¼˜å€¼å¯¹åº”çš„covariance
+    p_last = p_now;                             //æ›´æ–°covariance å€¼
+    x_last = x_now;                             //æ›´æ–°ç³»ç»ŸçŠ¶æ€å€¼
 
     return x_now;
-
 }
-

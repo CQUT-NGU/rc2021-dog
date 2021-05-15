@@ -2,20 +2,18 @@
 #define __STEPMOTOR_H
 #include "robocon.h"
 
+//#define STEP_MOTOR_EN        8       //æ­¥è¿›ç”µæœºä½¿èƒ½ç«¯ï¼Œä½Žç”µå¹³æœ‰æ•ˆ
 
-//#define STEP_MOTOR_EN        8       //²½½øµç»úÊ¹ÄÜ¶Ë£¬µÍµçÆ½ÓÐÐ§
+//#define STEP_MOTOR_X_DIR     5       //Xè½´ æ­¥è¿›ç”µæœºæ–¹å‘æŽ§åˆ¶
 
-//#define STEP_MOTOR_X_DIR     5       //XÖá ²½½øµç»ú·½Ïò¿ØÖÆ
+//#define STEP_MOTOR_Y_DIR     6       //yè½´ æ­¥è¿›ç”µæœºæ–¹å‘æŽ§åˆ¶
 
-//#define STEP_MOTOR_Y_DIR     6       //yÖá ²½½øµç»ú·½Ïò¿ØÖÆ
+//#define STEP_MOTOR_Z_DIR     7       //zè½´ æ­¥è¿›ç”µæœºæ–¹å‘æŽ§åˆ¶
 
-//#define STEP_MOTOR_Z_DIR     7       //zÖá ²½½øµç»ú·½Ïò¿ØÖÆ
+//#define STEP_MOTOR_X_STP     2       //xè½´ æ­¥è¿›æŽ§åˆ¶
 
-//#define STEP_MOTOR_X_STP     2       //xÖá ²½½ø¿ØÖÆ
+//#define STEP_MOTOR_Y_STP     3       //yè½´ æ­¥è¿›æŽ§åˆ¶
 
-//#define STEP_MOTOR_Y_STP     3       //yÖá ²½½ø¿ØÖÆ
-
-//#define STEP_MOTOR_Z_STP     4       //zÖá ²½½ø¿ØÖÆ
-
+//#define STEP_MOTOR_Z_STP     4       //zè½´ æ­¥è¿›æŽ§åˆ¶
 
 #endif

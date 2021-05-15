@@ -3,53 +3,53 @@
 
 /* TASK ------------------------------------------------------------------*/
 
-#define START_TASK_PRIO		0
-#define START_STK_SIZE 		128
+#define START_TASK_PRIO        0
+#define START_STK_SIZE         128
 TaskHandle_t StartTask_Handler;
 void start_task(void *pvParameters);
 
-#define MotorControl_TASK_PRIO		4
-#define MotorControl_STK_SIZE 		256
+#define MotorControl_TASK_PRIO        4
+#define MotorControl_STK_SIZE         256
 TaskHandle_t MotorControlTask_Handler;
 void MotorControl_task(void *pvParameters);
 
-#define PostureControl_TASK_PRIO		5
-#define PostureControl_STK_SIZE 		256
+#define PostureControl_TASK_PRIO        5
+#define PostureControl_STK_SIZE         256
 TaskHandle_t PostureControlTask_Handler;
 void PostureControl_task(void *pvParameters);
 
-#define Navi_TASK_PRIO		5
-#define Navi_STK_SIZE 		256
+#define Navi_TASK_PRIO        5
+#define Navi_STK_SIZE         256
 TaskHandle_t NaviTask_Handler;
 void Navi_task(void *pvParameters);
 
-#define Detect_TASK_PRIO		6
-#define Detect_STK_SIZE 		128
+#define Detect_TASK_PRIO        6
+#define Detect_STK_SIZE         128
 TaskHandle_t DetectTask_Handler;
 void Detect_task(void *pvParameters);
 
-#define Debug_TASK_PRIO		6
-#define Debug_STK_SIZE 		256
+#define Debug_TASK_PRIO        6
+#define Debug_STK_SIZE         256
 TaskHandle_t DebugTask_Handler;
 void Debug_task(void *pvParameters);
 
-#define Rc_TASK_PRIO		6
-#define Rc_STK_SIZE 		256
+#define Rc_TASK_PRIO        6
+#define Rc_STK_SIZE         256
 TaskHandle_t RcTask_Handler;
 void Rc_task(void *pvParameters);
 
-#define VcanGC_TASK_PRIO		6
-#define VcanGC_STK_SIZE 		256
+#define VcanGC_TASK_PRIO        6
+#define VcanGC_STK_SIZE         256
 TaskHandle_t VcanGCTask_Handler;
 void VcanGC_task(void *pvParameters);
 
-#define Test_TASK_PRIO		6
-#define Test_STK_SIZE 		256
+#define Test_TASK_PRIO        6
+#define Test_STK_SIZE         256
 TaskHandle_t TestTask_Handler;
 void Test_task(void *pvParameters);
 
-#define LogicalFlow_TASK_PRIO		6
-#define LogicalFlow_STK_SIZE 		256
+#define LogicalFlow_TASK_PRIO        6
+#define LogicalFlow_STK_SIZE         256
 TaskHandle_t LogicalFlowTask_Handler;
 void LogicalFlow_task(void *pvParameters);
 
@@ -60,127 +60,127 @@ static void MX_NVIC_Init(void);
 
 int main(void)
 {
-    HAL_Init();						//Hal¿â³õÊ¼»¯
-    SystemClock_Config();	//ÏµÍ³Ê±ÖÓ³õÊ¼»¯
-    MX_GPIO_Init();				//GPIO³õÊ¼»¯
+    HAL_Init();                        //Halåº“åˆå§‹åŒ–
+    SystemClock_Config();    //ç³»ç»Ÿæ—¶é’Ÿåˆå§‹åŒ–
+    MX_GPIO_Init();                //GPIOåˆå§‹åŒ–
 
 
-    MX_DMA_Init();				//DMA³õÊ¼»¯
-    MX_CAN1_Init();				//CAN1½Ó¿Ú³õÊ¼»¯
+    MX_DMA_Init();                //DMAåˆå§‹åŒ–
+    MX_CAN1_Init();                //CAN1æ¥å£åˆå§‹åŒ–
 
-    MX_CAN2_Init();				//CAN1½Ó¿Ú³õÊ¼»¯
-    MX_SPI5_Init();				//spi5³õÊ¼»¯
+    MX_CAN2_Init();                //CAN1æ¥å£åˆå§‹åŒ–
+    MX_SPI5_Init();                //spi5åˆå§‹åŒ–
 
     MX_USART2_UART_Init();
-    uart_receive_init(&USART2_HUART);//USART2DMA¿ÕÏĞÖĞ¶Ï
+    uart_receive_init(&USART2_HUART);//USART2DMAç©ºé—²ä¸­æ–­
     MX_USART3_UART_Init();
-    uart_receive_init(&USART3_HUART);//USART3DMA¿ÕÏĞÖĞ¶Ï   ps2Êı¾İ ÏÖÔÚÄÃÀ´×öÎª openmv2µÄ½ÓÊÕ
+    uart_receive_init(&USART3_HUART);//USART3DMAç©ºé—²ä¸­æ–­   ps2æ•°æ® ç°åœ¨æ‹¿æ¥åšä¸º openmv2çš„æ¥æ”¶
     MX_USART6_UART_Init();
-    uart_receive_init(&IMU_HUART);//usart6DMA½ÓÊÕÍÓÂİÒÇÊı¾İ
-    MX_UART7_Init();			//uart7DMA½ÓÊÕ
-    uart_receive_init(&OPENMV_HUART);//USART7DMA¿ÕÏĞÖĞ¶Ï  openmv
-    MX_UART8_Init();		//usart8DMA·¢ËÍÊı¾İ¸øÉ½ÍâÉÏÎ»»ú
+    uart_receive_init(&IMU_HUART);//usart6DMAæ¥æ”¶é™€èºä»ªæ•°æ®
+    MX_UART7_Init();            //uart7DMAæ¥æ”¶
+    uart_receive_init(&OPENMV_HUART);//USART7DMAç©ºé—²ä¸­æ–­  openmv
+    MX_UART8_Init();        //usart8DMAå‘é€æ•°æ®ç»™å±±å¤–ä¸Šä½æœº
 
-    MX_NVIC_Init();				//ÖĞ¶ÏÓÅÏÈ¼¶³õÊ¼»¯
-    //¶¨Ê±Æ÷Ê±ÖÓ90M·ÖÆµÏµÊı9000-1,¶¨Ê±Æ÷3µÄÆµÂÊ90M/9000=10K×Ô¶¯ÖØ×°ÔØ10-1,¶¨Ê±Æ÷ÖÜÆÚ1ms
-    //TIM3_Init(10-1,9000-1);//¶¨Ê±Æ÷3³õÊ¼»¯ ²½Ì¬Õğµ´Ê±ÖÓ
+    MX_NVIC_Init();                //ä¸­æ–­ä¼˜å…ˆçº§åˆå§‹åŒ–
+    //å®šæ—¶å™¨æ—¶é’Ÿ90Måˆ†é¢‘ç³»æ•°9000-1,å®šæ—¶å™¨3çš„é¢‘ç‡90M/9000=10Kè‡ªåŠ¨é‡è£…è½½10-1,å®šæ—¶å™¨å‘¨æœŸ1ms
+    //TIM3_Init(10-1,9000-1);//å®šæ—¶å™¨3åˆå§‹åŒ– æ­¥æ€éœ‡è¡æ—¶é’Ÿ
 
-    my_can_filter_init_recv_all(&hcan1);//¿ªÆôCANÂË²¨Æ÷
-    HAL_CAN_Receive_IT(&hcan1, CAN_FIFO0);//¿ªÆôCAN1
-    HAL_CAN_Receive_IT(&hcan2, CAN_FIFO0);//¿ªÆôCAN2
+    my_can_filter_init_recv_all(&hcan1);//å¼€å¯CANæ»¤æ³¢å™¨
+    HAL_CAN_Receive_IT(&hcan1, CAN_FIFO0);//å¼€å¯CAN1
+    HAL_CAN_Receive_IT(&hcan2, CAN_FIFO0);//å¼€å¯CAN2
 
-    pid_param_init();		//ËùÓĞÊ¹ÓÃµ½µÄPID²ÎÊı³õÊ¼»¯
-    buzzer_init(500-1, 90-1);//·äÃùÆ÷³õÊ¼»¯
-    led_configuration();	//Á÷Ë®µÆ ºìÂÌµÆ³õÊ¼»¯
-    //f=Tck/(psc+1)*(arr+1) ¶¨Ê±Æ÷Ê±ÖÓÎª90M  50Hz=180MHz/(90*20000)
-    Servo_Init(20000-1,90-1);//¶æ»úPWMÍ¨µÀ³õÊ¼»¯
+    pid_param_init();        //æ‰€æœ‰ä½¿ç”¨åˆ°çš„PIDå‚æ•°åˆå§‹åŒ–
+    buzzer_init(500-1, 90-1);//èœ‚é¸£å™¨åˆå§‹åŒ–
+    led_configuration();    //æµæ°´ç¯ çº¢ç»¿ç¯åˆå§‹åŒ–
+    //f=Tck/(psc+1)*(arr+1) å®šæ—¶å™¨æ—¶é’Ÿä¸º90M  50Hz=180MHz/(90*20000)
+    Servo_Init(20000-1,90-1);//èˆµæœºPWMé€šé“åˆå§‹åŒ–
 
-    TIM2_CH3_Cap_Init(0XFFFFFFFF,90-1); //PWM²¶»ñ ÒÔ1MHZµÄÆµÂÊ¼ÆÊı
+    TIM2_CH3_Cap_Init(0XFFFFFFFF,90-1); //PWMæ•è· ä»¥1MHZçš„é¢‘ç‡è®¡æ•°
 
-//    Servo1_DOWN;//¶æ»ú1¸´Î»
-//    Servo2_DOWN_POS;//¶æ»ú2¸´Î»
+//    Servo1_DOWN;//èˆµæœº1å¤ä½
+//    Servo2_DOWN_POS;//èˆµæœº2å¤ä½
 //    Servo3_CLOSE;
 
-    power_ctrl_on_all(); //¿ªÆôÈ«²¿µÄ24VÊä³ö
+    power_ctrl_on_all(); //å¼€å¯å…¨éƒ¨çš„24Vè¾“å‡º
 
     printf("\r\n/*************SYSTEM INIT SUCCESS****************/ \r\n");
 
-    //´´½¨¿ªÊ¼ÈÎÎñ
-    xTaskCreate((TaskFunction_t )start_task,            //ÈÎÎñº¯Êı
-                (const char*    )"start_task",          //ÈÎÎñÃû³Æ
-                (uint16_t       )START_STK_SIZE,        //ÈÎÎñ¶ÑÕ»´óĞ¡
-                (void*          )NULL,                  //´«µİ¸øÈÎÎñº¯ÊıµÄ²ÎÊı
-                (UBaseType_t    )START_TASK_PRIO,       //ÈÎÎñÓÅÏÈ¼¶
-                (TaskHandle_t*  )&StartTask_Handler);   //ÈÎÎñ¾ä±ú
-    vTaskStartScheduler();          //¿ªÆôÈÎÎñµ÷¶È
+    //åˆ›å»ºå¼€å§‹ä»»åŠ¡
+    xTaskCreate((TaskFunction_t )start_task,            //ä»»åŠ¡å‡½æ•°
+                (const char*    )"start_task",          //ä»»åŠ¡åç§°
+                (uint16_t       )START_STK_SIZE,        //ä»»åŠ¡å †æ ˆå¤§å°
+                (void*          )NULL,                  //ä¼ é€’ç»™ä»»åŠ¡å‡½æ•°çš„å‚æ•°
+                (UBaseType_t    )START_TASK_PRIO,       //ä»»åŠ¡ä¼˜å…ˆçº§
+                (TaskHandle_t*  )&StartTask_Handler);   //ä»»åŠ¡å¥æŸ„
+    vTaskStartScheduler();          //å¼€å¯ä»»åŠ¡è°ƒåº¦
 
 }
 
-//¿ªÊ¼ÈÎÎñÈÎÎñº¯Êı
+//å¼€å§‹ä»»åŠ¡ä»»åŠ¡å‡½æ•°
 void start_task(void *pvParameters)
 {
-    BeginWarnBuzzer();		//¿ª»úÌáÊ¾Òô
+    BeginWarnBuzzer();        //å¼€æœºæç¤ºéŸ³
 
-    robomoudle_init();		//³õÊ¼»¯robomoudle
+    robomoudle_init();        //åˆå§‹åŒ–robomoudle
 
-    taskENTER_CRITICAL();           //½øÈëÁÙ½çÇø
-    //´´½¨MotorControl_task
+    taskENTER_CRITICAL();           //è¿›å…¥ä¸´ç•ŒåŒº
+    //åˆ›å»ºMotorControl_task
     xTaskCreate((TaskFunction_t )MotorControl_task,
                 (const char*    )"MotorControl_task",
                 (uint16_t       )MotorControl_STK_SIZE,
                 (void*          )NULL,
                 (UBaseType_t    )MotorControl_TASK_PRIO,
                 (TaskHandle_t*  )&MotorControlTask_Handler);
-    //´´½¨PostureControl_task
+    //åˆ›å»ºPostureControl_task
     xTaskCreate((TaskFunction_t )PostureControl_task,
                 (const char*    )"PostureControl_task",
                 (uint16_t       )PostureControl_STK_SIZE,
                 (void*          )NULL,
                 (UBaseType_t    )PostureControl_TASK_PRIO,
                 (TaskHandle_t*  )&PostureControlTask_Handler);
-    //´´½¨NAVIGATIONÈÎÎñ
+    //åˆ›å»ºNAVIGATIONä»»åŠ¡
     xTaskCreate((TaskFunction_t )Navi_task,
                 (const char*    )"Navi_task",
                 (uint16_t       )Navi_STK_SIZE,
                 (void*          )NULL,
                 (UBaseType_t    )Navi_TASK_PRIO,
                 (TaskHandle_t*  )&NaviTask_Handler);
-    //´´½¨DetectÈÎÎñ
+    //åˆ›å»ºDetectä»»åŠ¡
 //    xTaskCreate((TaskFunction_t )Detect_task,
 //                (const char*    )"Detect_task",
 //                (uint16_t       )Detect_STK_SIZE,
 //                (void*          )NULL,
 //                (UBaseType_t    )Detect_TASK_PRIO,
 //                (TaskHandle_t*  )&DetectTask_Handler);
-    //´´½¨Debug_task
+    //åˆ›å»ºDebug_task
 //    xTaskCreate((TaskFunction_t )Debug_task,
 //                (const char*    )"Debug_task",
 //                (uint16_t       )Debug_STK_SIZE,
 //                (void*          )NULL,
 //                (UBaseType_t    )Debug_TASK_PRIO,
 //                (TaskHandle_t*  )&DebugTask_Handler);
-    //´´½¨Rc_task
+    //åˆ›å»ºRc_task
     xTaskCreate((TaskFunction_t )Rc_task,
                 (const char*    )"Rc_task",
                 (uint16_t       )Rc_STK_SIZE,
                 (void*          )NULL,
                 (UBaseType_t    )Rc_TASK_PRIO,
                 (TaskHandle_t*  )&RcTask_Handler);
-//    //´´½¨VcanGCÈÎÎñ VCAN ground control É½ÍâÉÏÎ»»ú
+//    //åˆ›å»ºVcanGCä»»åŠ¡ VCAN ground control å±±å¤–ä¸Šä½æœº
 //    xTaskCreate((TaskFunction_t )VcanGC_task,
 //                (const char*    )"VcanGC_task",
 //                (uint16_t       )VcanGC_STK_SIZE,
 //                (void*          )NULL,
 //                (UBaseType_t    )VcanGC_TASK_PRIO,
 //                (TaskHandle_t*  )&VcanGCTask_Handler);
-    //´´½¨TestÈÎÎñ
+    //åˆ›å»ºTestä»»åŠ¡
     xTaskCreate((TaskFunction_t )Test_task,
                 (const char*    )"Test_task",
                 (uint16_t       )Test_STK_SIZE,
                 (void*          )NULL,
                 (UBaseType_t    )Test_TASK_PRIO,
                 (TaskHandle_t*  )&TestTask_Handler);
-    //´´½¨LogicalFlowÈÎÎñ Âß¼­Á÷¿ØÖÆ
+    //åˆ›å»ºLogicalFlowä»»åŠ¡ é€»è¾‘æµæ§åˆ¶
     xTaskCreate((TaskFunction_t )LogicalFlow_task,
                 (const char*    )"LogicalFlow_task",
                 (uint16_t       )LogicalFlow_STK_SIZE,
@@ -188,8 +188,8 @@ void start_task(void *pvParameters)
                 (UBaseType_t    )LogicalFlow_TASK_PRIO,
                 (TaskHandle_t*  )&LogicalFlowTask_Handler);
 
-    vTaskDelete(StartTask_Handler); //É¾³ı¿ªÊ¼ÈÎÎñ
-    taskEXIT_CRITICAL();            //ÍË³öÁÙ½çÇø
+    vTaskDelete(StartTask_Handler); //åˆ é™¤å¼€å§‹ä»»åŠ¡
+    taskEXIT_CRITICAL();            //é€€å‡ºä¸´ç•ŒåŒº
 
 }
 
@@ -199,7 +199,7 @@ void Test_task(void *pvParameters)
 {
 
     float kalam;
-	
+    
     for(;;) {
 
 //        IndLED_On(IndColorBlue);
@@ -214,7 +214,7 @@ void Test_task(void *pvParameters)
 
 //        CAN_RoboModule_DRV_Position_Mode(0,1,1000,0);
 
-//			osDelay(3000);
+//            osDelay(3000);
 
 //        IndLED_Off();
 
@@ -223,19 +223,19 @@ void Test_task(void *pvParameters)
 
 
 //printf("  tick %u\r\n",HAL_GetTick());
-//	printf("  times %llu\r\n",times);
-        //		printf("  step_len_throttle %f  step_len_yaw %f  steplen %f\r\n",step_len_throttle,step_len_yaw,RcDetachedParam.detached_params_0.step_length);
+//    printf("  times %llu\r\n",times);
+        //        printf("  step_len_throttle %f  step_len_yaw %f  steplen %f\r\n",step_len_throttle,step_len_yaw,RcDetachedParam.detached_params_0.step_length);
         //printf("moto_chassis[0].given_current; %f\r\n",(float)moto_chassis[0].given_current/ 819.2);
 
-//				printf("  step_len_rotate_angle %f   \r\n",step_len_rotate_angle);
+//                printf("  step_len_rotate_angle %f   \r\n",step_len_rotate_angle);
 //        printf("real_current %f  rev_current %f estimate_moment %f\r\n", moto_chassis[0].real_current, moto_chassis[0].real_current-moto_chassis[0].given_current/ 819.2, moto_chassis[0].real_current*0.3);
 
 
         //printf("T; %f\r\n",(float)moto_chassis[0].given_current/ 819.2*0.3);
 
-//        if(ppm_rx[0])//³É¹¦²¶»ñµ½ÁËÒ»´ÎÉÏÉıÑØ
+//        if(ppm_rx[0])//æˆåŠŸæ•è·åˆ°äº†ä¸€æ¬¡ä¸Šå‡æ²¿
 //        {
-//            printf("×óÓÒ:%d Ç°ºó:%d ÓÍÃÅ:%d º½Ïò:%d chanel5-SWA:%d chanel6-SWB:%d chanel7-VRA:%d chanel8-SWC:%d  \r\n",ppm_rx[1],ppm_rx[2],ppm_rx[3],ppm_rx[4],ppm_rx[5],ppm_rx[6],ppm_rx[7],ppm_rx[8]);
+//            printf("å·¦å³:%d å‰å:%d æ²¹é—¨:%d èˆªå‘:%d chanel5-SWA:%d chanel6-SWB:%d chanel7-VRA:%d chanel8-SWC:%d  \r\n",ppm_rx[1],ppm_rx[2],ppm_rx[3],ppm_rx[4],ppm_rx[5],ppm_rx[6],ppm_rx[7],ppm_rx[8]);
 //            vTaskDelay(10);
 //            ppm_rx[0]=0;
 //        }
@@ -256,12 +256,12 @@ void Test_task(void *pvParameters)
 
 //temp_pid.ref_agle[0]=100000;
 //IsMotoReadyOrNot= IsReady;
-//				vTaskDelay(2000);
+//                vTaskDelay(2000);
 
-//								if(temp_pid.ref_agle[0]>=8000)
-//				{
-//					temp_pid.ref_agle[0]=0;
-//				}
+//                                if(temp_pid.ref_agle[0]>=8000)
+//                {
+//                    temp_pid.ref_agle[0]=0;
+//                }
 
 
 
@@ -281,28 +281,28 @@ void Test_task(void *pvParameters)
 
 
 
-//printf("Yaw %f step_len_dev %f Æ«ĞÄ¶È%f  °×Ïß½Ç%f  Ç°É«¿é%f ºóÉ«¿é%f\r\n",imuinfo.ActVal[0],step_len_dev,openmvinfo.ActVal[0],openmvinfo.ActVal[1],openmvinfo.ActVal[2],openmv2info.ActVal[2]);
+//printf("Yaw %f step_len_dev %f åå¿ƒåº¦%f  ç™½çº¿è§’%f  å‰è‰²å—%f åè‰²å—%f\r\n",imuinfo.ActVal[0],step_len_dev,openmvinfo.ActVal[0],openmvinfo.ActVal[1],openmvinfo.ActVal[2],openmv2info.ActVal[2]);
 
 
 
 
 
 
-//		for(int i=0 ; i<8 ; i++)
-//		printf(" hall   %d",moto_chassis[i].hall);
-//		printf(" \r\n");
+//        for(int i=0 ; i<8 ; i++)
+//        printf(" hall   %d",moto_chassis[i].hall);
+//        printf(" \r\n");
 
 
-//				printf(" CCR1 %d  CCR2 %d  CCR3 %d\r\n",(int)TIM4->CCR1,(int)TIM4->CCR2,(int)TIM4->CCR3);
+//                printf(" CCR1 %d  CCR2 %d  CCR3 %d\r\n",(int)TIM4->CCR1,(int)TIM4->CCR2,(int)TIM4->CCR3);
 
-//        printf("restart1U %d restart2V %d restartclimbc %d restart3W %d	startB %d	inf1S %d inf2T %d\r\n",keyRestart1,keyRestart2,keyRestartclimb,keyRestart3,keyStart,keyInf1,keyInf2);
+//        printf("restart1U %d restart2V %d restartclimbc %d restart3W %d    startB %d    inf1S %d inf2T %d\r\n",keyRestart1,keyRestart2,keyRestartclimb,keyRestart3,keyStart,keyInf1,keyInf2);
 
-//        printf("²½¸ß %2.1f  ",state_detached_params[state].detached_params_0.stance_height);
-//        printf("²½³¤ %2.1f  ",state_detached_params[state].detached_params_0.step_length);
-//        printf("Ì§ÍÈ¸ß %2.1f  ",state_detached_params[state].detached_params_0.up_amp);
-//        printf("Ñ¹ÍÈ¸ß %2.1f  ",state_detached_params[state].detached_params_0.down_amp);
-//        printf("·ÉĞĞÕ¼±È %2.2f  ",state_detached_params[state].detached_params_0.flight_percent);
-//        printf("ÆµÂÊ %2.1f  ",state_detached_params[state].detached_params_0.freq);
+//        printf("æ­¥é«˜ %2.1f  ",state_detached_params[state].detached_params_0.stance_height);
+//        printf("æ­¥é•¿ %2.1f  ",state_detached_params[state].detached_params_0.step_length);
+//        printf("æŠ¬è…¿é«˜ %2.1f  ",state_detached_params[state].detached_params_0.up_amp);
+//        printf("å‹è…¿é«˜ %2.1f  ",state_detached_params[state].detached_params_0.down_amp);
+//        printf("é£è¡Œå æ¯” %2.2f  ",state_detached_params[state].detached_params_0.flight_percent);
+//        printf("é¢‘ç‡ %2.1f  ",state_detached_params[state].detached_params_0.freq);
 //        printf("\r\n");
 
 
@@ -313,20 +313,20 @@ void Test_task(void *pvParameters)
 //printf("KEY_VALUE=%d Yaw %f",ps2info.KEY_VALUE, imuinfo.ActVal[0]);
 
 
-//		  printf("yaw_set=%f ",yaw_set);
+//          printf("yaw_set=%f ",yaw_set);
 //      printf("\r\n");
-//			for(int i=0;i<8;i++)
-//			printf("%x ", usart3_buf[i]);
-//			printf("\r\n");
+//            for(int i=0;i<8;i++)
+//            printf("%x ", usart3_buf[i]);
+//            printf("\r\n");
 
-//			for(int i=0;i<28;i++)
-//			printf("%x ",imu_buf[i]);
-//			printf("\r\n");
+//            for(int i=0;i<28;i++)
+//            printf("%x ",imu_buf[i]);
+//            printf("\r\n");
 
 
-//			for(int i=0;i<16;i++)
-//			printf("%x ",openmv_buf[i]);
-//			printf("\r\n");		//½Ç¶È  //ÖĞĞÄ×ø±ê // 1°× 2»Æ 4ºì
+//            for(int i=0;i<16;i++)
+//            printf("%x ",openmv_buf[i]);
+//            printf("\r\n");        //è§’åº¦  //ä¸­å¿ƒåæ ‡ // 1ç™½ 2é»„ 4çº¢
 
 
 
@@ -336,29 +336,29 @@ void Test_task(void *pvParameters)
 //      printf("Roll %f Pitch %f Yaw %f \r\n",imuinfo.ActVal[2],imuinfo.ActVal[1],imuinfo.ActVal[0]);
 //      printf(" %x %x %x  %x %x %x %x %x %x\n",dbus_buf[0],dbus_buf[1],dbus_buf[2],dbus_buf[3],dbus_buf[4],dbus_buf[5],dbus_buf[6],dbus_buf[7],dbus_buf[8]);
 
-//		mpu_get_data();
-//		imu_ahrs_update();
-//		imu_attitude_update();
-//		HAL_Delay(5);
-//		printf(" Roll:  \n");
-//		HAL_UART_Transmit(&huart6, (uint8_t *)buf, (COUNTOF(buf)-1), 55);
-//		HAL_Delay(5);
+//        mpu_get_data();
+//        imu_ahrs_update();
+//        imu_attitude_update();
+//        HAL_Delay(5);
+//        printf(" Roll:  \n");
+//        HAL_UART_Transmit(&huart6, (uint8_t *)buf, (COUNTOF(buf)-1), 55);
+//        HAL_Delay(5);
 
-//		Servo_DOWN;
-//		wave_form_data[1] =count;
-//		wave_form_data[2] =count;
+//        Servo_DOWN;
+//        wave_form_data[1] =count;
+//        wave_form_data[2] =count;
 //    temp_pid.ref_agle[0]-=30.0f*ReductionAndAngleRatio;
 //    temp_pid.ref_agle[1]+=30.0f*ReductionAndAngleRatio;
 
-//		temp_pid.ref_agle[0]=count*TransData;
-//		count+=10;
-//		if(count>=50)
-//		{count=0;}
+//        temp_pid.ref_agle[0]=count*TransData;
+//        count+=10;
+//        if(count>=50)
+//        {count=0;}
 
-//		printf(" ref_agle[0]  = %f   ref_agle[1]  =%f  \n",temp_pid.ref_agle[0],temp_pid.ref_agle[1]);
-//		printf(" theat1  = %f   theat2  =%f  \n",theta1,theta2);
+//        printf(" ref_agle[0]  = %f   ref_agle[1]  =%f  \n",temp_pid.ref_agle[0],temp_pid.ref_agle[1]);
+//        printf(" theat1  = %f   theat2  =%f  \n",theta1,theta2);
 
-//		Servo_PEAK;
+//        Servo_PEAK;
 
     }
 }
@@ -371,7 +371,7 @@ void ResetStart(void)
         while(keyRestart3==0)
             vTaskDelay(200);
 
-    CAN_RoboModule_DRV_Position_Mode(0,1,2000,0);		
+    CAN_RoboModule_DRV_Position_Mode(0,1,2000,0);        
 
         restartflag = 1;
 
@@ -381,17 +381,17 @@ void ResetStart(void)
         vTaskDelete(LogicalFlowTask_Handler);
         vTaskDelay(200);
 
-        taskENTER_CRITICAL();           //½øÈëÁÙ½çÇø
+        taskENTER_CRITICAL();           //è¿›å…¥ä¸´ç•ŒåŒº
         xTaskCreate((TaskFunction_t )LogicalFlow_task,
                     (const char*    )"LogicalFlow_task",
                     (uint16_t       )LogicalFlow_STK_SIZE,
                     (void*           )NULL,
                     (UBaseType_t    )LogicalFlow_TASK_PRIO,
                     (TaskHandle_t*  )&LogicalFlowTask_Handler);
-        taskEXIT_CRITICAL();            //ÍË³öÁÙ½çÇø
+        taskEXIT_CRITICAL();            //é€€å‡ºä¸´ç•ŒåŒº
 
-										
-				IndLED_On(IndColorGreen);
+                                        
+                IndLED_On(IndColorGreen);
       //  IndicateLED_Off;
     }
 

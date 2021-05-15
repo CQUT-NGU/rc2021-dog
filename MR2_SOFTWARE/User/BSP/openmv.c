@@ -1,4 +1,2 @@
 
 #include "openmv.h"
-
-

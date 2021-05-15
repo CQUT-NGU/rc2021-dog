@@ -3,7 +3,7 @@
 #include "tim.h"
 
 /* USER CODE BEGIN 0 */
-uint64_t times=0;		//msÊ¹ÓÃtim3¶¨Ê± ²úÉúÎÈ¶¨µÄÂö³åÖÜÆÚ
+uint64_t times = 0;  //msä½¿ç”¨tim3å®šæ—¶ äº§ç”Ÿç¨³å®šçš„è„‰å†²å‘¨æœŸ
 /* USER CODE END 0 */
 
 TIM_HandleTypeDef htim2;
@@ -14,81 +14,79 @@ TIM_HandleTypeDef htim8;
 TIM_HandleTypeDef htim12;
 
 TIM_HandleTypeDef TIM2_Handler;
-TIM_HandleTypeDef TIM3_Handler;      //¶¨Ê±Æ÷¾ä±ú
+TIM_HandleTypeDef TIM3_Handler;  //å®šæ—¶å™¨å¥æŸ„
 
-//Í¨ÓÃ¶¨Ê±Æ÷3ÖÐ¶Ï³õÊ¼»¯
-//arr£º×Ô¶¯ÖØ×°Öµ¡£
-//psc£ºÊ±ÖÓÔ¤·ÖÆµÊý
-//¶¨Ê±Æ÷Òç³öÊ±¼ä¼ÆËã·½·¨:Tout=((arr+1)*(psc+1))/Ft us.
-//Ft=¶¨Ê±Æ÷¹¤×÷ÆµÂÊ,µ¥Î»:Mhz
-//ÕâÀïÊ¹ÓÃµÄÊÇ¶¨Ê±Æ÷3!(¶¨Ê±Æ÷3¹ÒÔÚAPB1ÉÏ£¬Ê±ÖÓÎªHCLK/2)           //
-void TIM3_Init(uint16_t arr,uint16_t psc)
+//é€šç”¨å®šæ—¶å™¨3ä¸­æ–­åˆå§‹åŒ–
+//arrï¼šè‡ªåŠ¨é‡è£…å€¼ã€‚
+//pscï¼šæ—¶é’Ÿé¢„åˆ†é¢‘æ•°
+//å®šæ—¶å™¨æº¢å‡ºæ—¶é—´è®¡ç®—æ–¹æ³•:Tout=((arr+1)*(psc+1))/Ft us.
+//Ft=å®šæ—¶å™¨å·¥ä½œé¢‘çŽ‡,å•ä½:Mhz
+//è¿™é‡Œä½¿ç”¨çš„æ˜¯å®šæ—¶å™¨3!(å®šæ—¶å™¨3æŒ‚åœ¨APB1ä¸Šï¼Œæ—¶é’Ÿä¸ºHCLK/2)           //
+void TIM3_Init(uint16_t arr, uint16_t psc)
 {
-    TIM3_Handler.Instance=TIM3;                          //Í¨ÓÃ¶¨Ê±Æ÷3
-    TIM3_Handler.Init.Prescaler=psc;                     //·ÖÆµÏµÊý
-    TIM3_Handler.Init.CounterMode=TIM_COUNTERMODE_UP;    //ÏòÉÏ¼ÆÊýÆ÷
-    TIM3_Handler.Init.Period=arr;                        //×Ô¶¯×°ÔØÖµ
-    TIM3_Handler.Init.ClockDivision=TIM_CLOCKDIVISION_DIV1;//Ê±ÖÓ·ÖÆµÒò×Ó
+    TIM3_Handler.Instance           = TIM3;                    //é€šç”¨å®šæ—¶å™¨3
+    TIM3_Handler.Init.Prescaler     = psc;                     //åˆ†é¢‘ç³»æ•°
+    TIM3_Handler.Init.CounterMode   = TIM_COUNTERMODE_UP;      //å‘ä¸Šè®¡æ•°å™¨
+    TIM3_Handler.Init.Period        = arr;                     //è‡ªåŠ¨è£…è½½å€¼
+    TIM3_Handler.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;  //æ—¶é’Ÿåˆ†é¢‘å› å­
     HAL_TIM_Base_Init(&TIM3_Handler);
 
-    HAL_TIM_Base_Start_IT(&TIM3_Handler); //Ê¹ÄÜ¶¨Ê±Æ÷3ºÍ¶¨Ê±Æ÷3¸üÐÂÖÐ¶Ï£ºTIM_IT_UPDATE
+    HAL_TIM_Base_Start_IT(&TIM3_Handler);  //ä½¿èƒ½å®šæ—¶å™¨3å’Œå®šæ—¶å™¨3æ›´æ–°ä¸­æ–­ï¼šTIM_IT_UPDATE
 }
 
-
-//arr£º×Ô¶¯ÖØ×°Öµ(TIM2,TIM2ÊÇ32Î»µÄ!!)
-//psc£ºÊ±ÖÓÔ¤·ÖÆµÊý
-void TIM2_CH3_Cap_Init(uint32_t arr,uint16_t psc)
+//arrï¼šè‡ªåŠ¨é‡è£…å€¼(TIM2,TIM2æ˜¯32ä½çš„!!)
+//pscï¼šæ—¶é’Ÿé¢„åˆ†é¢‘æ•°
+void TIM2_CH3_Cap_Init(uint32_t arr, uint16_t psc)
 {
     TIM_IC_InitTypeDef TIM2_CH3Config;
 
-    TIM2_Handler.Instance=TIM2;                          //Í¨ÓÃ¶¨Ê±Æ÷5
-    TIM2_Handler.Init.Prescaler=psc;                     //·ÖÆµÏµÊý
-    TIM2_Handler.Init.CounterMode=TIM_COUNTERMODE_UP;    //ÏòÉÏ¼ÆÊýÆ÷
-    TIM2_Handler.Init.Period=arr;                        //×Ô¶¯×°ÔØÖµ
-    TIM2_Handler.Init.ClockDivision=TIM_CLOCKDIVISION_DIV1;//Ê±ÖÓ·ÖÆµÒø×Ó
-    HAL_TIM_IC_Init(&TIM2_Handler);//³õÊ¼»¯ÊäÈë²¶»ñÊ±»ù²ÎÊý
+    TIM2_Handler.Instance           = TIM2;                    //é€šç”¨å®šæ—¶å™¨5
+    TIM2_Handler.Init.Prescaler     = psc;                     //åˆ†é¢‘ç³»æ•°
+    TIM2_Handler.Init.CounterMode   = TIM_COUNTERMODE_UP;      //å‘ä¸Šè®¡æ•°å™¨
+    TIM2_Handler.Init.Period        = arr;                     //è‡ªåŠ¨è£…è½½å€¼
+    TIM2_Handler.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;  //æ—¶é’Ÿåˆ†é¢‘é“¶å­
+    HAL_TIM_IC_Init(&TIM2_Handler);                            //åˆå§‹åŒ–è¾“å…¥æ•èŽ·æ—¶åŸºå‚æ•°
 
-    TIM2_CH3Config.ICPolarity=TIM_ICPOLARITY_RISING;    //ÉÏÉýÑØ²¶»ñ
-    TIM2_CH3Config.ICSelection=TIM_ICSELECTION_DIRECTTI;//Ó³Éäµ½TI1ÉÏ
-    TIM2_CH3Config.ICPrescaler=TIM_ICPSC_DIV1;          //ÅäÖÃÊäÈë·ÖÆµ£¬²»·ÖÆµ
-    TIM2_CH3Config.ICFilter=0;                          //ÅäÖÃÊäÈëÂË²¨Æ÷£¬²»ÂË²¨
-    HAL_TIM_IC_ConfigChannel(&TIM2_Handler,&TIM2_CH3Config,TIM_CHANNEL_3);//ÅäÖÃTIM2Í¨µÀ3
+    TIM2_CH3Config.ICPolarity  = TIM_ICPOLARITY_RISING;                       //ä¸Šå‡æ²¿æ•èŽ·
+    TIM2_CH3Config.ICSelection = TIM_ICSELECTION_DIRECTTI;                    //æ˜ å°„åˆ°TI1ä¸Š
+    TIM2_CH3Config.ICPrescaler = TIM_ICPSC_DIV1;                              //é…ç½®è¾“å…¥åˆ†é¢‘ï¼Œä¸åˆ†é¢‘
+    TIM2_CH3Config.ICFilter    = 0;                                           //é…ç½®è¾“å…¥æ»¤æ³¢å™¨ï¼Œä¸æ»¤æ³¢
+    HAL_TIM_IC_ConfigChannel(&TIM2_Handler, &TIM2_CH3Config, TIM_CHANNEL_3);  //é…ç½®TIM2é€šé“3
 
-    HAL_TIM_IC_Start_IT(&TIM2_Handler,TIM_CHANNEL_3);   //¿ªÆôTIM2µÄ²¶»ñÍ¨µÀ3£¬²¢ÇÒ¿ªÆô²¶»ñÖÐ¶Ï
-    __HAL_TIM_ENABLE_IT(&TIM2_Handler,TIM_IT_UPDATE);   //Ê¹ÄÜ¸üÐÂÖÐ¶Ï
+    HAL_TIM_IC_Start_IT(&TIM2_Handler, TIM_CHANNEL_3);  //å¼€å¯TIM2çš„æ•èŽ·é€šé“3ï¼Œå¹¶ä¸”å¼€å¯æ•èŽ·ä¸­æ–­
+    __HAL_TIM_ENABLE_IT(&TIM2_Handler, TIM_IT_UPDATE);  //ä½¿èƒ½æ›´æ–°ä¸­æ–­
 }
 
-//´Ëº¯Êý»á±»HAL_TIM_IC_Init()µ÷ÓÃ
+//æ­¤å‡½æ•°ä¼šè¢«HAL_TIM_IC_Init()è°ƒç”¨
 void HAL_TIM_IC_MspInit(TIM_HandleTypeDef *htim)
 {
     GPIO_InitTypeDef GPIO_Initure;
-    __HAL_RCC_TIM2_CLK_ENABLE();            //Ê¹ÄÜTIM2Ê±ÖÓ
-    __HAL_RCC_GPIOA_CLK_ENABLE();			//¿ªÆôGPIOAÊ±ÖÓ
+    __HAL_RCC_TIM2_CLK_ENABLE();   //ä½¿èƒ½TIM2æ—¶é’Ÿ
+    __HAL_RCC_GPIOA_CLK_ENABLE();  //å¼€å¯GPIOAæ—¶é’Ÿ
 
-//    /**TIM2 GPIO Configuration
-//    PA2     ------> TIM2_CH3
-//    PA3     ------> TIM2_CH4
-    GPIO_Initure.Pin = GPIO_PIN_2|GPIO_PIN_3;
-    GPIO_Initure.Mode=GPIO_MODE_AF_PP;      //¸´ÓÃÍÆÍìÊä³ö
-    GPIO_Initure.Pull=GPIO_PULLDOWN;        //ÏÂÀ­
-    GPIO_Initure.Speed=GPIO_SPEED_HIGH;     //¸ßËÙ
-    GPIO_Initure.Alternate=GPIO_AF1_TIM2;   //PA0¸´ÓÃÎªTIM2Í¨µÀ1
-    HAL_GPIO_Init(GPIOA,&GPIO_Initure);
+    //    /**TIM2 GPIO Configuration
+    //    PA2     ------> TIM2_CH3
+    //    PA3     ------> TIM2_CH4
+    GPIO_Initure.Pin       = GPIO_PIN_2 | GPIO_PIN_3;
+    GPIO_Initure.Mode      = GPIO_MODE_AF_PP;  //å¤ç”¨æŽ¨æŒ½è¾“å‡º
+    GPIO_Initure.Pull      = GPIO_PULLDOWN;    //ä¸‹æ‹‰
+    GPIO_Initure.Speed     = GPIO_SPEED_HIGH;  //é«˜é€Ÿ
+    GPIO_Initure.Alternate = GPIO_AF1_TIM2;    //PA0å¤ç”¨ä¸ºTIM2é€šé“1
+    HAL_GPIO_Init(GPIOA, &GPIO_Initure);
 
-    HAL_NVIC_SetPriority(TIM2_IRQn,5,0);    //ÉèÖÃÖÐ¶ÏÓÅÏÈ¼¶£¬ÇÀÕ¼ÓÅÏÈ¼¶2£¬×ÓÓÅÏÈ¼¶0
-    HAL_NVIC_EnableIRQ(TIM2_IRQn);          //¿ªÆôITM5ÖÐ¶ÏÍ¨µÀ
+    HAL_NVIC_SetPriority(TIM2_IRQn, 5, 0);  //è®¾ç½®ä¸­æ–­ä¼˜å…ˆçº§ï¼ŒæŠ¢å ä¼˜å…ˆçº§2ï¼Œå­ä¼˜å…ˆçº§0
+    HAL_NVIC_EnableIRQ(TIM2_IRQn);          //å¼€å¯ITM5ä¸­æ–­é€šé“
 }
 
-
-//¶¨Ê±Æ÷µ×²áÇý¶¯£¬¿ªÆôÊ±ÖÓ£¬ÉèÖÃÖÐ¶ÏÓÅÏÈ¼¶
-//´Ëº¯Êý»á±»HAL_TIM_Base_Init()º¯Êýµ÷ÓÃ
+//å®šæ—¶å™¨åº•å†Œé©±åŠ¨ï¼Œå¼€å¯æ—¶é’Ÿï¼Œè®¾ç½®ä¸­æ–­ä¼˜å…ˆçº§
+//æ­¤å‡½æ•°ä¼šè¢«HAL_TIM_Base_Init()å‡½æ•°è°ƒç”¨
 void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim)
 {
-    if(htim->Instance==TIM3)
+    if (htim->Instance == TIM3)
     {
-        __HAL_RCC_TIM3_CLK_ENABLE();            //Ê¹ÄÜTIM3Ê±ÖÓ
-        HAL_NVIC_SetPriority(TIM3_IRQn,1,3);    //ÉèÖÃÖÐ¶ÏÓÅÏÈ¼¶£¬ÇÀÕ¼ÓÅÏÈ¼¶1£¬×ÓÓÅÏÈ¼¶3
-        HAL_NVIC_EnableIRQ(TIM3_IRQn);          //¿ªÆôITM3ÖÐ¶Ï
+        __HAL_RCC_TIM3_CLK_ENABLE();            //ä½¿èƒ½TIM3æ—¶é’Ÿ
+        HAL_NVIC_SetPriority(TIM3_IRQn, 1, 3);  //è®¾ç½®ä¸­æ–­ä¼˜å…ˆçº§ï¼ŒæŠ¢å ä¼˜å…ˆçº§1ï¼Œå­ä¼˜å…ˆçº§3
+        HAL_NVIC_EnableIRQ(TIM3_IRQn);          //å¼€å¯ITM3ä¸­æ–­
     }
 }
 
@@ -97,19 +95,17 @@ void TIM2_IRQHandler(void)
     HAL_TIM_IRQHandler(&TIM2_Handler);
 }
 
-//¶¨Ê±Æ÷3ÖÐ¶Ï·þÎñº¯Êý
+//å®šæ—¶å™¨3ä¸­æ–­æœåŠ¡å‡½æ•°
 void TIM3_IRQHandler(void)
 {
     HAL_TIM_IRQHandler(&TIM3_Handler);
 }
 
-
-//»Øµ÷º¯Êý£¬¶¨Ê±Æ÷ÖÐ¶Ï·þÎñº¯Êýµ÷ÓÃ
+//å›žè°ƒå‡½æ•°ï¼Œå®šæ—¶å™¨ä¸­æ–­æœåŠ¡å‡½æ•°è°ƒç”¨
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-    if(htim==(&TIM3_Handler))
+    if (htim == (&TIM3_Handler))
     {
-
     }
     if (htim->Instance == TIM6)
     {
@@ -117,83 +113,84 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     }
 }
 
-//[7]:0,Ã»ÓÐ³É¹¦µÄ²¶»ñ;1,³É¹¦²¶»ñµ½Ò»´Î.
-//[6]:0,»¹Ã»²¶»ñµ½µÍµçÆ½;1,ÒÑ¾­²¶»ñµ½µÍµçÆ½ÁË.
-//[5:0]:²¶»ñµÍµçÆ½ºóÒç³öµÄ´ÎÊý(¶ÔÓÚ32Î»¶¨Ê±Æ÷À´Ëµ,1us¼ÆÊýÆ÷¼Ó1,Òç³öÊ±¼ä:4294Ãë)
-uint8_t  TIM2CH3_CAPTURE_STA=0;	//ÊäÈë²¶»ñ×´Ì¬
-uint32_t	TIM2CH3_CAPTURE_VAL;	//ÊäÈë²¶»ñÖµ(TIM2/TIM2ÊÇ32Î»)
+//[7]:0,æ²¡æœ‰æˆåŠŸçš„æ•èŽ·;1,æˆåŠŸæ•èŽ·åˆ°ä¸€æ¬¡.
+//[6]:0,è¿˜æ²¡æ•èŽ·åˆ°ä½Žç”µå¹³;1,å·²ç»æ•èŽ·åˆ°ä½Žç”µå¹³äº†.
+//[5:0]:æ•èŽ·ä½Žç”µå¹³åŽæº¢å‡ºçš„æ¬¡æ•°(å¯¹äºŽ32ä½å®šæ—¶å™¨æ¥è¯´,1usè®¡æ•°å™¨åŠ 1,æº¢å‡ºæ—¶é—´:4294ç§’)
+uint8_t  TIM2CH3_CAPTURE_STA = 0;  //è¾“å…¥æ•èŽ·çŠ¶æ€
+uint32_t TIM2CH3_CAPTURE_VAL;      //è¾“å…¥æ•èŽ·å€¼(TIM2/TIM2æ˜¯32ä½)
 
-u32 temp_cap_tim2=0;
-u8  ppm_rx_sta=0,ppm_rx_num=0;	//ÊäÈë²¶»ñ×´Ì¬
-u16 ppm_rx[10];//ppm_rx[0]   1   ½ÓÊÕµ½ppmÊý¾Ý
+u32 temp_cap_tim2 = 0;
+u8  ppm_rx_sta = 0, ppm_rx_num = 0;  //è¾“å…¥æ•èŽ·çŠ¶æ€
+u16 ppm_rx[10];                      //ppm_rx[0]   1   æŽ¥æ”¶åˆ°ppmæ•°æ®
 
-
-//¶¨Ê±Æ÷ÊäÈë²¶»ñÖÐ¶Ï´¦Àí»Øµ÷º¯Êý£¬¸Ãº¯ÊýÔÚHAL_TIM_IRQHandlerÖÐ»á±»µ÷ÓÃ
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)//²¶»ñÖÐ¶Ï·¢ÉúÊ±Ö´ÐÐ
+//å®šæ—¶å™¨è¾“å…¥æ•èŽ·ä¸­æ–­å¤„ç†å›žè°ƒå‡½æ•°ï¼Œè¯¥å‡½æ•°åœ¨HAL_TIM_IRQHandlerä¸­ä¼šè¢«è°ƒç”¨
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)  //æ•èŽ·ä¸­æ–­å‘ç”Ÿæ—¶æ‰§è¡Œ
 {
-    if((TIM2CH3_CAPTURE_STA&0X80)==0)//»¹Î´³É¹¦²¶»ñ
+    if ((TIM2CH3_CAPTURE_STA & 0X80) == 0)  //è¿˜æœªæˆåŠŸæ•èŽ·
     {
-        if(TIM2CH3_CAPTURE_STA&0X40)		//²¶»ñµ½Ò»¸öÏÂ½µÑØ
+        if (TIM2CH3_CAPTURE_STA & 0X40)  //æ•èŽ·åˆ°ä¸€ä¸ªä¸‹é™æ²¿
         {
-            TIM2CH3_CAPTURE_STA|=0X80;		//±ê¼Ç³É¹¦²¶»ñµ½Ò»´Î¸ßµçÆ½Âö¿í
-            TIM2CH3_CAPTURE_VAL=HAL_TIM_ReadCapturedValue(&TIM2_Handler,TIM_CHANNEL_3);//»ñÈ¡µ±Ç°µÄ²¶»ñÖµ.
-            TIM_RESET_CAPTUREPOLARITY(&TIM2_Handler,TIM_CHANNEL_3);   //Ò»¶¨ÒªÏÈÇå³ýÔ­À´µÄÉèÖÃ£¡£¡
-            TIM_SET_CAPTUREPOLARITY(&TIM2_Handler,TIM_CHANNEL_3,TIM_ICPOLARITY_RISING);//ÅäÖÃTIM2Í¨µÀ1ÉÏÉýÑØ²¶»ñ
-        } else  								//»¹Î´¿ªÊ¼,µÚÒ»´Î²¶»ñÉÏÉýÑØ
+            TIM2CH3_CAPTURE_STA |= 0X80;                                                    //æ ‡è®°æˆåŠŸæ•èŽ·åˆ°ä¸€æ¬¡é«˜ç”µå¹³è„‰å®½
+            TIM2CH3_CAPTURE_VAL = HAL_TIM_ReadCapturedValue(&TIM2_Handler, TIM_CHANNEL_3);  //èŽ·å–å½“å‰çš„æ•èŽ·å€¼.
+            TIM_RESET_CAPTUREPOLARITY(&TIM2_Handler, TIM_CHANNEL_3);                        //ä¸€å®šè¦å…ˆæ¸…é™¤åŽŸæ¥çš„è®¾ç½®ï¼ï¼
+            TIM_SET_CAPTUREPOLARITY(&TIM2_Handler, TIM_CHANNEL_3, TIM_ICPOLARITY_RISING);   //é…ç½®TIM2é€šé“1ä¸Šå‡æ²¿æ•èŽ·
+        }
+        else  //è¿˜æœªå¼€å§‹,ç¬¬ä¸€æ¬¡æ•èŽ·ä¸Šå‡æ²¿
         {
-            TIM2CH3_CAPTURE_STA=0;			//Çå¿Õ
-            TIM2CH3_CAPTURE_VAL=0;
-            TIM2CH3_CAPTURE_STA|=0X40;		//±ê¼Ç²¶»ñµ½ÁËÉÏÉýÑØ
-            __HAL_TIM_DISABLE(&TIM2_Handler);        //¹Ø±Õ¶¨Ê±Æ÷5
-            __HAL_TIM_SET_COUNTER(&TIM2_Handler,0);
-            TIM_RESET_CAPTUREPOLARITY(&TIM2_Handler,TIM_CHANNEL_3);   //Ò»¶¨ÒªÏÈÇå³ýÔ­À´µÄÉèÖÃ£¡£¡
-            TIM_SET_CAPTUREPOLARITY(&TIM2_Handler,TIM_CHANNEL_3,TIM_ICPOLARITY_FALLING);//¶¨Ê±Æ÷5Í¨µÀ1ÉèÖÃÎªÏÂ½µÑØ²¶»ñ
-            __HAL_TIM_ENABLE(&TIM2_Handler);//Ê¹ÄÜ¶¨Ê±Æ÷5
+            TIM2CH3_CAPTURE_STA = 0;  //æ¸…ç©º
+            TIM2CH3_CAPTURE_VAL = 0;
+            TIM2CH3_CAPTURE_STA |= 0X40;       //æ ‡è®°æ•èŽ·åˆ°äº†ä¸Šå‡æ²¿
+            __HAL_TIM_DISABLE(&TIM2_Handler);  //å…³é—­å®šæ—¶å™¨5
+            __HAL_TIM_SET_COUNTER(&TIM2_Handler, 0);
+            TIM_RESET_CAPTUREPOLARITY(&TIM2_Handler, TIM_CHANNEL_3);                        //ä¸€å®šè¦å…ˆæ¸…é™¤åŽŸæ¥çš„è®¾ç½®ï¼ï¼
+            TIM_SET_CAPTUREPOLARITY(&TIM2_Handler, TIM_CHANNEL_3, TIM_ICPOLARITY_FALLING);  //å®šæ—¶å™¨5é€šé“1è®¾ç½®ä¸ºä¸‹é™æ²¿æ•èŽ·
+            __HAL_TIM_ENABLE(&TIM2_Handler);                                                //ä½¿èƒ½å®šæ—¶å™¨5
         }
     }
 
-    if(TIM2CH3_CAPTURE_STA&0X80)        //³É¹¦²¶»ñµ½ÁËÒ»´Î¸ßµçÆ½
+    if (TIM2CH3_CAPTURE_STA & 0X80)  //æˆåŠŸæ•èŽ·åˆ°äº†ä¸€æ¬¡é«˜ç”µå¹³
     {
-        if(ppm_rx_sta==1) {
-            ppm_rx[ppm_rx_num+1]=TIM2CH3_CAPTURE_VAL;	//printf("TIM2CH3_CAPTURE_VAL:%d\r\n",TIM2CH3_CAPTURE_VAL);
+        if (ppm_rx_sta == 1)
+        {
+            ppm_rx[ppm_rx_num + 1] = TIM2CH3_CAPTURE_VAL;  //printf("TIM2CH3_CAPTURE_VAL:%d\r\n",TIM2CH3_CAPTURE_VAL);
             ppm_rx_num++;
         }
 
-        if(4>TIM2CH3_CAPTURE_STA&0X3F>0||TIM2CH3_CAPTURE_VAL>3000) ppm_rx_sta++;//µÍµçÆ½Ê±¼ä´óÓÚ3000usÎªÆðÊ¼Ö¡
+        if (4 > TIM2CH3_CAPTURE_STA & 0X3F > 0 || TIM2CH3_CAPTURE_VAL > 3000)
+            ppm_rx_sta++;  //ä½Žç”µå¹³æ—¶é—´å¤§äºŽ3000usä¸ºèµ·å§‹å¸§
 
-        if(ppm_rx_sta==2) {
-            ppm_rx_sta=0;    //printf("receive\r\n");//ppm_rx_sta   1 ±íÊ¾½ÓÊÕµ½Í¬²½Ö¡/ 2½ÓÊÕµ½µ½ÏÂÒ»ÆðÊ¼Ö¡ ppmÊý¾Ý½ÓÊÕÍê±Ï
-            ppm_rx[0]=1;
-            ppm_rx_num=0;
+        if (ppm_rx_sta == 2)
+        {
+            ppm_rx_sta = 0;  //printf("receive\r\n");//ppm_rx_sta   1 è¡¨ç¤ºæŽ¥æ”¶åˆ°åŒæ­¥å¸§/ 2æŽ¥æ”¶åˆ°åˆ°ä¸‹ä¸€èµ·å§‹å¸§ ppmæ•°æ®æŽ¥æ”¶å®Œæ¯•
+            ppm_rx[0]  = 1;
+            ppm_rx_num = 0;
         }
 
-        TIM2CH3_CAPTURE_STA=0;          //¿ªÆôÏÂÒ»´Î²¶»ñ
-
+        TIM2CH3_CAPTURE_STA = 0;  //å¼€å¯ä¸‹ä¸€æ¬¡æ•èŽ·
     }
-
 }
 
-//¶¨Ê±Æ÷µ×²ãÇý¶¯£¬Ê±ÖÓÊ¹ÄÜ£¬Òý½ÅÅäÖÃ
-//´Ëº¯Êý»á±»HAL_TIM_PWM_Init()µ÷ÓÃ
-//htim:¶¨Ê±Æ÷¾ä±ú
+//å®šæ—¶å™¨åº•å±‚é©±åŠ¨ï¼Œæ—¶é’Ÿä½¿èƒ½ï¼Œå¼•è„šé…ç½®
+//æ­¤å‡½æ•°ä¼šè¢«HAL_TIM_PWM_Init()è°ƒç”¨
+//htim:å®šæ—¶å™¨å¥æŸ„
 void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *htim)
 {
     GPIO_InitTypeDef GPIO_InitStruct;
 
-    if(htim->Instance==TIM12)
+    if (htim->Instance == TIM12)
     {
-        __HAL_RCC_TIM12_CLK_ENABLE();			//Ê¹ÄÜ¶¨Ê±Æ÷12
-        __HAL_RCC_GPIOH_CLK_ENABLE();			//¿ªÆôGPIOHÊ±ÖÓ
+        __HAL_RCC_TIM12_CLK_ENABLE();  //ä½¿èƒ½å®šæ—¶å™¨12
+        __HAL_RCC_GPIOH_CLK_ENABLE();  //å¼€å¯GPIOHæ—¶é’Ÿ
 
-        GPIO_InitStruct.Pin=GPIO_PIN_6;           	//PH6
-        GPIO_InitStruct.Mode=GPIO_MODE_AF_PP;  	//¸´ÓÃÍÆÍìÊä³ö
-        GPIO_InitStruct.Pull=GPIO_PULLUP;          //ÉÏÀ­
-        GPIO_InitStruct.Speed=GPIO_SPEED_HIGH;     //¸ßËÙ
-        GPIO_InitStruct.Alternate= GPIO_AF9_TIM12;	//PH6¸´ÓÃÎªTIM12_CH1
-        HAL_GPIO_Init(GPIOH,&GPIO_InitStruct);
+        GPIO_InitStruct.Pin       = GPIO_PIN_6;       //PH6
+        GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;  //å¤ç”¨æŽ¨æŒ½è¾“å‡º
+        GPIO_InitStruct.Pull      = GPIO_PULLUP;      //ä¸Šæ‹‰
+        GPIO_InitStruct.Speed     = GPIO_SPEED_HIGH;  //é«˜é€Ÿ
+        GPIO_InitStruct.Alternate = GPIO_AF9_TIM12;   //PH6å¤ç”¨ä¸ºTIM12_CH1
+        HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
     }
 
-    else if(htim->Instance==TIM4)
+    else if (htim->Instance == TIM4)
     {
         /**TIM4 GPIO Configuration
         PD15     ------> TIM4_CH4
@@ -201,19 +198,18 @@ void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *htim)
         PD13     ------> TIM4_CH2
         PD12     ------> TIM4_CH1
         */
-        __HAL_RCC_TIM4_CLK_ENABLE();			//Ê¹ÄÜ¶¨Ê±Æ÷12
-        __HAL_RCC_GPIOD_CLK_ENABLE();			//¿ªÆôGPIODÊ±ÖÓ
+        __HAL_RCC_TIM4_CLK_ENABLE();   //ä½¿èƒ½å®šæ—¶å™¨12
+        __HAL_RCC_GPIOD_CLK_ENABLE();  //å¼€å¯GPIODæ—¶é’Ÿ
 
-        GPIO_InitStruct.Pin = GPIO_PIN_15|GPIO_PIN_14|GPIO_PIN_13|GPIO_PIN_12;
-        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-        GPIO_InitStruct.Pull = GPIO_PULLUP;
-        GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
+        GPIO_InitStruct.Pin       = GPIO_PIN_15 | GPIO_PIN_14 | GPIO_PIN_13 | GPIO_PIN_12;
+        GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Pull      = GPIO_PULLUP;
+        GPIO_InitStruct.Speed     = GPIO_SPEED_HIGH;
         GPIO_InitStruct.Alternate = GPIO_AF2_TIM4;
         HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
     }
 
-    else	if(htim->Instance==TIM2)
+    else if (htim->Instance == TIM2)
     {
         /* USER CODE BEGIN TIM2_MspInit 0 */
 
@@ -224,7 +220,6 @@ void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *htim)
 
         /* USER CODE END TIM2_MspInit 1 */
     }
-
 }
 ///* TIM2 init function */
 //void MX_TIM2_Init(void)
@@ -276,7 +271,6 @@ void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *htim)
 //    HAL_TIM_MspPostInit(&htim2);
 
 //}
-
 
 ///* TIM3 init function */
 //void MX_TIM3_Init(void)
