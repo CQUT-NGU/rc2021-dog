@@ -16,7 +16,7 @@ uint8_t ch;
 uint8_t ch_r;
 //重写这个函数,重定向printf函数到串口，意思就是说printf直接输出到串口，其默认输出到控制台的
 /*fputc*/
-int fputc(int c, FILE* f)
+int fputc(int c, FILE *f)
 {
     ch = c;
     HAL_UART_Transmit(&huart2, &ch, 1, 1000);  //发送串口
@@ -25,14 +25,14 @@ int fputc(int c, FILE* f)
 }
 //重定向scanf函数到串口 意思就是说接受串口发过来的数据，其默认是接受控制台的数据
 /*fgetc*/
-int fgetc(FILE* F)
+int fgetc(FILE *F)
 {
     //HAL_UART_Receive_DMA (&huart2,&ch_r,1);//接收
     HAL_UART_Receive(&huart2, &ch_r, 1, 0xffff);  //接收
     //HAL_UART_Receive_DMA(&huart2, USART2RxBuf, USART2RXBUFSIZE);
     return ch_r;
 }
-#if EN_USART_RX  //如果使能了接收
+#if EN_USART_RX                        //如果使能了接收
 uint16_t USART_RX_BUF[USART_REC_LEN];  //接收缓冲,最大USART_REC_LEN个字节.
 //接收状态
 //bit15，    接收完成标志
@@ -42,13 +42,13 @@ uint16_t aRxBuffer[RXBUFFERSIZE];  //HAL库使用的串口接收缓冲
 uint16_t USART_RX_STA = 0;         //接收状态标记
 #endif
 
-#if EN_USART2_RX  //如果使能了接收
+#if EN_USART2_RX             //如果使能了接收
 uint16_t USART2_RX_STA = 0;  //接收状态标记
 uint8_t  USART2TxBuf[USART2TXBUFSIZE];
 uint8_t  USART2RxBuf[USART2RXBUFSIZE];
 #endif
 
-#if EN_USART6_RX  //如果使能了接收
+#if EN_USART6_RX             //如果使能了接收
 uint16_t USART6_RX_STA = 0;  //接收状态标记
 uint8_t  USART6RxBuf[USART6RXBUFSIZE];
 #endif
@@ -174,7 +174,7 @@ void MX_UART8_Init(void)
 //UART底层初始化，时钟使能，引脚配置，中断配置
 //此函数会被HAL_UART_Init()调用
 //huart:串口句柄
-void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
+void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
 {
     GPIO_InitTypeDef GPIO_InitStruct;
     if (uartHandle->Instance == USART1)

@@ -25,7 +25,7 @@
 * @note ELMO驱动器默认初始状态为电机失能，使用电机时需要对其进行使能
 *       部分驱动器参数需要在电机失能状态下才可以配置
 */
-void MotorOn(CAN_TypeDef* CANx, uint8_t ElmoNum);
+void MotorOn(CAN_TypeDef *CANx, uint8_t ElmoNum);
 
 /**
 * @brief  电机失能（断电）
@@ -33,7 +33,7 @@ void MotorOn(CAN_TypeDef* CANx, uint8_t ElmoNum);
 * @param  ElmoNum：驱动器ID号，范围：0~128，0为广播用ID号
 * @author ACTION
 */
-void MotorOff(CAN_TypeDef* CANx, uint8_t ElmoNum);
+void MotorOff(CAN_TypeDef *CANx, uint8_t ElmoNum);
 
 /**
 * @brief  驱动器速度环初始化
@@ -44,7 +44,7 @@ void MotorOff(CAN_TypeDef* CANx, uint8_t ElmoNum);
 * @author ACTION
 * @note 在速度环初始化后才可以使能电机！！
 */
-void VelLoopCfg(CAN_TypeDef* CANx, uint8_t ElmoNum, uint32_t acc, uint32_t dec);
+void VelLoopCfg(CAN_TypeDef *CANx, uint8_t ElmoNum, uint32_t acc, uint32_t dec);
 
 /**
 * @brief  驱动器位置环初始化
@@ -56,7 +56,7 @@ void VelLoopCfg(CAN_TypeDef* CANx, uint8_t ElmoNum, uint32_t acc, uint32_t dec);
 * @author ACTION
 * @note 在位置环初始化后才可以使能电机！！
 */
-void PosLoopCfg(CAN_TypeDef* CANx, uint8_t ElmoNum, uint32_t acc, uint32_t dec, uint32_t vel);
+void PosLoopCfg(CAN_TypeDef *CANx, uint8_t ElmoNum, uint32_t acc, uint32_t dec, uint32_t vel);
 
 /**
 * @brief  电机速度控制
@@ -65,7 +65,7 @@ void PosLoopCfg(CAN_TypeDef* CANx, uint8_t ElmoNum, uint32_t acc, uint32_t dec, 
 * @param  vel: 速度，单位：脉冲每秒，范围：最小速度限制到最大速度限制
 * @author ACTION
 */
-void VelCrl(CAN_TypeDef* CANx, uint8_t ElmoNum, int32_t vel);
+void VelCrl(CAN_TypeDef *CANx, uint8_t ElmoNum, int32_t vel);
 
 /**
 * @brief  电机位置控制
@@ -77,7 +77,7 @@ void VelCrl(CAN_TypeDef* CANx, uint8_t ElmoNum, int32_t vel);
 * @param  pos:位置命令，单位：脉冲，范围：最大位置限制到最小位置限制
 * @author ACTION
 */
-void PosCrl(CAN_TypeDef* CANx, uint8_t ElmoNum, uint8_t posMode, int32_t pos);
+void PosCrl(CAN_TypeDef *CANx, uint8_t ElmoNum, uint8_t posMode, int32_t pos);
 
 /**
 * @brief  配置加速度与减速度
@@ -88,7 +88,7 @@ void PosCrl(CAN_TypeDef* CANx, uint8_t ElmoNum, uint8_t posMode, int32_t pos);
 * @author ACTION
 * @note
 */
-void SetAccAndDec(CAN_TypeDef* CANx, uint8_t ElmoNum, uint32_t acc, uint32_t dec);
+void SetAccAndDec(CAN_TypeDef *CANx, uint8_t ElmoNum, uint32_t acc, uint32_t dec);
 
 /**
 * @brief  配置位置环运行最大速度
@@ -98,7 +98,7 @@ void SetAccAndDec(CAN_TypeDef* CANx, uint8_t ElmoNum, uint32_t acc, uint32_t dec
 * @author ACTION
 * @note：速度正负号代表旋转的方向，大于零为正方向，小于零为负方向
 */
-void SetPosLoopVel(CAN_TypeDef* CANx, uint8_t ElmoNum, int32_t vel);
+void SetPosLoopVel(CAN_TypeDef *CANx, uint8_t ElmoNum, int32_t vel);
 
 /**
 * @brief  配置驱动器工作模式
@@ -113,7 +113,7 @@ void SetPosLoopVel(CAN_TypeDef* CANx, uint8_t ElmoNum, int32_t vel);
 * @author ACTION
 * @note 只有在电机失能时可以配置该参数
 */
-void SetUnitMode(CAN_TypeDef* CANx, uint8_t ElmoNum, uint8_t unitMode);
+void SetUnitMode(CAN_TypeDef *CANx, uint8_t ElmoNum, uint8_t unitMode);
 
 /**
 * @brief  配置运行速度
@@ -123,7 +123,7 @@ void SetUnitMode(CAN_TypeDef* CANx, uint8_t ElmoNum, uint8_t unitMode);
 * @author ACTION
 * @note：速度正负号代表旋转的方向，大于零为正方向，小于零为负方向
 */
-void SetJoggingVel(CAN_TypeDef* CANx, uint8_t ElmoNum, int32_t vel);
+void SetJoggingVel(CAN_TypeDef *CANx, uint8_t ElmoNum, int32_t vel);
 
 /**
 * @brief  配置位置环命令
@@ -136,7 +136,7 @@ void SetJoggingVel(CAN_TypeDef* CANx, uint8_t ElmoNum, int32_t vel);
 * @author ACTION
 * @note：位置正负号代表旋转的方向，大于零为正方向，小于零为负方向
 */
-void SendPosCmd(CAN_TypeDef* CANx, uint8_t ElmoNum, uint8_t posMode, int32_t pos);
+void SendPosCmd(CAN_TypeDef *CANx, uint8_t ElmoNum, uint8_t posMode, int32_t pos);
 
 /**********************************读取驱动器数据命令*************************************/
 
@@ -147,7 +147,7 @@ void SendPosCmd(CAN_TypeDef* CANx, uint8_t ElmoNum, uint8_t posMode, int32_t pos
 * @author ACTION
  * @note：接收标识符为：0x00005850
 */
-void ReadActualPos(CAN_TypeDef* CANx, uint8_t ElmoNum);
+void ReadActualPos(CAN_TypeDef *CANx, uint8_t ElmoNum);
 
 /**
 * @brief  读取电机速度
@@ -156,6 +156,6 @@ void ReadActualPos(CAN_TypeDef* CANx, uint8_t ElmoNum);
 * @author ACTION
  * @note：接收标识符为：0x00005856
 */
-void ReadActualVel(CAN_TypeDef* CANx, uint8_t ElmoNum);
+void ReadActualVel(CAN_TypeDef *CANx, uint8_t ElmoNum);
 
 #endif

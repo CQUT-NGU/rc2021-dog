@@ -71,5 +71,5 @@ latex
 *.crf
 *.scvd
 *.uvguix.*
-MR2_SOFTWARE/MDK-ARM/DebugConfig
-MR2_SOFTWARE/MDK-ARM/MR2
+MDK-ARM/DebugConfig
+MDK-ARM/MR2

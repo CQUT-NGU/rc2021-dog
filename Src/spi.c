@@ -74,7 +74,7 @@ void MX_SPI5_Init(void)
     }
 }
 
-void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
+void HAL_SPI_MspInit(SPI_HandleTypeDef *spiHandle)
 {
     GPIO_InitTypeDef GPIO_InitStruct;
     if (spiHandle->Instance == SPI5)
@@ -103,7 +103,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
     }
 }
 
-void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle)
+void HAL_SPI_MspDeInit(SPI_HandleTypeDef *spiHandle)
 {
     if (spiHandle->Instance == SPI5)
     {

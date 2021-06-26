@@ -35,7 +35,7 @@ extern int16_t        test;
 uint8_t               MPU6500_Init(void);
 uint8_t               MPU6500_Write_Reg(uint8_t const reg, uint8_t const data);
 uint8_t               MPU6500_Read_Reg(uint8_t const reg);
-void                  IMU_getValues(volatile float* values);
+void                  IMU_getValues(volatile float *values);
 uint8_t               IST8310_Init(void);
 
 void IMU_Get_Data();
@@ -56,7 +56,7 @@ typedef struct __MPU6050_REAL_Data__
     int16_t GyroRawData_Y;
 } MPU6050_REAL_DATA;
 extern MPU6050_REAL_DATA MPU6050_read_data;
-void                     IMU_getYawPitchRoll(volatile float* ypr);  //更新姿态
+void                     IMU_getYawPitchRoll(volatile float *ypr);  //更新姿态
 void                     GetPitchYawGxGyGz(void);
 float                    Get_Yaw_Angle(int16_t Gyro_Z);
 

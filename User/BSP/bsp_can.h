@@ -100,10 +100,10 @@ extern float          real_current_from_judgesys;  //unit :mA
 extern float          dynamic_limit_current;       //unit :mA,;	//from judge_sys
 extern float          ZGyroModuleAngle, yaw_zgyro_angle;
 
-void my_can_filter_init(CAN_HandleTypeDef* hcan);
-void my_can_filter_init_recv_all(CAN_HandleTypeDef* _hcan);
-void can_filter_recv_special(CAN_HandleTypeDef* hcan, uint8_t filter_number, uint16_t filtered_id);
-void get_moto_measure(moto_measure_t* ptr, CAN_HandleTypeDef* hcan);
-void can_receive_onetime(CAN_HandleTypeDef* _hcan, int time);
-void set_moto_current(CAN_HandleTypeDef* hcan, s16 iq1, s16 iq2, s16 iq3, s16 iq4);
+void my_can_filter_init(CAN_HandleTypeDef *hcan);
+void my_can_filter_init_recv_all(CAN_HandleTypeDef *_hcan);
+void can_filter_recv_special(CAN_HandleTypeDef *hcan, uint8_t filter_number, uint16_t filtered_id);
+void get_moto_measure(moto_measure_t *ptr, CAN_HandleTypeDef *hcan);
+void can_receive_onetime(CAN_HandleTypeDef *_hcan, int time);
+void set_moto_current(CAN_HandleTypeDef *hcan, s16 iq1, s16 iq2, s16 iq3, s16 iq4);
 #endif

@@ -87,7 +87,7 @@ void MX_CAN2_Init(void)
 
 static uint32_t HAL_RCC_CAN1_CLK_ENABLED = 0;
 
-void HAL_CAN_MspInit(CAN_HandleTypeDef* canHandle)
+void HAL_CAN_MspInit(CAN_HandleTypeDef *canHandle)
 {
     GPIO_InitTypeDef GPIO_InitStruct;
     if (canHandle->Instance == CAN1)
@@ -157,7 +157,7 @@ void HAL_CAN_MspInit(CAN_HandleTypeDef* canHandle)
     }
 }
 
-void HAL_CAN_MspDeInit(CAN_HandleTypeDef* canHandle)
+void HAL_CAN_MspDeInit(CAN_HandleTypeDef *canHandle)
 {
     if (canHandle->Instance == CAN1)
     {

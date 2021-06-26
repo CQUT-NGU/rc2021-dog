@@ -15,7 +15,7 @@ void ProcessBuzzer(void);
 extern TIM_HandleTypeDef  TIM12_Handler;
 extern TIM_OC_InitTypeDef TIM12_CH1Handler;
 
-#define proport 100000  //Tclk/(psc+1)=180000000/(89+1)
+#define proport 100000                 //Tclk/(psc+1)=180000000/(89+1)
 #define L1      ((proport / 131) - 1)  //低调　do 的周期根据Tout= ((arr+1)*(psc+1))/Tclk推出arr值就是本句define定义的值，Tout为音调频率131Hz的倒数，Tclk=72MHz
 #define L2      ((proport / 147) - 1)  //低调　re 的周期
 #define L3      ((proport / 165) - 1)  //低调　mi 的周期

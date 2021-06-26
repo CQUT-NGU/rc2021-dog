@@ -6,52 +6,52 @@
 #define START_TASK_PRIO 0
 #define START_STK_SIZE  128
 TaskHandle_t StartTask_Handler;
-void         start_task(void* pvParameters);
+void         start_task(void *pvParameters);
 
 #define MotorControl_TASK_PRIO 4
 #define MotorControl_STK_SIZE  256
 TaskHandle_t MotorControlTask_Handler;
-void         MotorControl_task(void* pvParameters);
+void         MotorControl_task(void *pvParameters);
 
 #define PostureControl_TASK_PRIO 5
 #define PostureControl_STK_SIZE  256
 TaskHandle_t PostureControlTask_Handler;
-void         PostureControl_task(void* pvParameters);
+void         PostureControl_task(void *pvParameters);
 
 #define Navi_TASK_PRIO 5
 #define Navi_STK_SIZE  256
 TaskHandle_t NaviTask_Handler;
-void         Navi_task(void* pvParameters);
+void         Navi_task(void *pvParameters);
 
 #define Detect_TASK_PRIO 6
 #define Detect_STK_SIZE  128
 TaskHandle_t DetectTask_Handler;
-void         Detect_task(void* pvParameters);
+void         Detect_task(void *pvParameters);
 
 #define Debug_TASK_PRIO 6
 #define Debug_STK_SIZE  256
 TaskHandle_t DebugTask_Handler;
-void         Debug_task(void* pvParameters);
+void         Debug_task(void *pvParameters);
 
 #define Rc_TASK_PRIO 6
 #define Rc_STK_SIZE  256
 TaskHandle_t RcTask_Handler;
-void         Rc_task(void* pvParameters);
+void         Rc_task(void *pvParameters);
 
 #define VcanGC_TASK_PRIO 6
 #define VcanGC_STK_SIZE  256
 TaskHandle_t VcanGCTask_Handler;
-void         VcanGC_task(void* pvParameters);
+void         VcanGC_task(void *pvParameters);
 
 #define Test_TASK_PRIO 6
 #define Test_STK_SIZE  256
 TaskHandle_t TestTask_Handler;
-void         Test_task(void* pvParameters);
+void         Test_task(void *pvParameters);
 
 #define LogicalFlow_TASK_PRIO 6
 #define LogicalFlow_STK_SIZE  256
 TaskHandle_t LogicalFlowTask_Handler;
-void         LogicalFlow_task(void* pvParameters);
+void         LogicalFlow_task(void *pvParameters);
 
 void        SystemClock_Config(void);
 static void MX_NVIC_Init(void);
@@ -107,17 +107,17 @@ int main(void)
     printf("\r\n/*************SYSTEM INIT SUCCESS****************/ \r\n");
 
     //创建开始任务
-    xTaskCreate((TaskFunction_t)start_task,          //任务函数
-                (const char*)"start_task",           //任务名称
-                (uint16_t)START_STK_SIZE,            //任务堆栈大小
-                (void*)NULL,                         //传递给任务函数的参数
-                (UBaseType_t)START_TASK_PRIO,        //任务优先级
-                (TaskHandle_t*)&StartTask_Handler);  //任务句柄
-    vTaskStartScheduler();                           //开启任务调度
+    xTaskCreate((TaskFunction_t)start_task,           //任务函数
+                (const char *)"start_task",           //任务名称
+                (uint16_t)START_STK_SIZE,             //任务堆栈大小
+                (void *)NULL,                         //传递给任务函数的参数
+                (UBaseType_t)START_TASK_PRIO,         //任务优先级
+                (TaskHandle_t *)&StartTask_Handler);  //任务句柄
+    vTaskStartScheduler();                            //开启任务调度
 }
 
 //开始任务任务函数
-void start_task(void* pvParameters)
+void start_task(void *pvParameters)
 {
     BeginWarnBuzzer();  //开机提示音
 
@@ -126,18 +126,18 @@ void start_task(void* pvParameters)
     taskENTER_CRITICAL();  //进入临界区
     //创建MotorControl_task
     xTaskCreate((TaskFunction_t)MotorControl_task,
-                (const char*)"MotorControl_task",
+                (const char *)"MotorControl_task",
                 (uint16_t)MotorControl_STK_SIZE,
-                (void*)NULL,
+                (void *)NULL,
                 (UBaseType_t)MotorControl_TASK_PRIO,
-                (TaskHandle_t*)&MotorControlTask_Handler);
+                (TaskHandle_t *)&MotorControlTask_Handler);
     //创建PostureControl_task
     xTaskCreate((TaskFunction_t)PostureControl_task,
-                (const char*)"PostureControl_task",
+                (const char *)"PostureControl_task",
                 (uint16_t)PostureControl_STK_SIZE,
-                (void*)NULL,
+                (void *)NULL,
                 (UBaseType_t)PostureControl_TASK_PRIO,
-                (TaskHandle_t*)&PostureControlTask_Handler);
+                (TaskHandle_t *)&PostureControlTask_Handler);
     //创建NAVIGATION任务
     //    xTaskCreate((TaskFunction_t )Navi_task,
     //                (const char*    )"Navi_task",
@@ -182,11 +182,11 @@ void start_task(void* pvParameters)
     //                                    ( TaskHandle_t*  )&TestTask_Handler );
     //创建LogicalFlow任务 逻辑流控制
     xTaskCreate((TaskFunction_t)LogicalFlow_task,
-                (const char*)"LogicalFlow_task",
+                (const char *)"LogicalFlow_task",
                 (uint16_t)LogicalFlow_STK_SIZE,
-                (void*)NULL,
+                (void *)NULL,
                 (UBaseType_t)LogicalFlow_TASK_PRIO,
-                (TaskHandle_t*)&LogicalFlowTask_Handler);
+                (TaskHandle_t *)&LogicalFlowTask_Handler);
 
     vTaskDelete(StartTask_Handler);  //删除开始任务
     taskEXIT_CRITICAL();             //退出临界区
@@ -194,7 +194,7 @@ void start_task(void* pvParameters)
 
 void ResetStart(void);
 
-void Test_task(void* pvParameters)
+void Test_task(void *pvParameters)
 {
     float kalam;
 
@@ -361,11 +361,11 @@ void ResetStart(void)
 
         taskENTER_CRITICAL();  //进入临界区
         xTaskCreate((TaskFunction_t)LogicalFlow_task,
-                    (const char*)"LogicalFlow_task",
+                    (const char *)"LogicalFlow_task",
                     (uint16_t)LogicalFlow_STK_SIZE,
-                    (void*)NULL,
+                    (void *)NULL,
                     (UBaseType_t)LogicalFlow_TASK_PRIO,
-                    (TaskHandle_t*)&LogicalFlowTask_Handler);
+                    (TaskHandle_t *)&LogicalFlowTask_Handler);
         taskEXIT_CRITICAL();  //退出临界区
 
         IndicateLED_Off;
@@ -464,7 +464,7 @@ void Error_Handler(void)
    * @param line: assert_param error line source number
    * @retval None
    */
-void assert_failed(uint8_t* file, uint32_t line)
+void assert_failed(uint8_t *file, uint32_t line)
 {
     /* USER CODE BEGIN 6 */
     /* User can add his own implementation to report the file name and line number,

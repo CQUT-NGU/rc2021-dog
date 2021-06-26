@@ -10,7 +10,7 @@
 * @note ELMO驱动器默认初始状态为电机失能，使用电机时需要对其进行使能
 *       部分驱动器参数需要在电机失能状态下才可以配置
 */
-void MotorOn(CAN_TypeDef* CANx, uint8_t ElmoNum)
+void MotorOn(CAN_TypeDef *CANx, uint8_t ElmoNum)
 {
     //第一个数发送MO命令，第二个数发送1给电机使能（通电）
     uint32_t data[1][2] = {
@@ -28,14 +28,14 @@ void MotorOn(CAN_TypeDef* CANx, uint8_t ElmoNum)
 
     TxMessage.DLC = 8;
 
-    TxMessage.Data[0] = *(unsigned long*)&data[0][0] & 0xff;
-    TxMessage.Data[1] = (*(unsigned long*)&data[0][0] >> 8) & 0xff;
-    TxMessage.Data[2] = (*(unsigned long*)&data[0][0] >> 16) & 0xff;
-    TxMessage.Data[3] = (*(unsigned long*)&data[0][0] >> 24) & 0xff;
-    TxMessage.Data[4] = *(unsigned long*)&data[0][1] & 0xff;
-    TxMessage.Data[5] = (*(unsigned long*)&data[0][1] >> 8) & 0xff;
-    TxMessage.Data[6] = (*(unsigned long*)&data[0][1] >> 16) & 0xff;
-    TxMessage.Data[7] = (*(unsigned long*)&data[0][1] >> 24) & 0xff;
+    TxMessage.Data[0] = *(unsigned long *)&data[0][0] & 0xff;
+    TxMessage.Data[1] = (*(unsigned long *)&data[0][0] >> 8) & 0xff;
+    TxMessage.Data[2] = (*(unsigned long *)&data[0][0] >> 16) & 0xff;
+    TxMessage.Data[3] = (*(unsigned long *)&data[0][0] >> 24) & 0xff;
+    TxMessage.Data[4] = *(unsigned long *)&data[0][1] & 0xff;
+    TxMessage.Data[5] = (*(unsigned long *)&data[0][1] >> 8) & 0xff;
+    TxMessage.Data[6] = (*(unsigned long *)&data[0][1] >> 16) & 0xff;
+    TxMessage.Data[7] = (*(unsigned long *)&data[0][1] >> 24) & 0xff;
 
     //发送数据
     mbox = CAN_Transmit(CANx, &TxMessage);
@@ -57,7 +57,7 @@ void MotorOn(CAN_TypeDef* CANx, uint8_t ElmoNum)
 * @param  ElmoNum：驱动器ID号，范围：0~128，0为广播用ID号
 * @author ACTION
 */
-void MotorOff(CAN_TypeDef* CANx, uint8_t ElmoNum)
+void MotorOff(CAN_TypeDef *CANx, uint8_t ElmoNum)
 {
     //第一个数据发送MO命令，第二个数据发送0给电机失能（断电）
     uint32_t data[1][2] = {
@@ -73,14 +73,14 @@ void MotorOff(CAN_TypeDef* CANx, uint8_t ElmoNum)
     TxMessage.RTR   = CAN_RTR_Data;                  // the type of frame for the message that will be transmitted
     TxMessage.DLC   = 8;
 
-    TxMessage.Data[0] = *(unsigned long*)&data[0][0] & 0xff;
-    TxMessage.Data[1] = (*(unsigned long*)&data[0][0] >> 8) & 0xff;
-    TxMessage.Data[2] = (*(unsigned long*)&data[0][0] >> 16) & 0xff;
-    TxMessage.Data[3] = (*(unsigned long*)&data[0][0] >> 24) & 0xff;
-    TxMessage.Data[4] = *(unsigned long*)&data[0][1] & 0xff;
-    TxMessage.Data[5] = (*(unsigned long*)&data[0][1] >> 8) & 0xff;
-    TxMessage.Data[6] = (*(unsigned long*)&data[0][1] >> 16) & 0xff;
-    TxMessage.Data[7] = (*(unsigned long*)&data[0][1] >> 24) & 0xff;
+    TxMessage.Data[0] = *(unsigned long *)&data[0][0] & 0xff;
+    TxMessage.Data[1] = (*(unsigned long *)&data[0][0] >> 8) & 0xff;
+    TxMessage.Data[2] = (*(unsigned long *)&data[0][0] >> 16) & 0xff;
+    TxMessage.Data[3] = (*(unsigned long *)&data[0][0] >> 24) & 0xff;
+    TxMessage.Data[4] = *(unsigned long *)&data[0][1] & 0xff;
+    TxMessage.Data[5] = (*(unsigned long *)&data[0][1] >> 8) & 0xff;
+    TxMessage.Data[6] = (*(unsigned long *)&data[0][1] >> 16) & 0xff;
+    TxMessage.Data[7] = (*(unsigned long *)&data[0][1] >> 24) & 0xff;
     mbox              = CAN_Transmit(CANx, &TxMessage);
 
     //等待发送成功
@@ -103,7 +103,7 @@ void MotorOff(CAN_TypeDef* CANx, uint8_t ElmoNum)
 * @author ACTION
 * @note 在速度环初始化后才可以使能电机！！
 */
-void VelLoopCfg(CAN_TypeDef* CANx, uint8_t ElmoNum, uint32_t acc, uint32_t dec)
+void VelLoopCfg(CAN_TypeDef *CANx, uint8_t ElmoNum, uint32_t acc, uint32_t dec)
 {
     SetUnitMode(CANx, ElmoNum, SPEED_CONTROL_MODE);
 
@@ -119,7 +119,7 @@ void VelLoopCfg(CAN_TypeDef* CANx, uint8_t ElmoNum, uint32_t acc, uint32_t dec)
 * @author ACTION
 * @note
 */
-void SetAccAndDec(CAN_TypeDef* CANx, uint8_t ElmoNum, uint32_t acc, uint32_t dec)
+void SetAccAndDec(CAN_TypeDef *CANx, uint8_t ElmoNum, uint32_t acc, uint32_t dec)
 {
     //第一个数据发送AC\DC命令，第二个数据发送命令值
     uint32_t data[2][2] = {
@@ -142,14 +142,14 @@ void SetAccAndDec(CAN_TypeDef* CANx, uint8_t ElmoNum, uint32_t acc, uint32_t dec
 
     for (uint8_t i = 0; i < 2; i++)
     {
-        TxMessage.Data[0] = *(unsigned long*)&data[i][0] & 0xff;
-        TxMessage.Data[1] = (*(unsigned long*)&data[i][0] >> 8) & 0xff;
-        TxMessage.Data[2] = (*(unsigned long*)&data[i][0] >> 16) & 0xff;
-        TxMessage.Data[3] = (*(unsigned long*)&data[i][0] >> 24) & 0xff;
-        TxMessage.Data[4] = *(unsigned long*)&data[i][1] & 0xff;
-        TxMessage.Data[5] = (*(unsigned long*)&data[i][1] >> 8) & 0xff;
-        TxMessage.Data[6] = (*(unsigned long*)&data[i][1] >> 16) & 0xff;
-        TxMessage.Data[7] = (*(unsigned long*)&data[i][1] >> 24) & 0xff;
+        TxMessage.Data[0] = *(unsigned long *)&data[i][0] & 0xff;
+        TxMessage.Data[1] = (*(unsigned long *)&data[i][0] >> 8) & 0xff;
+        TxMessage.Data[2] = (*(unsigned long *)&data[i][0] >> 16) & 0xff;
+        TxMessage.Data[3] = (*(unsigned long *)&data[i][0] >> 24) & 0xff;
+        TxMessage.Data[4] = *(unsigned long *)&data[i][1] & 0xff;
+        TxMessage.Data[5] = (*(unsigned long *)&data[i][1] >> 8) & 0xff;
+        TxMessage.Data[6] = (*(unsigned long *)&data[i][1] >> 16) & 0xff;
+        TxMessage.Data[7] = (*(unsigned long *)&data[i][1] >> 24) & 0xff;
         mbox              = CAN_Transmit(CANx, &TxMessage);
 
         //等待发送成功
@@ -175,7 +175,7 @@ void SetAccAndDec(CAN_TypeDef* CANx, uint8_t ElmoNum, uint32_t acc, uint32_t dec
 * @author ACTION
 * @note 在位置环初始化后才可以使能电机！！
 */
-void PosLoopCfg(CAN_TypeDef* CANx, uint8_t ElmoNum, uint32_t acc, uint32_t dec, uint32_t vel)
+void PosLoopCfg(CAN_TypeDef *CANx, uint8_t ElmoNum, uint32_t acc, uint32_t dec, uint32_t vel)
 {
     SetUnitMode(CANx, ElmoNum, POSITION_CONTROL_MODE);
 
@@ -192,7 +192,7 @@ void PosLoopCfg(CAN_TypeDef* CANx, uint8_t ElmoNum, uint32_t acc, uint32_t dec, 
 * @author ACTION
 * @note：速度正负号代表旋转的方向，大于零为正方向，小于零为负方向
 */
-void SetPosLoopVel(CAN_TypeDef* CANx, uint8_t ElmoNum, int32_t vel)
+void SetPosLoopVel(CAN_TypeDef *CANx, uint8_t ElmoNum, int32_t vel)
 {
     //第一个数据发送SP命令，第二个数据发送命令值
     uint32_t data[1][2] = {
@@ -210,14 +210,14 @@ void SetPosLoopVel(CAN_TypeDef* CANx, uint8_t ElmoNum, int32_t vel)
 
     data[0][1] = vel;
 
-    TxMessage.Data[0] = *(unsigned long*)&data[0][0] & 0xff;
-    TxMessage.Data[1] = (*(unsigned long*)&data[0][0] >> 8) & 0xff;
-    TxMessage.Data[2] = (*(unsigned long*)&data[0][0] >> 16) & 0xff;
-    TxMessage.Data[3] = (*(unsigned long*)&data[0][0] >> 24) & 0xff;
-    TxMessage.Data[4] = *(unsigned long*)&data[0][1] & 0xff;
-    TxMessage.Data[5] = (*(unsigned long*)&data[0][1] >> 8) & 0xff;
-    TxMessage.Data[6] = (*(unsigned long*)&data[0][1] >> 16) & 0xff;
-    TxMessage.Data[7] = (*(unsigned long*)&data[0][1] >> 24) & 0xff;
+    TxMessage.Data[0] = *(unsigned long *)&data[0][0] & 0xff;
+    TxMessage.Data[1] = (*(unsigned long *)&data[0][0] >> 8) & 0xff;
+    TxMessage.Data[2] = (*(unsigned long *)&data[0][0] >> 16) & 0xff;
+    TxMessage.Data[3] = (*(unsigned long *)&data[0][0] >> 24) & 0xff;
+    TxMessage.Data[4] = *(unsigned long *)&data[0][1] & 0xff;
+    TxMessage.Data[5] = (*(unsigned long *)&data[0][1] >> 8) & 0xff;
+    TxMessage.Data[6] = (*(unsigned long *)&data[0][1] >> 16) & 0xff;
+    TxMessage.Data[7] = (*(unsigned long *)&data[0][1] >> 24) & 0xff;
     mbox              = CAN_Transmit(CANx, &TxMessage);
 
     //等待发送成功
@@ -239,7 +239,7 @@ void SetPosLoopVel(CAN_TypeDef* CANx, uint8_t ElmoNum, int32_t vel)
 * @param  vel: 速度，单位：脉冲每秒，范围：最小速度限制到最大速度限制
 * @author ACTION
 */
-void VelCrl(CAN_TypeDef* CANx, uint8_t ElmoNum, int32_t vel)
+void VelCrl(CAN_TypeDef *CANx, uint8_t ElmoNum, int32_t vel)
 {
     SetJoggingVel(CANx, ElmoNum, vel);
 }
@@ -254,7 +254,7 @@ void VelCrl(CAN_TypeDef* CANx, uint8_t ElmoNum, int32_t vel)
 * @param  pos:位置命令，单位：脉冲，范围：最大位置限制到最小位置限制
 * @author ACTION
 */
-void PosCrl(CAN_TypeDef* CANx, uint8_t ElmoNum, uint8_t posMode, int32_t pos)
+void PosCrl(CAN_TypeDef *CANx, uint8_t ElmoNum, uint8_t posMode, int32_t pos)
 {
     SendPosCmd(CANx, ElmoNum, posMode, pos);
 }
@@ -272,7 +272,7 @@ void PosCrl(CAN_TypeDef* CANx, uint8_t ElmoNum, uint8_t posMode, int32_t pos)
 * @author ACTION
 * @note 只有在电机失能时可以配置该参数
 */
-void SetUnitMode(CAN_TypeDef* CANx, uint8_t ElmoNum, uint8_t unitMode)
+void SetUnitMode(CAN_TypeDef *CANx, uint8_t ElmoNum, uint8_t unitMode)
 {
     //第一个数据发送UM命令，第二个数据发送模式
     uint32_t data[1][2] = {
@@ -290,14 +290,14 @@ void SetUnitMode(CAN_TypeDef* CANx, uint8_t ElmoNum, uint8_t unitMode)
 
     data[0][1] = unitMode;
 
-    TxMessage.Data[0] = *(unsigned long*)&data[0][0] & 0xff;
-    TxMessage.Data[1] = (*(unsigned long*)&data[0][0] >> 8) & 0xff;
-    TxMessage.Data[2] = (*(unsigned long*)&data[0][0] >> 16) & 0xff;
-    TxMessage.Data[3] = (*(unsigned long*)&data[0][0] >> 24) & 0xff;
-    TxMessage.Data[4] = *(unsigned long*)&data[0][1] & 0xff;
-    TxMessage.Data[5] = (*(unsigned long*)&data[0][1] >> 8) & 0xff;
-    TxMessage.Data[6] = (*(unsigned long*)&data[0][1] >> 16) & 0xff;
-    TxMessage.Data[7] = (*(unsigned long*)&data[0][1] >> 24) & 0xff;
+    TxMessage.Data[0] = *(unsigned long *)&data[0][0] & 0xff;
+    TxMessage.Data[1] = (*(unsigned long *)&data[0][0] >> 8) & 0xff;
+    TxMessage.Data[2] = (*(unsigned long *)&data[0][0] >> 16) & 0xff;
+    TxMessage.Data[3] = (*(unsigned long *)&data[0][0] >> 24) & 0xff;
+    TxMessage.Data[4] = *(unsigned long *)&data[0][1] & 0xff;
+    TxMessage.Data[5] = (*(unsigned long *)&data[0][1] >> 8) & 0xff;
+    TxMessage.Data[6] = (*(unsigned long *)&data[0][1] >> 16) & 0xff;
+    TxMessage.Data[7] = (*(unsigned long *)&data[0][1] >> 24) & 0xff;
     mbox              = CAN_Transmit(CANx, &TxMessage);
 
     //等待发送成功
@@ -319,7 +319,7 @@ void SetUnitMode(CAN_TypeDef* CANx, uint8_t ElmoNum, uint8_t unitMode)
 * @author ACTION
 * @note：速度正负号代表旋转的方向，大于零为正方向，小于零为负方向
 */
-void SetJoggingVel(CAN_TypeDef* CANx, uint8_t ElmoNum, int32_t vel)
+void SetJoggingVel(CAN_TypeDef *CANx, uint8_t ElmoNum, int32_t vel)
 {
     //第一个数据发送JV命令，第二个数据发送命令值
     uint32_t data[1][2] = {
@@ -337,14 +337,14 @@ void SetJoggingVel(CAN_TypeDef* CANx, uint8_t ElmoNum, int32_t vel)
 
     data[0][1] = vel;
 
-    TxMessage.Data[0] = *(unsigned long*)&data[0][0] & 0xff;
-    TxMessage.Data[1] = (*(unsigned long*)&data[0][0] >> 8) & 0xff;
-    TxMessage.Data[2] = (*(unsigned long*)&data[0][0] >> 16) & 0xff;
-    TxMessage.Data[3] = (*(unsigned long*)&data[0][0] >> 24) & 0xff;
-    TxMessage.Data[4] = *(unsigned long*)&data[0][1] & 0xff;
-    TxMessage.Data[5] = (*(unsigned long*)&data[0][1] >> 8) & 0xff;
-    TxMessage.Data[6] = (*(unsigned long*)&data[0][1] >> 16) & 0xff;
-    TxMessage.Data[7] = (*(unsigned long*)&data[0][1] >> 24) & 0xff;
+    TxMessage.Data[0] = *(unsigned long *)&data[0][0] & 0xff;
+    TxMessage.Data[1] = (*(unsigned long *)&data[0][0] >> 8) & 0xff;
+    TxMessage.Data[2] = (*(unsigned long *)&data[0][0] >> 16) & 0xff;
+    TxMessage.Data[3] = (*(unsigned long *)&data[0][0] >> 24) & 0xff;
+    TxMessage.Data[4] = *(unsigned long *)&data[0][1] & 0xff;
+    TxMessage.Data[5] = (*(unsigned long *)&data[0][1] >> 8) & 0xff;
+    TxMessage.Data[6] = (*(unsigned long *)&data[0][1] >> 16) & 0xff;
+    TxMessage.Data[7] = (*(unsigned long *)&data[0][1] >> 24) & 0xff;
     mbox              = CAN_Transmit(CANx, &TxMessage);
 
     while ((CAN_TransmitStatus(CANx, mbox) != CAN_TxStatus_Ok))
@@ -363,7 +363,7 @@ void SetJoggingVel(CAN_TypeDef* CANx, uint8_t ElmoNum, int32_t vel)
 * @author ACTION
 * @note：位置正负号代表旋转的方向，大于零为正方向，小于零为负方向
 */
-void SendPosCmd(CAN_TypeDef* CANx, uint8_t ElmoNum, uint8_t posMode, int32_t pos)
+void SendPosCmd(CAN_TypeDef *CANx, uint8_t ElmoNum, uint8_t posMode, int32_t pos)
 {
     uint32_t data[1][2] = {
         0x00000000,
@@ -386,14 +386,14 @@ void SendPosCmd(CAN_TypeDef* CANx, uint8_t ElmoNum, uint8_t posMode, int32_t pos
 
     data[0][1] = pos;
 
-    TxMessage.Data[0] = *(unsigned long*)&data[0][0] & 0xff;
-    TxMessage.Data[1] = (*(unsigned long*)&data[0][0] >> 8) & 0xff;
-    TxMessage.Data[2] = (*(unsigned long*)&data[0][0] >> 16) & 0xff;
-    TxMessage.Data[3] = (*(unsigned long*)&data[0][0] >> 24) & 0xff;
-    TxMessage.Data[4] = *(unsigned long*)&data[0][1] & 0xff;
-    TxMessage.Data[5] = (*(unsigned long*)&data[0][1] >> 8) & 0xff;
-    TxMessage.Data[6] = (*(unsigned long*)&data[0][1] >> 16) & 0xff;
-    TxMessage.Data[7] = (*(unsigned long*)&data[0][1] >> 24) & 0xff;
+    TxMessage.Data[0] = *(unsigned long *)&data[0][0] & 0xff;
+    TxMessage.Data[1] = (*(unsigned long *)&data[0][0] >> 8) & 0xff;
+    TxMessage.Data[2] = (*(unsigned long *)&data[0][0] >> 16) & 0xff;
+    TxMessage.Data[3] = (*(unsigned long *)&data[0][0] >> 24) & 0xff;
+    TxMessage.Data[4] = *(unsigned long *)&data[0][1] & 0xff;
+    TxMessage.Data[5] = (*(unsigned long *)&data[0][1] >> 8) & 0xff;
+    TxMessage.Data[6] = (*(unsigned long *)&data[0][1] >> 16) & 0xff;
+    TxMessage.Data[7] = (*(unsigned long *)&data[0][1] >> 24) & 0xff;
 
     mbox = CAN_Transmit(CANx, &TxMessage);
 
@@ -416,7 +416,7 @@ void SendPosCmd(CAN_TypeDef* CANx, uint8_t ElmoNum, uint8_t posMode, int32_t pos
 * @author ACTION
  * @note：接收标识符为：0x00005850
 */
-void ReadActualPos(CAN_TypeDef* CANx, uint8_t ElmoNum)
+void ReadActualPos(CAN_TypeDef *CANx, uint8_t ElmoNum)
 {
     uint32_t data[1][2] = {
         0x40005850,
@@ -431,14 +431,14 @@ void ReadActualPos(CAN_TypeDef* CANx, uint8_t ElmoNum)
     TxMessage.RTR   = CAN_RTR_Data;                  // the type of frame for the message that will be transmitted
     TxMessage.DLC   = 8;
 
-    TxMessage.Data[0] = *(unsigned long*)&data[0][0] & 0xff;
-    TxMessage.Data[1] = (*(unsigned long*)&data[0][0] >> 8) & 0xff;
-    TxMessage.Data[2] = (*(unsigned long*)&data[0][0] >> 16) & 0xff;
-    TxMessage.Data[3] = (*(unsigned long*)&data[0][0] >> 24) & 0xff;
-    TxMessage.Data[4] = *(unsigned long*)&data[0][1] & 0xff;
-    TxMessage.Data[5] = (*(unsigned long*)&data[0][1] >> 8) & 0xff;
-    TxMessage.Data[6] = (*(unsigned long*)&data[0][1] >> 16) & 0xff;
-    TxMessage.Data[7] = (*(unsigned long*)&data[0][1] >> 24) & 0xff;
+    TxMessage.Data[0] = *(unsigned long *)&data[0][0] & 0xff;
+    TxMessage.Data[1] = (*(unsigned long *)&data[0][0] >> 8) & 0xff;
+    TxMessage.Data[2] = (*(unsigned long *)&data[0][0] >> 16) & 0xff;
+    TxMessage.Data[3] = (*(unsigned long *)&data[0][0] >> 24) & 0xff;
+    TxMessage.Data[4] = *(unsigned long *)&data[0][1] & 0xff;
+    TxMessage.Data[5] = (*(unsigned long *)&data[0][1] >> 8) & 0xff;
+    TxMessage.Data[6] = (*(unsigned long *)&data[0][1] >> 16) & 0xff;
+    TxMessage.Data[7] = (*(unsigned long *)&data[0][1] >> 24) & 0xff;
 
     mbox             = CAN_Transmit(CANx, &TxMessage);
     uint16_t timeout = 0;
@@ -458,7 +458,7 @@ void ReadActualPos(CAN_TypeDef* CANx, uint8_t ElmoNum)
 * @author ACTION
  * @note：接收标识符为：0x00005856
 */
-void ReadActualVel(CAN_TypeDef* CANx, uint8_t ElmoNum)
+void ReadActualVel(CAN_TypeDef *CANx, uint8_t ElmoNum)
 {
     uint32_t data[1][2] = {
         0x40005856,
@@ -473,14 +473,14 @@ void ReadActualVel(CAN_TypeDef* CANx, uint8_t ElmoNum)
     TxMessage.RTR   = CAN_RTR_Data;                  // the type of frame for the message that will be transmitted
     TxMessage.DLC   = 8;
 
-    TxMessage.Data[0] = *(unsigned long*)&data[0][0] & 0xff;
-    TxMessage.Data[1] = (*(unsigned long*)&data[0][0] >> 8) & 0xff;
-    TxMessage.Data[2] = (*(unsigned long*)&data[0][0] >> 16) & 0xff;
-    TxMessage.Data[3] = (*(unsigned long*)&data[0][0] >> 24) & 0xff;
-    TxMessage.Data[4] = *(unsigned long*)&data[0][1] & 0xff;
-    TxMessage.Data[5] = (*(unsigned long*)&data[0][1] >> 8) & 0xff;
-    TxMessage.Data[6] = (*(unsigned long*)&data[0][1] >> 16) & 0xff;
-    TxMessage.Data[7] = (*(unsigned long*)&data[0][1] >> 24) & 0xff;
+    TxMessage.Data[0] = *(unsigned long *)&data[0][0] & 0xff;
+    TxMessage.Data[1] = (*(unsigned long *)&data[0][0] >> 8) & 0xff;
+    TxMessage.Data[2] = (*(unsigned long *)&data[0][0] >> 16) & 0xff;
+    TxMessage.Data[3] = (*(unsigned long *)&data[0][0] >> 24) & 0xff;
+    TxMessage.Data[4] = *(unsigned long *)&data[0][1] & 0xff;
+    TxMessage.Data[5] = (*(unsigned long *)&data[0][1] >> 8) & 0xff;
+    TxMessage.Data[6] = (*(unsigned long *)&data[0][1] >> 16) & 0xff;
+    TxMessage.Data[7] = (*(unsigned long *)&data[0][1] >> 24) & 0xff;
 
     mbox = CAN_Transmit(CANx, &TxMessage);
 

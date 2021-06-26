@@ -32,8 +32,8 @@
 moto_measure_t moto_chassis[8] = {0};
 moto_measure_t moto_info;
 
-void get_total_angle(moto_measure_t* p);
-void get_moto_offset(moto_measure_t* ptr, CAN_HandleTypeDef* hcan);
+void get_total_angle(moto_measure_t *p);
+void get_moto_offset(moto_measure_t *ptr, CAN_HandleTypeDef *hcan);
 
 /*******************************************************************************************
   * @Func		my_can_filter_init
@@ -42,7 +42,7 @@ void get_moto_offset(moto_measure_t* ptr, CAN_HandleTypeDef* hcan);
   * @Retval		None
   * @Date     2015/11/30
  *******************************************************************************************/
-void my_can_filter_init_recv_all(CAN_HandleTypeDef* _hcan)
+void my_can_filter_init_recv_all(CAN_HandleTypeDef *_hcan)
 {
     //can1 &can2 use same filter config
     CAN_FilterConfTypeDef  CAN_FilterConfigStructure;
@@ -106,7 +106,7 @@ void my_can_filter_init_recv_all(CAN_HandleTypeDef* _hcan)
 										CAN1_FilterConfiguration(5, SET_LIMIT_RECOVER_ID);
   * @Date     2016年11月11日
  *******************************************************************************************/
-void can_filter_recv_special(CAN_HandleTypeDef* hcan, uint8_t filter_number, uint16_t filtered_id)
+void can_filter_recv_special(CAN_HandleTypeDef *hcan, uint8_t filter_number, uint16_t filtered_id)
 {
     CAN_FilterConfTypeDef cf;
     cf.FilterNumber         = filter_number;              //过滤器组编号
@@ -140,7 +140,7 @@ float ZGyroModuleAngle;
   * @Retval		None
   * @Date     2015/11/24
  *******************************************************************************************/
-void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* _hcan)
+void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef *_hcan)
 {
     //ignore can1 or can2.
     switch (_hcan->pRxMsg->StdId)
@@ -178,7 +178,7 @@ void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* _hcan)
   * @Retval		None
   * @Date     2015/11/24
  *******************************************************************************************/
-void get_moto_measure(moto_measure_t* ptr, CAN_HandleTypeDef* hcan)
+void get_moto_measure(moto_measure_t *ptr, CAN_HandleTypeDef *hcan)
 {
     //	u32  sum=0;
     //	u8	 i = FILTER_BUF_LEN;
@@ -211,7 +211,7 @@ void get_moto_measure(moto_measure_t* ptr, CAN_HandleTypeDef* hcan)
 }
 
 /*this function should be called after system+can init */
-void get_moto_offset(moto_measure_t* ptr, CAN_HandleTypeDef* hcan)
+void get_moto_offset(moto_measure_t *ptr, CAN_HandleTypeDef *hcan)
 {
     ptr->angle        = (uint16_t)(hcan->pRxMsg->Data[0] << 8 | hcan->pRxMsg->Data[1]);
     ptr->offset_angle = ptr->angle;
@@ -221,7 +221,7 @@ void get_moto_offset(moto_measure_t* ptr, CAN_HandleTypeDef* hcan)
 /**
 *@bref 电机上电角度=0， 之后用这个函数更新3510电机的相对开机后（为0）的相对角度。
 	*/
-void get_total_angle(moto_measure_t* p)
+void get_total_angle(moto_measure_t *p)
 {
     int res1, res2, delta;
     if (p->angle < p->last_angle)
